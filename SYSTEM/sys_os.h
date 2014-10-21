@@ -5,18 +5,23 @@
 unsigned char
  */
 #define MAXTASKS 9
+#define MAX_LOOPTASKS 2
+
 extern volatile unsigned int timers[MAXTASKS];
+extern volatile unsigned int timers_loop[MAX_LOOPTASKS];
+
 #define _SS static unsigned char _lc=0; switch(_lc){default:
 #define _EE ;}; _lc=0; return 255;
+#define _LOOP_SS _lc=(__LINE__+((__LINE__%256)==0))%256;for(;;){case (__LINE__+((__LINE__%256)==0))%256:
 #define WaitX(tickets)  do {_lc=(__LINE__+((__LINE__%256)==0))%256; return tickets ;} while(0); case (__LINE__+((__LINE__%256)==0))%256:
+#define LoopX(tickets); return tickets;}
 
 #define RunTask(TaskName,TaskID) do { if (timers[TaskID]==0) timers[TaskID]=TaskName(); }  while(0);
 #define RunTaskA(TaskName,TaskID) { if (timers[TaskID]==0) {timers[TaskID]=TaskName(); continue;} }   //前面的任务优先保证执行
+#define RunLoop(TaskName,TaskID) { if (timers[TaskID]==0) {timers[TaskID]=timers_loop[TaskID];timers_loop[TaskID]=TaskName(); continue;} }   //前面的任务优先保证执行
 
-//#define InitTasks() {unsigned char i; for(i=MAXTASKS;i>0 ;i--) timers[i-1]=0; }
+
 #define UpdateTimers() {char i; for(i=MAXTASKS;i>0 ;i--){if((timers[i-1]!=0)&&(timers[i-1]!=0xffffffff)) timers[i-1]--;}}
-
-
 //////////////////////////////////////////////////////////////////////////////////
 
 #define CallSub(SubTaskName) do {unsigned char currdt; _lc=(__LINE__+((__LINE__%256)==0))%256; return 0; case (__LINE__+((__LINE__%256)==0))%256:  currdt=SubTaskName(); if(currdt!=255) return currdt;} while(0);
@@ -37,12 +42,5 @@ extern volatile unsigned int timers[MAXTASKS];
 #define OS_CRITICAL_METHOD
 //每秒钟 多少次
 #define OS_TICKS_PER_SEC 1000
-
-
-
-
-
-
-extern int task5(void);
 
 #endif

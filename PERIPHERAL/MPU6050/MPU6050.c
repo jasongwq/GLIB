@@ -373,25 +373,13 @@ S_INT16_XYZ     MPU6050_ACC_LAST, MPU6050_GYRO_LAST; //最新一次读取值
 #define     MPU6050_MIN     -32768
 void MPU6050_Dataanl(void)
 {
-    MPU6050_ACC_LAST.X = ((((int16_t)mpu6050_buffer[0]) << 8)  | mpu6050_buffer[1 ]) - ACC_OFFSET.X;
-    MPU6050_ACC_LAST.Y = ((((int16_t)mpu6050_buffer[2]) << 8)  | mpu6050_buffer[3 ]) - ACC_OFFSET.Y;
-    MPU6050_ACC_LAST.Z = ((((int16_t)mpu6050_buffer[4]) << 8)  | mpu6050_buffer[5 ]) - ACC_OFFSET.Z;
-    //跳过温度ADC
-    MPU6050_GYRO_LAST.X = ((((int16_t)mpu6050_buffer[8]) << 8)  | mpu6050_buffer[9 ]) - GYRO_OFFSET.X;
-    MPU6050_GYRO_LAST.Y = ((((int16_t)mpu6050_buffer[10]) << 8) | mpu6050_buffer[11]) - GYRO_OFFSET.Y;
-    MPU6050_GYRO_LAST.Z = ((((int16_t)mpu6050_buffer[12]) << 8) | mpu6050_buffer[13]) - GYRO_OFFSET.Z;
-    //  MPU6050_ACC_LAST.X>MPU6050_MAX ? MPU6050_MAX:MPU6050_ACC_LAST.X;
-    //  MPU6050_ACC_LAST.X<MPU6050_MIN ? MPU6050_MIN:MPU6050_ACC_LAST.X;
-    //  MPU6050_ACC_LAST.Y>MPU6050_MAX ? MPU6050_MAX:   MPU6050_ACC_LAST.Y;
-    //  MPU6050_ACC_LAST.Y<MPU6050_MIN ? MPU6050_MIN:   MPU6050_ACC_LAST.Y;
-    //  MPU6050_ACC_LAST.Z>MPU6050_MAX ? MPU6050_MAX:MPU6050_ACC_LAST.Z;
-    //  MPU6050_ACC_LAST.Z<MPU6050_MIN ? MPU6050_MIN:MPU6050_ACC_LAST.Z;
-    //  MPU6050_GYRO_LAST.X>MPU6050_MAX ? MPU6050_MAX:MPU6050_GYRO_LAST.X;
-    //  MPU6050_GYRO_LAST.X<MPU6050_MIN ? MPU6050_MIN:MPU6050_GYRO_LAST.X;
-    //  MPU6050_GYRO_LAST.Y>MPU6050_MAX ? MPU6050_MAX:MPU6050_GYRO_LAST.Y;
-    //  MPU6050_GYRO_LAST.Y<MPU6050_MIN ? MPU6050_MIN:MPU6050_GYRO_LAST.Y;
-    //  MPU6050_GYRO_LAST.Z>MPU6050_MAX ? MPU6050_MAX:MPU6050_GYRO_LAST.Z;
-    //  MPU6050_GYRO_LAST.Z<MPU6050_MIN ? MPU6050_MIN:MPU6050_GYRO_LAST.Z;
+    MPU6050_ACC_LAST.x = ((((int16_t)mpu6050_buffer[0]) << 8)  | mpu6050_buffer[1 ]) - ACC_OFFSET.x;
+    MPU6050_ACC_LAST.y = ((((int16_t)mpu6050_buffer[2]) << 8)  | mpu6050_buffer[3 ]) - ACC_OFFSET.y;
+    MPU6050_ACC_LAST.z = ((((int16_t)mpu6050_buffer[4]) << 8)  | mpu6050_buffer[5 ]) - ACC_OFFSET.z;
+    //????ADC
+    MPU6050_GYRO_LAST.x = ((((int16_t)mpu6050_buffer[8]) << 8)  | mpu6050_buffer[9 ]) - GYRO_OFFSET.x;
+    MPU6050_GYRO_LAST.y = ((((int16_t)mpu6050_buffer[10]) << 8) | mpu6050_buffer[11]) - GYRO_OFFSET.y;
+    MPU6050_GYRO_LAST.z = ((((int16_t)mpu6050_buffer[12]) << 8) | mpu6050_buffer[13]) - GYRO_OFFSET.z;
 
 
     if (!GYRO_OFFSET_OK) //陀螺仪 零偏计算
@@ -400,24 +388,24 @@ void MPU6050_Dataanl(void)
         static uint8_t cnt_g = 0;
         if (cnt_g == 0) //刚进入 寄存器清零
         {
-            GYRO_OFFSET.X = 0;
-            GYRO_OFFSET.Y = 0;
-            GYRO_OFFSET.Z = 0;
+            GYRO_OFFSET.x = 0;
+            GYRO_OFFSET.y = 0;
+            GYRO_OFFSET.z = 0;
             tempgx = 0;
             tempgy = 0;
             tempgz = 0;
             cnt_g = 1;
             return;
         }
-        //6050数据累加
-        tempgx += MPU6050_GYRO_LAST.X;
-        tempgy += MPU6050_GYRO_LAST.Y;
-        tempgz += MPU6050_GYRO_LAST.Z;
+        //6050数据累加        
+				tempgx += MPU6050_GYRO_LAST.x;
+        tempgy += MPU6050_GYRO_LAST.y;
+        tempgz += MPU6050_GYRO_LAST.z;
         if (cnt_g == 200) //加两百次 求平均
         {
-            GYRO_OFFSET.X = tempgx / cnt_g;
-            GYRO_OFFSET.Y = tempgy / cnt_g;
-            GYRO_OFFSET.Z = tempgz / cnt_g;
+            GYRO_OFFSET.x = tempgx / cnt_g;
+            GYRO_OFFSET.y = tempgy / cnt_g;
+            GYRO_OFFSET.z = tempgz / cnt_g;
             cnt_g = 0;
             GYRO_OFFSET_OK = 1;//计算完成标志
 						Data_Save(3);
@@ -433,22 +421,22 @@ void MPU6050_Dataanl(void)
         static uint8_t cnt_a = 0;
         if (cnt_a == 0)
         {
-            ACC_OFFSET.X = 0;
-            ACC_OFFSET.Y = 0;
-            ACC_OFFSET.Z = 0;
+            ACC_OFFSET.x = 0;
+            ACC_OFFSET.y = 0;
+            ACC_OFFSET.z = 0;
             tempax = 0;
             tempay = 0;
             tempaz = 0;
             cnt_a = 1;
             return;
         }
-        tempax += MPU6050_ACC_LAST.X;
-        tempay += MPU6050_ACC_LAST.Y;
+        tempax += MPU6050_ACC_LAST.x;
+        tempay += MPU6050_ACC_LAST.y;
         if (cnt_a == 200)
         {
-            ACC_OFFSET.X = tempax / cnt_a;
-            ACC_OFFSET.Y = tempay / cnt_a;
-            ACC_OFFSET.Z = tempaz / cnt_a;
+            ACC_OFFSET.x = tempax / cnt_a;
+            ACC_OFFSET.y = tempay / cnt_a;
+            ACC_OFFSET.z = tempaz / cnt_a;
             cnt_a = 0;
             ACC_OFFSET_OK = 1;
 						Data_Save(2);
