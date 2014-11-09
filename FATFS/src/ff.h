@@ -108,7 +108,7 @@ typedef struct {
 } FATFS;
 
 
-/* File object structure (FIL)�ļ�����ṹ */
+/* File object structure (FIL)文件对象结构 */
 
 typedef struct {
 	FATFS*	fs;				/* Pointer to the related file system object (**do not change order**) */
@@ -237,7 +237,7 @@ TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);						/* Get a string from the fil
 #define f_tell(fp) ((fp)->fptr)
 #define f_size(fp) ((fp)->fsize)
 
-FRESULT dir_sdi (DIR *dj,WORD idx);	  	//�øú������Ա��ⲿ��������
+FRESULT dir_sdi (DIR *dj,WORD idx);	  	//让该函数可以被外部函数调用
 
 #ifndef EOF
 #define EOF (-1)
@@ -287,13 +287,13 @@ int ff_del_syncobj (_SYNC_t sobj);				/* Delete a sync object */
 
 #if !_FS_READONLY
 /*
-ģʽ  				���� 
-FA_READ 			ָ�������ʶ��󡣿��Դ��ļ��ж�ȡ���ݡ� ��FA_WRITE ��Ͽ��Խ��ж�д���ʡ� 
-FA_WRITE 			ָ��д���ʶ��󡣿������ļ���д�����ݡ� ��FA_READ��Ͽ��Խ��ж�д���ʡ� 
-FA_OPEN_EXISTING 	���ļ�������ļ������ڣ����ʧ�ܡ�( Ĭ��) 
-FA_OPEN_ALWAYS  	����ļ����ڣ���򿪣����򣬴���һ�����ļ��� 
-FA_CREATE_NEW  		����һ�����ļ�������ļ��Ѵ��ڣ��򴴽�ʧ�ܡ� 
-FA_CREATE_ALWAYS 	����һ�����ļ�������ļ��Ѵ��ڣ����������ضϲ����ǡ� 
+模式  				描述 
+FA_READ 			指定读访问对象。可以从文件中读取数据。 与FA_WRITE 结合可以进行读写访问。 
+FA_WRITE 			指定写访问对象。可以向文件中写入数据。 与FA_READ结合可以进行读写访问。 
+FA_OPEN_EXISTING 	打开文件。如果文件不存在，则打开失败。( 默认) 
+FA_OPEN_ALWAYS  	如果文件存在，则打开；否则，创建一个新文件。 
+FA_CREATE_NEW  		创建一个新文件。如果文件已存在，则创建失败。 
+FA_CREATE_ALWAYS 	创建一个新文件。如果文件已存在，则它将被截断并覆盖。 
 */
 #define	FA_WRITE         0x02
 #define	FA_CREATE_NEW    0x04

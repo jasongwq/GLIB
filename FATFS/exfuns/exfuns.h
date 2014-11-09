@@ -12,31 +12,31 @@ extern FIL *ftemp;
 extern UINT br,bxw;
 extern FILINFO fileinfo;
 extern DIR dir;
-extern u8 *fatbuf;//SD¿¨Êı¾İ»º´æÇø
+extern u8 *fatbuf;//SDå¡æ•°æ®ç¼“å­˜åŒº
 
 
-//f_typetell·µ»ØµÄÀàĞÍ¶¨Òå
-//¸ù¾İ±íFILE_TYPE_TBL»ñµÃ.ÔÚexfuns.cÀïÃæ¶¨Òå
-#define T_BIN		0X00	//binÎÄ¼ş
-#define T_LRC		0X10	//lrcÎÄ¼ş
-#define T_NES		0X20	//nesÎÄ¼ş
-#define T_TEXT		0X30	//.txtÎÄ¼ş
-#define T_C			0X31	//.cÎÄ¼ş
-#define T_H			0X32    //.hÎÄ¼ş
-#define T_FLAC		0X4C	//flacÎÄ¼ş
-#define T_BMP		0X50	//bmpÎÄ¼ş
-#define T_JPG		0X51	//jpgÎÄ¼ş
-#define T_JPEG		0X52	//jpegÎÄ¼ş		 
-#define T_GIF		0X53	//gifÎÄ¼ş  
+//f_typetellè¿”å›çš„ç±»å‹å®šä¹‰
+//æ ¹æ®è¡¨FILE_TYPE_TBLè·å¾—.åœ¨exfuns.cé‡Œé¢å®šä¹‰
+#define T_BIN		0X00	//binæ–‡ä»¶
+#define T_LRC		0X10	//lrcæ–‡ä»¶
+#define T_NES		0X20	//nesæ–‡ä»¶
+#define T_TEXT		0X30	//.txtæ–‡ä»¶
+#define T_C			0X31	//.cæ–‡ä»¶
+#define T_H			0X32    //.hæ–‡ä»¶
+#define T_FLAC		0X4C	//flacæ–‡ä»¶
+#define T_BMP		0X50	//bmpæ–‡ä»¶
+#define T_JPG		0X51	//jpgæ–‡ä»¶
+#define T_JPEG		0X52	//jpegæ–‡ä»¶		 
+#define T_GIF		0X53	//gifæ–‡ä»¶  
 
  
-u8 exfuns_init(void);		//ÉêÇëÄÚ´æ
-u8 f_typetell(char *fname);	//Ê¶±ğÎÄ¼şÀàĞÍ
-u8 exf_getfree(u8 *drv,u32 *total,u32 *free);//µÃµ½´ÅÅÌ×ÜÈİÁ¿ºÍÊ£ÓàÈİÁ¿
-u32 exf_fdsize(u8 *fdname);																				   //µÃµ½ÎÄ¼ş¼Ğ´óĞ¡
+u8 exfuns_init(void);		//ç”³è¯·å†…å­˜
+u8 f_typetell(char *fname);	//è¯†åˆ«æ–‡ä»¶ç±»å‹
+u8 exf_getfree(u8 *drv,u32 *total,u32 *free);//å¾—åˆ°ç£ç›˜æ€»å®¹é‡å’Œå‰©ä½™å®¹é‡
+u32 exf_fdsize(u8 *fdname);																				   //å¾—åˆ°æ–‡ä»¶å¤¹å¤§å°
 // u8* exf_get_src_dname(u8* dpfn);																		   
-// u8 exf_copy(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8 *psrc,u8 *pdst,u32 totsize,u32 cpdsize,u8 fwmode);	   //ÎÄ¼ş¸´ÖÆ
-// u8 exf_fdcopy(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8 *psrc,u8 *pdst,u32 *totsize,u32 *cpdsize,u8 fwmode);//ÎÄ¼ş¼Ğ¸´ÖÆ
+// u8 exf_copy(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8 *psrc,u8 *pdst,u32 totsize,u32 cpdsize,u8 fwmode);	   //æ–‡ä»¶å¤åˆ¶
+// u8 exf_fdcopy(u8(*fcpymsg)(u8*pname,u8 pct,u8 mode),u8 *psrc,u8 *pdst,u32 *totsize,u32 *cpdsize,u8 fwmode);//æ–‡ä»¶å¤¹å¤åˆ¶
 
 #endif
 

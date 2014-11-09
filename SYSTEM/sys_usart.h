@@ -2,7 +2,15 @@
 #define __SYS_USART_H_
 #include "sys.h"
 #include "usart.h"
-extern u8 Rx_Buf[3][2][32]; //Á½¸ö32×Ö½ÚµÄ´®¿Ú½ÓÊÕ»º´æ
+#include "stm32_config.h"
+extern u8 Rx_Buf[3][2][32]; //ä¸¤ä¸ª32å­—èŠ‚çš„ä¸²å£æ¥æ”¶ç¼“å­˜
+#if VERSIONS ==1
+#define Printf_USART USART1
+#endif
+#if VERSIONS ==2
+#define Printf_USART USART3
+#endif
+
 void Sys_Printf(USART_TypeDef *USARTx, char *Data, ...);
 extern uint8_t *Sys_sPrintf(USART_TypeDef *USARTx, unsigned char *DataToSend, unsigned char num);
 void Uart_CheckEvent(void);

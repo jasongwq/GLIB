@@ -24,7 +24,7 @@
 
 
 
-void Set_Nokia_Contrast(u8 Contrast);//���öԱȶ�;
+void Set_Nokia_Contrast(u8 Contrast);//设置对比度;
 
 void NOKIA_5110_LCD_Init(void);
 void NOKIA_5110_LCD_Clear(void);

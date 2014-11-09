@@ -2,12 +2,12 @@
 #ifndef __ENC28J60_H
 #define __ENC28J60_H	  
 //////////////////////////////////////////////////////////////////////////////////	 
-//ALIENTEKս��STM32������
-//ENC28J60���� ����	   
-//����ԭ��@ALIENTEK
-//������̳:www.openedv.com
-//�޸�����:2012/9/28
-//�汾��V1.0			   								  
+//ALIENTEK战舰STM32开发板
+//ENC28J60驱动 代码	   
+//正点原子@ALIENTEK
+//技术论坛:www.openedv.com
+//修改日期:2012/9/28
+//版本：V1.0			   								  
 //////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,10 +39,10 @@
 #define ERXSTH           (0x09|0x00)
 #define ERXNDL           (0x0A|0x00)
 #define ERXNDH           (0x0B|0x00)
-//ERXWRPTH:ERXWRPTL �Ĵ�������Ӳ����FIFO ��
-//���ĸ�λ��д������յ����ֽڡ� ָ����ֻ���ģ��ڳ�
-//�����յ�һ�����ݰ���Ӳ�����Զ�����ָ�롣 ָ���
-//�����ж�FIFO ��ʣ��ռ�Ĵ�С��
+//ERXWRPTH:ERXWRPTL 寄存器定义硬件向FIFO 中
+//的哪个位置写入其接收到的字节。 指针是只读的，在成
+//功接收到一个数据包后，硬件会自动更新指针。 指针可
+//用于判断FIFO 内剩余空间的大小。
 #define ERXRDPTL         (0x0C|0x00)
 #define ERXRDPTH         (0x0D|0x00)
 #define ERXWRPTL         (0x0E|0x00)
@@ -249,10 +249,10 @@
 #define   MAX_FRAMELEN    1518        // (note: maximum ethernet frame length would be 1518)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-#define ENC28J60_CS		PAout(4) 	//ENC28J60Ƭѡ�ź�
-#define ENC28J60_RST	PEout(1)	//ENC28J60��λ�ź�
+#define ENC28J60_CS		PAout(4) 	//ENC28J60片选信号
+#define ENC28J60_RST	PEout(1)	//ENC28J60复位信号
 
-//SPI1��ʼ��
+//SPI1初始化
 void ENC28J60_Reset(void);
 u8 ENC28J60_Read_Op(u8 op,u8 addr);
 void ENC28J60_Write_Op(u8 op,u8 addr,u8 data);

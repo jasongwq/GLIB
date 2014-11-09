@@ -5,35 +5,35 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 
-// SD¿¨ÀàĞÍ¶¨Òå
+// SDå¡ç±»å‹å®šä¹‰
 #define SD_TYPE_ERR     0X00
 #define SD_TYPE_MMC     0X01
 #define SD_TYPE_V1      0X02
 #define SD_TYPE_V2      0X04
 #define SD_TYPE_V2HC    0X06
-// SD¿¨Ö¸Áî±í
-#define CMD0    0       //¿¨¸´Î»
+// SDå¡æŒ‡ä»¤è¡¨
+#define CMD0    0       //å¡å¤ä½
 #define CMD1    1
-#define CMD8    8       //ÃüÁî8 £¬SEND_IF_COND
-#define CMD9    9       //ÃüÁî9 £¬¶ÁCSDÊı¾İ
-#define CMD10   10      //ÃüÁî10£¬¶ÁCIDÊı¾İ
-#define CMD12   12      //ÃüÁî12£¬Í£Ö¹Êı¾İ´«Êä
-#define CMD16   16      //ÃüÁî16£¬ÉèÖÃSectorSize Ó¦·µ»Ø0x00
-#define CMD17   17      //ÃüÁî17£¬¶Ásector
-#define CMD18   18      //ÃüÁî18£¬¶ÁMulti sector
-#define CMD23   23      //ÃüÁî23£¬ÉèÖÃ¶àsectorĞ´ÈëÇ°Ô¤ÏÈ²Á³ıN¸öblock
-#define CMD24   24      //ÃüÁî24£¬Ğ´sector
-#define CMD25   25      //ÃüÁî25£¬Ğ´Multi sector
-#define CMD41   41      //ÃüÁî41£¬Ó¦·µ»Ø0x00
-#define CMD55   55      //ÃüÁî55£¬Ó¦·µ»Ø0x01
-#define CMD58   58      //ÃüÁî58£¬¶ÁOCRĞÅÏ¢
-#define CMD59   59      //ÃüÁî59£¬Ê¹ÄÜ/½ûÖ¹CRC£¬Ó¦·µ»Ø0x00
-//Êı¾İĞ´Èë»ØÓ¦×ÖÒâÒå
+#define CMD8    8       //å‘½ä»¤8 ï¼ŒSEND_IF_COND
+#define CMD9    9       //å‘½ä»¤9 ï¼Œè¯»CSDæ•°æ®
+#define CMD10   10      //å‘½ä»¤10ï¼Œè¯»CIDæ•°æ®
+#define CMD12   12      //å‘½ä»¤12ï¼Œåœæ­¢æ•°æ®ä¼ è¾“
+#define CMD16   16      //å‘½ä»¤16ï¼Œè®¾ç½®SectorSize åº”è¿”å›0x00
+#define CMD17   17      //å‘½ä»¤17ï¼Œè¯»sector
+#define CMD18   18      //å‘½ä»¤18ï¼Œè¯»Multi sector
+#define CMD23   23      //å‘½ä»¤23ï¼Œè®¾ç½®å¤šsectorå†™å…¥å‰é¢„å…ˆæ“¦é™¤Nä¸ªblock
+#define CMD24   24      //å‘½ä»¤24ï¼Œå†™sector
+#define CMD25   25      //å‘½ä»¤25ï¼Œå†™Multi sector
+#define CMD41   41      //å‘½ä»¤41ï¼Œåº”è¿”å›0x00
+#define CMD55   55      //å‘½ä»¤55ï¼Œåº”è¿”å›0x01
+#define CMD58   58      //å‘½ä»¤58ï¼Œè¯»OCRä¿¡æ¯
+#define CMD59   59      //å‘½ä»¤59ï¼Œä½¿èƒ½/ç¦æ­¢CRCï¼Œåº”è¿”å›0x00
+//æ•°æ®å†™å…¥å›åº”å­—æ„ä¹‰
 #define MSD_DATA_OK                0x05
 #define MSD_DATA_CRC_ERROR         0x0B
 #define MSD_DATA_WRITE_ERROR       0x0D
 #define MSD_DATA_OTHER_ERROR       0xFF
-//SD¿¨»ØÓ¦±ê¼Ç×Ö
+//SDå¡å›åº”æ ‡è®°å­—
 #define MSD_RESPONSE_NO_ERROR      0x00
 #define MSD_IN_IDLE_STATE          0x01
 #define MSD_ERASE_RESET            0x02
@@ -44,23 +44,23 @@
 #define MSD_PARAMETER_ERROR        0x40
 #define MSD_RESPONSE_FAILURE       0xFF
 
-//Õâ²¿·ÖÓ¦¸ù¾İ¾ßÌåµÄÁ¬ÏßÀ´ĞŞ¸Ä!
-//Mini STM32Ê¹ÓÃµÄÊÇPA3×÷ÎªSD¿¨µÄCS½Å.
-#define SD_CS  PDout(2) //SD¿¨Æ¬Ñ¡Òı½Å                           
+//è¿™éƒ¨åˆ†åº”æ ¹æ®å…·ä½“çš„è¿çº¿æ¥ä¿®æ”¹!
+//Mini STM32ä½¿ç”¨çš„æ˜¯PA3ä½œä¸ºSDå¡çš„CSè„š.
+#define SD_CS  PDout(2) //SDå¡ç‰‡é€‰å¼•è„š                           
 
-extern u8  SD_Type;//SD¿¨µÄÀàĞÍ
-//º¯ÊıÉêÃ÷Çø
+extern u8  SD_Type;//SDå¡çš„ç±»å‹
+//å‡½æ•°ç”³æ˜åŒº
 u8 SD_SPI_ReadWriteByte(u8 data);
 void SD_SPI_SpeedLow(void);
 void SD_SPI_SpeedHigh(void);
-u8 SD_WaitReady(void);                          //µÈ´ıSD¿¨×¼±¸
-u8 SD_GetResponse(u8 Response);                 //»ñµÃÏàÓ¦
-u8 SD_Initialize(void);                         //³õÊ¼»¯
-u8 SD_ReadDisk(u8 *buf, u32 sector, u8 cnt);    //¶Á¿é
-u8 SD_WriteDisk(u8 *buf, u32 sector, u8 cnt);   //Ğ´¿é
-u32 SD_GetSectorCount(void);                    //¶ÁÉÈÇøÊı
-u8 SD_GetCID(u8 *cid_data);                     //¶ÁSD¿¨CID
-u8 SD_GetCSD(u8 *csd_data);                     //¶ÁSD¿¨CSD
+u8 SD_WaitReady(void);                          //ç­‰å¾…SDå¡å‡†å¤‡
+u8 SD_GetResponse(u8 Response);                 //è·å¾—ç›¸åº”
+u8 SD_Initialize(void);                         //åˆå§‹åŒ–
+u8 SD_ReadDisk(u8 *buf, u32 sector, u8 cnt);    //è¯»å—
+u8 SD_WriteDisk(u8 *buf, u32 sector, u8 cnt);   //å†™å—
+u32 SD_GetSectorCount(void);                    //è¯»æ‰‡åŒºæ•°
+u8 SD_GetCID(u8 *cid_data);                     //è¯»SDå¡CID
+u8 SD_GetCSD(u8 *csd_data);                     //è¯»SDå¡CSD
 
 #endif
 

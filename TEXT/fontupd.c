@@ -4,37 +4,37 @@
 #include "lcd.h"  
 #include "malloc.h"
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEKÕ½½¢STM32¿ª·¢°å
-//×Ö¿â¸üĞÂ Çı¶¯´úÂë	   
-//ÕıµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//ĞŞ¸ÄÈÕÆÚ:2012/9/18
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2009-2019
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEKæˆ˜èˆ°STM32å¼€å‘æ¿
+//å­—åº“æ›´æ–° é©±åŠ¨ä»£ç 	   
+//æ­£ç‚¹åŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//ä¿®æ”¹æ—¥æœŸ:2012/9/18
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2009-2019
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
 						   
-u32 FONTINFOADDR=(1024*6+500)*1024;//Ä¬ÈÏÊÇ6MµÄµØÖ·
-//×Ö¿âĞÅÏ¢½á¹¹Ìå. 
-//ÓÃÀ´±£´æ×Ö¿â»ù±¾ĞÅÏ¢£¬µØÖ·£¬´óĞ¡µÈ
+u32 FONTINFOADDR=(1024*6+500)*1024;//é»˜è®¤æ˜¯6Mçš„åœ°å€
+//å­—åº“ä¿¡æ¯ç»“æ„ä½“. 
+//ç”¨æ¥ä¿å­˜å­—åº“åŸºæœ¬ä¿¡æ¯ï¼Œåœ°å€ï¼Œå¤§å°ç­‰
 _font_info ftinfo;
 
-//ÔÚsd¿¨ÖĞµÄÂ·¾¶
-const u8 *GBK16_SDPATH="0:/SYSTEM/FONT/GBK16.FON";		//GBK16µÄ´æ·ÅÎ»ÖÃ
-const u8 *GBK12_SDPATH="0:/SYSTEM/FONT/GBK12.FON";		//GBK12µÄ´æ·ÅÎ»ÖÃ
-const u8 *UNIGBK_SDPATH="0:/SYSTEM/FONT/UNIGBK.BIN";	//UNIGBK.BINµÄ´æ·ÅÎ»ÖÃ
-//ÔÚ25QxxÖĞµÄÂ·¾¶
-const u8 *GBK16_25QPATH="1:/SYSTEM/FONT/GBK16.FON";		//GBK16µÄ´æ·ÅÎ»ÖÃ
-const u8 *GBK12_25QPATH="1:/SYSTEM/FONT/GBK12.FON";		//GBK12µÄ´æ·ÅÎ»ÖÃ
-const u8 *UNIGBK_25QPATH="1:/SYSTEM/FONT/UNIGBK.BIN";	//UNIGBK.BINµÄ´æ·ÅÎ»ÖÃ
+//åœ¨sdå¡ä¸­çš„è·¯å¾„
+const u8 *GBK16_SDPATH="0:/SYSTEM/FONT/GBK16.FON";		//GBK16çš„å­˜æ”¾ä½ç½®
+const u8 *GBK12_SDPATH="0:/SYSTEM/FONT/GBK12.FON";		//GBK12çš„å­˜æ”¾ä½ç½®
+const u8 *UNIGBK_SDPATH="0:/SYSTEM/FONT/UNIGBK.BIN";	//UNIGBK.BINçš„å­˜æ”¾ä½ç½®
+//åœ¨25Qxxä¸­çš„è·¯å¾„
+const u8 *GBK16_25QPATH="1:/SYSTEM/FONT/GBK16.FON";		//GBK16çš„å­˜æ”¾ä½ç½®
+const u8 *GBK12_25QPATH="1:/SYSTEM/FONT/GBK12.FON";		//GBK12çš„å­˜æ”¾ä½ç½®
+const u8 *UNIGBK_25QPATH="1:/SYSTEM/FONT/UNIGBK.BIN";	//UNIGBK.BINçš„å­˜æ”¾ä½ç½®
 
-//ÏÔÊ¾µ±Ç°×ÖÌå¸üĞÂ½ø¶È
-//x,y:×ø±ê
-//size:×ÖÌå´óĞ¡
-//fsize:Õû¸öÎÄ¼ş´óĞ¡
-//pos:µ±Ç°ÎÄ¼şÖ¸ÕëÎ»ÖÃ
+//æ˜¾ç¤ºå½“å‰å­—ä½“æ›´æ–°è¿›åº¦
+//x,y:åæ ‡
+//size:å­—ä½“å¤§å°
+//fsize:æ•´ä¸ªæ–‡ä»¶å¤§å°
+//pos:å½“å‰æ–‡ä»¶æŒ‡é’ˆä½ç½®
 u32 fupd_prog(u16 x,u16 y,u8 size,u32 fsize,u32 pos)
 {
 	float prog;
@@ -46,16 +46,16 @@ u32 fupd_prog(u16 x,u16 y,u8 size,u32 fsize,u32 pos)
 		LCD_ShowString(x+3*size/2,y,240,320,size,"%");		
 		t=prog;
 		if(t>100)t=100;
-		LCD_ShowNum(x,y,t,3,size);//ÏÔÊ¾ÊıÖµ
+		LCD_ShowNum(x,y,t,3,size);//æ˜¾ç¤ºæ•°å€¼
 	}
 	return 0;					    
 } 
-//¸üĞÂÄ³Ò»¸ö
-//x,y:×ø±ê
-//size:×ÖÌå´óĞ¡
-//fxpath:Â·¾¶
-//fx:¸üĞÂµÄÄÚÈİ 0,ungbk;1,gbk12;2,gbk16;
-//·µ»ØÖµ:0,³É¹¦;ÆäËû,Ê§°Ü.
+//æ›´æ–°æŸä¸€ä¸ª
+//x,y:åæ ‡
+//size:å­—ä½“å¤§å°
+//fxpath:è·¯å¾„
+//fx:æ›´æ–°çš„å†…å®¹ 0,ungbk;1,gbk12;2,gbk16;
+//è¿”å›å€¼:0,æˆåŠŸ;å…¶ä»–,å¤±è´¥.
 u8 updata_fontx(u16 x,u16 y,u8 size,u8 *fxpath,u8 fx)
 {
 	u32 flashaddr=0;								    
@@ -65,66 +65,66 @@ u8 updata_fontx(u16 x,u16 y,u8 size,u8 *fxpath,u8 fx)
 	u16 bread;
 	u32 offx=0;
 	u8 rval=0;	     
-	fftemp=(FIL*)mymalloc(SRAMIN,sizeof(FIL));	//·ÖÅäÄÚ´æ	
+	fftemp=(FIL*)mymalloc(SRAMIN,sizeof(FIL));	//åˆ†é…å†…å­˜	
 	if(fftemp==NULL)rval=1;
-	tempbuf=mymalloc(SRAMIN,4096);	//·ÖÅä4096¸ö×Ö½Ú¿Õ¼ä
+	tempbuf=mymalloc(SRAMIN,4096);	//åˆ†é…4096ä¸ªå­—èŠ‚ç©ºé—´
 	if(tempbuf==NULL)rval=1;
  	res=f_open(fftemp,(const TCHAR*)fxpath,FA_READ); 
- 	if(res)rval=2;//´ò¿ªÎÄ¼şÊ§°Ü  
+ 	if(res)rval=2;//æ‰“å¼€æ–‡ä»¶å¤±è´¥  
  	if(rval==0)	 
 	{
-		if(fx==0)		//¸üĞÂUNIGBK.BIN
+		if(fx==0)		//æ›´æ–°UNIGBK.BIN
 		{
-			ftinfo.ugbkaddr=FONTINFOADDR+sizeof(ftinfo);//ĞÅÏ¢Í·Ö®ºó£¬½ô¸úUNIGBK×ª»»Âë±í
-  			ftinfo.ugbksize=fftemp->fsize;				//UNIGBK´óĞ¡
+			ftinfo.ugbkaddr=FONTINFOADDR+sizeof(ftinfo);//ä¿¡æ¯å¤´ä¹‹åï¼Œç´§è·ŸUNIGBKè½¬æ¢ç è¡¨
+  			ftinfo.ugbksize=fftemp->fsize;				//UNIGBKå¤§å°
  			flashaddr=ftinfo.ugbkaddr;
 		}else if(fx==1)	//GBK12
 		{				  
-			ftinfo.f12addr=ftinfo.ugbkaddr+ftinfo.ugbksize;		//UNIGBKÖ®ºó£¬½ô¸úGBK12×Ö¿â
-			ftinfo.gbk12size=fftemp->fsize;						//GBK12×Ö¿â´óĞ¡
-			flashaddr=ftinfo.f12addr;							//GBK12µÄÆğÊ¼µØÖ·
+			ftinfo.f12addr=ftinfo.ugbkaddr+ftinfo.ugbksize;		//UNIGBKä¹‹åï¼Œç´§è·ŸGBK12å­—åº“
+			ftinfo.gbk12size=fftemp->fsize;						//GBK12å­—åº“å¤§å°
+			flashaddr=ftinfo.f12addr;							//GBK12çš„èµ·å§‹åœ°å€
 		}else			//GBK16
 		{
-			ftinfo.f16addr=ftinfo.f12addr+ftinfo.gbk12size;		//GBK12Ö®ºó£¬½ô¸úGBK16×Ö¿â
-			ftinfo.gkb16size=fftemp->fsize;						//GBK16×Ö¿â´óĞ¡
-			flashaddr=ftinfo.f16addr;							//GBK16µÄÆğÊ¼µØÖ·
+			ftinfo.f16addr=ftinfo.f12addr+ftinfo.gbk12size;		//GBK12ä¹‹åï¼Œç´§è·ŸGBK16å­—åº“
+			ftinfo.gkb16size=fftemp->fsize;						//GBK16å­—åº“å¤§å°
+			flashaddr=ftinfo.f16addr;							//GBK16çš„èµ·å§‹åœ°å€
 		}	   
-		while(res==FR_OK)//ËÀÑ­»·Ö´ĞĞ
+		while(res==FR_OK)//æ­»å¾ªç¯æ‰§è¡Œ
 		{
-	 		res=f_read(fftemp,tempbuf,4096,(UINT *)&bread);		//¶ÁÈ¡Êı¾İ	 
-			if(res!=FR_OK)break;								//Ö´ĞĞ´íÎó
-			SPI_Flash_Write(tempbuf,offx+flashaddr,4096);		//´Ó0¿ªÊ¼Ğ´Èë4096¸öÊı¾İ  
+	 		res=f_read(fftemp,tempbuf,4096,(UINT *)&bread);		//è¯»å–æ•°æ®	 
+			if(res!=FR_OK)break;								//æ‰§è¡Œé”™è¯¯
+			SPI_Flash_Write(tempbuf,offx+flashaddr,4096);		//ä»0å¼€å§‹å†™å…¥4096ä¸ªæ•°æ®  
 	  		offx+=bread;	  
-			fupd_prog(x,y,size,fftemp->fsize,offx);	 			//½ø¶ÈÏÔÊ¾
-			if(bread!=4096)break;								//¶ÁÍêÁË.
+			fupd_prog(x,y,size,fftemp->fsize,offx);	 			//è¿›åº¦æ˜¾ç¤º
+			if(bread!=4096)break;								//è¯»å®Œäº†.
 	 	} 	
 		f_close(fftemp);		
 	}			 
-	myfree(SRAMIN,fftemp);	//ÊÍ·ÅÄÚ´æ
-	myfree(SRAMIN,tempbuf);	//ÊÍ·ÅÄÚ´æ
+	myfree(SRAMIN,fftemp);	//é‡Šæ”¾å†…å­˜
+	myfree(SRAMIN,tempbuf);	//é‡Šæ”¾å†…å­˜
 	return res;
 }
 
-//¸üĞÂ×ÖÌåÎÄ¼ş,UNIGBK,GBK12,GBK16Ò»Æğ¸üĞÂ
-//x,y:ÌáÊ¾ĞÅÏ¢µÄÏÔÊ¾µØÖ·
-//size:×ÖÌå´óĞ¡
-//ÌáÊ¾ĞÅÏ¢×ÖÌå´óĞ¡
-//src:0,´ÓSD¿¨¸üĞÂ.
-//	  1,´Ó25QXX¸üĞÂ											  
-//·µ»ØÖµ:0,¸üĞÂ³É¹¦;
-//		 ÆäËû,´íÎó´úÂë.	  
+//æ›´æ–°å­—ä½“æ–‡ä»¶,UNIGBK,GBK12,GBK16ä¸€èµ·æ›´æ–°
+//x,y:æç¤ºä¿¡æ¯çš„æ˜¾ç¤ºåœ°å€
+//size:å­—ä½“å¤§å°
+//æç¤ºä¿¡æ¯å­—ä½“å¤§å°
+//src:0,ä»SDå¡æ›´æ–°.
+//	  1,ä»25QXXæ›´æ–°											  
+//è¿”å›å€¼:0,æ›´æ–°æˆåŠŸ;
+//		 å…¶ä»–,é”™è¯¯ä»£ç .	  
 u8 update_font(u16 x,u16 y,u8 size,u8 src)
 {	
 	u8 *gbk16_path;
 	u8 *gbk12_path;
 	u8 *unigbk_path;
 	u8 res;		  
-	if(src)//´Ó25qxx¸üĞÂ
+	if(src)//ä»25qxxæ›´æ–°
 	{
 		unigbk_path=(u8*)UNIGBK_25QPATH;
 		gbk12_path=(u8*)GBK12_25QPATH;
 		gbk16_path=(u8*)GBK16_25QPATH;
-	}else//´Ósd¿¨¸üĞÂ
+	}else//ä»sdå¡æ›´æ–°
 	{
 		unigbk_path=(u8*)UNIGBK_SDPATH;
 		gbk12_path=(u8*)GBK12_SDPATH;
@@ -132,32 +132,32 @@ u8 update_font(u16 x,u16 y,u8 size,u8 src)
 	}   
  	res=0XFF;		
 	ftinfo.fontok=0XFF;
-  	SPI_Flash_Write((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));	//Çå³ıÖ®Ç°×Ö¿â³É¹¦µÄ±êÖ¾.·ÀÖ¹¸üĞÂµ½Ò»°ëÖØÆô,µ¼ÖÂµÄ×Ö¿â²¿·ÖÊı¾İ¶ªÊ§.
- 	SPI_Flash_Read((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));	//ÖØĞÂ¶Á³öftinfo½á¹¹ÌåÊı¾İ
+  	SPI_Flash_Write((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));	//æ¸…é™¤ä¹‹å‰å­—åº“æˆåŠŸçš„æ ‡å¿—.é˜²æ­¢æ›´æ–°åˆ°ä¸€åŠé‡å¯,å¯¼è‡´çš„å­—åº“éƒ¨åˆ†æ•°æ®ä¸¢å¤±.
+ 	SPI_Flash_Read((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));	//é‡æ–°è¯»å‡ºftinfoç»“æ„ä½“æ•°æ®
  	LCD_ShowString(x,y,240,320,size,"Updating UNIGBK.BIN");		
-	res=updata_fontx(x+20*size/2,y,size,unigbk_path,0);			//¸üĞÂUNIGBK.BIN
+	res=updata_fontx(x+20*size/2,y,size,unigbk_path,0);			//æ›´æ–°UNIGBK.BIN
 	if(res)return 1;
  	LCD_ShowString(x,y,240,320,size,"Updating GBK12.BIN  ");
-	res=updata_fontx(x+20*size/2,y,size,gbk12_path,1);			//¸üĞÂGBK12.FON
+	res=updata_fontx(x+20*size/2,y,size,gbk12_path,1);			//æ›´æ–°GBK12.FON
 	if(res)return 2;
 	LCD_ShowString(x,y,240,320,size,"Updating GBK16.BIN  ");
-	res=updata_fontx(x+20*size/2,y,size,gbk16_path,2);			//¸üĞÂGBK16.FON
+	res=updata_fontx(x+20*size/2,y,size,gbk16_path,2);			//æ›´æ–°GBK16.FON
 	if(res)return 3;	   
-	//È«²¿¸üĞÂºÃÁË
+	//å…¨éƒ¨æ›´æ–°å¥½äº†
 	ftinfo.fontok=0XAA;
-  	SPI_Flash_Write((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));	//±£´æ×Ö¿âĞÅÏ¢
-	return 0;//ÎŞ´íÎó.		 
+  	SPI_Flash_Write((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));	//ä¿å­˜å­—åº“ä¿¡æ¯
+	return 0;//æ— é”™è¯¯.		 
 } 
-//³õÊ¼»¯×ÖÌå
-//·µ»ØÖµ:0,×Ö¿âÍêºÃ.
-//		 ÆäËû,×Ö¿â¶ªÊ§
+//åˆå§‹åŒ–å­—ä½“
+//è¿”å›å€¼:0,å­—åº“å®Œå¥½.
+//		 å…¶ä»–,å­—åº“ä¸¢å¤±
 u8 font_init(void)
 {			  												 
 	SPI_Flash_Init();
-	FONTINFOADDR=(1024*6+500)*1024;			//W25Q64,6MÒÔºó	 
-	ftinfo.ugbkaddr=FONTINFOADDR+25;		//UNICODEGBK ±í´æ·ÅÊ×µØÖ·¹Ì¶¨µØÖ·
-	SPI_Flash_Read((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));//¶Á³öftinfo½á¹¹ÌåÊı¾İ
-	if(ftinfo.fontok!=0XAA)return 1;		//×Ö¿â´íÎó. 
+	FONTINFOADDR=(1024*6+500)*1024;			//W25Q64,6Mä»¥å	 
+	ftinfo.ugbkaddr=FONTINFOADDR+25;		//UNICODEGBK è¡¨å­˜æ”¾é¦–åœ°å€å›ºå®šåœ°å€
+	SPI_Flash_Read((u8*)&ftinfo,FONTINFOADDR,sizeof(ftinfo));//è¯»å‡ºftinfoç»“æ„ä½“æ•°æ®
+	if(ftinfo.fontok!=0XAA)return 1;		//å­—åº“é”™è¯¯. 
 	return 0;		    
 }
 

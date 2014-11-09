@@ -18,65 +18,65 @@ IQR     Maskable interrupt pin. Active low              PA0
 */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-//NRF24L01�Ĵ�����������
-//#define READ_REG        0x00  //�����üĴ���,��5λΪ�Ĵ�����ַ
-#define NRF24L01_WRITE_REG       0x20  //д���üĴ���,��5λΪ�Ĵ�����ַ
-#define RD_RX_PLOAD     0x61  //��RX��Ч����,1~32�ֽ�
-#define WR_TX_PLOAD     0xA0  //дTX��Ч����,1~32�ֽ�
-#define FLUSH_TX        0xE1  //���TX FIFO�Ĵ���.����ģʽ����
-#define FLUSH_RX        0xE2  //���RX FIFO�Ĵ���.����ģʽ����
-#define REUSE_TX_PL     0xE3  //����ʹ����һ������,CEΪ��,���ݰ������Ϸ���.
-#define NOP             0xFF  //�ղ���,����������״̬�Ĵ���
-//SPI(NRF24L01)�Ĵ�����ַ
-#define CONFIG          0x00  //���üĴ�����ַ;bit0:1����ģʽ,0����ģʽ;bit1:��ѡ��;bit2:CRCģʽ;bit3:CRCʹ��;
-//bit4:�ж�MAX_RT(�ﵽ����ط������ж�)ʹ��;bit5:�ж�TX_DSʹ��;bit6:�ж�RX_DRʹ��
-#define EN_AA           0x01  //ʹ���Զ�Ӧ����  bit0~5,��Ӧͨ��0~5
-#define EN_RXADDR       0x02  //���յ�ַ����,bit0~5,��Ӧͨ��0~5
-#define SETUP_AW        0x03  //���õ�ַ����(��������ͨ��):bit1,0:00,3�ֽ�;01,4�ֽ�;02,5�ֽ�;
-#define SETUP_RETR      0x04  //�����Զ��ط�;bit3:0,�Զ��ط�������;bit7:4,�Զ��ط���ʱ 250*x+86us
-#define RF_CH           0x05  //RFͨ��,bit6:0,����ͨ��Ƶ��;
-#define RF_SETUP        0x06  //RF�Ĵ���;bit3:��������(0:1Mbps,1:2Mbps);bit2:1,���书��;bit0:�������Ŵ�������
-#define STATUS          0x07  //״̬�Ĵ���;bit0:TX FIFO����־;bit3:1,��������ͨ����(���:6);bit4,�ﵽ�����ط�
-//bit5:���ݷ�������ж�;bit6:���������ж�;
-#define MAX_TX          0x10  //�ﵽ����ʹ����ж�
-#define TX_OK           0x20  //TX��������ж�
-#define RX_OK           0x40  //���յ������ж�
+//NRF24L01寄存器操作命令
+//#define READ_REG        0x00  //读配置寄存器,低5位为寄存器地址
+#define NRF24L01_WRITE_REG       0x20  //写配置寄存器,低5位为寄存器地址
+#define RD_RX_PLOAD     0x61  //读RX有效数据,1~32字节
+#define WR_TX_PLOAD     0xA0  //写TX有效数据,1~32字节
+#define FLUSH_TX        0xE1  //清除TX FIFO寄存器.发射模式下用
+#define FLUSH_RX        0xE2  //清除RX FIFO寄存器.接收模式下用
+#define REUSE_TX_PL     0xE3  //重新使用上一包数据,CE为高,数据包被不断发送.
+#define NOP             0xFF  //空操作,可以用来读状态寄存器
+//SPI(NRF24L01)寄存器地址
+#define CONFIG          0x00  //配置寄存器地址;bit0:1接收模式,0发射模式;bit1:电选择;bit2:CRC模式;bit3:CRC使能;
+//bit4:中断MAX_RT(达到最大重发次数中断)使能;bit5:中断TX_DS使能;bit6:中断RX_DR使能
+#define EN_AA           0x01  //使能自动应答功能  bit0~5,对应通道0~5
+#define EN_RXADDR       0x02  //接收地址允许,bit0~5,对应通道0~5
+#define SETUP_AW        0x03  //设置地址宽度(所有数据通道):bit1,0:00,3字节;01,4字节;02,5字节;
+#define SETUP_RETR      0x04  //建立自动重发;bit3:0,自动重发计数器;bit7:4,自动重发延时 250*x+86us
+#define RF_CH           0x05  //RF通道,bit6:0,工作通道频率;
+#define RF_SETUP        0x06  //RF寄存器;bit3:传输速率(0:1Mbps,1:2Mbps);bit2:1,发射功率;bit0:低噪声放大器增益
+#define STATUS          0x07  //状态寄存器;bit0:TX FIFO满标志;bit3:1,接收数据通道号(最大:6);bit4,达到最多次重发
+//bit5:数据发送完成中断;bit6:接收数据中断;
+#define MAX_TX          0x10  //达到最大发送次数中断
+#define TX_OK           0x20  //TX发送完成中断
+#define RX_OK           0x40  //接收到数据中断
 
-#define OBSERVE_TX      0x08  //���ͼ��Ĵ���,bit7:4,���ݰ���ʧ������;bit3:0,�ط�������
-#define CD              0x09  //�ز����Ĵ���,bit0,�ز����;
-#define RX_ADDR_P0      0x0A  //����ͨ��0���յ�ַ,��󳤶�5���ֽ�,���ֽ���ǰ
-#define RX_ADDR_P1      0x0B  //����ͨ��1���յ�ַ,��󳤶�5���ֽ�,���ֽ���ǰ
-#define RX_ADDR_P2      0x0C  //����ͨ��2���յ�ַ,����ֽڿ�����,���ֽ�,����ͬRX_ADDR_P1[39:8]���;
-#define RX_ADDR_P3      0x0D  //����ͨ��3���յ�ַ,����ֽڿ�����,���ֽ�,����ͬRX_ADDR_P1[39:8]���;
-#define RX_ADDR_P4      0x0E  //����ͨ��4���յ�ַ,����ֽڿ�����,���ֽ�,����ͬRX_ADDR_P1[39:8]���;
-#define RX_ADDR_P5      0x0F  //����ͨ��5���յ�ַ,����ֽڿ�����,���ֽ�,����ͬRX_ADDR_P1[39:8]���;
-#define TX_ADDR         0x10  //���͵�ַ(���ֽ���ǰ),ShockBurstTMģʽ��,RX_ADDR_P0��˵�ַ���
-#define RX_PW_P0        0x11  //��������ͨ��0��Ч���ݿ���(1~32�ֽ�),����Ϊ0��Ƿ�
-#define RX_PW_P1        0x12  //��������ͨ��1��Ч���ݿ���(1~32�ֽ�),����Ϊ0��Ƿ�
-#define RX_PW_P2        0x13  //��������ͨ��2��Ч���ݿ���(1~32�ֽ�),����Ϊ0��Ƿ�
-#define RX_PW_P3        0x14  //��������ͨ��3��Ч���ݿ���(1~32�ֽ�),����Ϊ0��Ƿ�
-#define RX_PW_P4        0x15  //��������ͨ��4��Ч���ݿ���(1~32�ֽ�),����Ϊ0��Ƿ�
-#define RX_PW_P5        0x16  //��������ͨ��5��Ч���ݿ���(1~32�ֽ�),����Ϊ0��Ƿ�
-#define NRF_FIFO_STATUS 0x17  //FIFO״̬�Ĵ���;bit0,RX FIFO�Ĵ����ձ�־;bit1,RX FIFO����־;bit2,3,����
-//bit4,TX FIFO�ձ�־;bit5,TX FIFO����־;bit6,1,ѭ��������һ���ݰ�.0,��ѭ��;
+#define OBSERVE_TX      0x08  //发送检测寄存器,bit7:4,数据包丢失计数器;bit3:0,重发计数器
+#define CD              0x09  //载波检测寄存器,bit0,载波检测;
+#define RX_ADDR_P0      0x0A  //数据通道0接收地址,最大长度5个字节,低字节在前
+#define RX_ADDR_P1      0x0B  //数据通道1接收地址,最大长度5个字节,低字节在前
+#define RX_ADDR_P2      0x0C  //数据通道2接收地址,最低字节可设置,高字节,必须同RX_ADDR_P1[39:8]相等;
+#define RX_ADDR_P3      0x0D  //数据通道3接收地址,最低字节可设置,高字节,必须同RX_ADDR_P1[39:8]相等;
+#define RX_ADDR_P4      0x0E  //数据通道4接收地址,最低字节可设置,高字节,必须同RX_ADDR_P1[39:8]相等;
+#define RX_ADDR_P5      0x0F  //数据通道5接收地址,最低字节可设置,高字节,必须同RX_ADDR_P1[39:8]相等;
+#define TX_ADDR         0x10  //发送地址(低字节在前),ShockBurstTM模式下,RX_ADDR_P0与此地址相等
+#define RX_PW_P0        0x11  //接收数据通道0有效数据宽度(1~32字节),设置为0则非法
+#define RX_PW_P1        0x12  //接收数据通道1有效数据宽度(1~32字节),设置为0则非法
+#define RX_PW_P2        0x13  //接收数据通道2有效数据宽度(1~32字节),设置为0则非法
+#define RX_PW_P3        0x14  //接收数据通道3有效数据宽度(1~32字节),设置为0则非法
+#define RX_PW_P4        0x15  //接收数据通道4有效数据宽度(1~32字节),设置为0则非法
+#define RX_PW_P5        0x16  //接收数据通道5有效数据宽度(1~32字节),设置为0则非法
+#define NRF_FIFO_STATUS 0x17  //FIFO状态寄存器;bit0,RX FIFO寄存器空标志;bit1,RX FIFO满标志;bit2,3,保留
+//bit4,TX FIFO空标志;bit5,TX FIFO满标志;bit6,1,循环发送上一数据包.0,不循环;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-//24L01������
-#define NRF24L01_CE   PCout(6) //24L01Ƭѡ�ź�
-#define NRF24L01_CSN  PBout(0) //SPIƬѡ�ź�
-#define NRF24L01_IRQ  PAin(0)  //IRQ������������
-//24L01���ͽ������ݿ��ȶ���
-#define TX_ADR_WIDTH    5       //5�ֽڵĵ�ַ����
-#define RX_ADR_WIDTH    5       //5�ֽڵĵ�ַ����
-#define TX_PLOAD_WIDTH  32      //32�ֽڵ��û����ݿ���
-#define RX_PLOAD_WIDTH  32      //32�ֽڵ��û����ݿ���
+//24L01操作线
+#define NRF24L01_CE   PCout(6) //24L01片选信号
+#define NRF24L01_CSN  PBout(0) //SPI片选信号
+#define NRF24L01_IRQ  PAin(0)  //IRQ主机数据输入
+//24L01发送接收数据宽度定义
+#define TX_ADR_WIDTH    5       //5字节的地址宽度
+#define RX_ADR_WIDTH    5       //5字节的地址宽度
+#define TX_PLOAD_WIDTH  32      //32字节的用户数据宽度
+#define RX_PLOAD_WIDTH  32      //32字节的用户数据宽度
 
 
 
 //////////////////////////////////////////////////////////////////////////////////
-const u8 TX_ADDRESS[TX_ADR_WIDTH] = {0x34, 0x43, 0x10, 0x10, 0x01}; //���͵�ַ
-const u8 RX_ADDRESS[RX_ADR_WIDTH] = {0x34, 0x43, 0x10, 0x10, 0x01}; //���ܵ�ַ
+const u8 TX_ADDRESS[TX_ADR_WIDTH] = {0x34, 0x43, 0x10, 0x10, 0x01}; //发送地址
+const u8 RX_ADDRESS[RX_ADR_WIDTH] = {0x34, 0x43, 0x10, 0x10, 0x01}; //接受地址
 
-//��ʼ��24L01
+//初始化24L01
 void NRF24L01_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -88,20 +88,20 @@ void NRF24L01_Init(void)
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU ;  //��������
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU ;  //上拉输入
     GPIO_Init(GPIOA, &GPIO_InitStructure);
     PBout(12) = 1;
 
-    SPI2_Init();            //��ʼ��SPI
-    //���NRF���ص��޸�SPI������
-    SPI2->CR1 &= ~(1 << 6); //SPI�豸ʧ��
-    SPI2->CR1 &= ~(1 << 1); //����ģʽ��SCKΪ0 CPOL=0
-    SPI2->CR1 &= ~(1 << 0); //���ݲ����ӵ�1��ʱ����ؿ�ʼ,CPHA=0
-    SPI2->CR1 |= 1 << 6;    //SPI�豸ʹ��
+    SPI2_Init();            //初始化SPI
+    //针对NRF的特点修改SPI的设置
+    SPI2->CR1 &= ~(1 << 6); //SPI设备失能
+    SPI2->CR1 &= ~(1 << 1); //空闲模式下SCK为0 CPOL=0
+    SPI2->CR1 &= ~(1 << 0); //数据采样从第1个时间边沿开始,CPHA=0
+    SPI2->CR1 |= 1 << 6;    //SPI设备使能
 
-    NRF24L01_CE = 0;        //ʹ��24L01
-    NRF24L01_CSN = 1;       //SPIƬѡȡ��
-    while (NRF24L01_Check())//���NRF24L01�Ƿ���λ.
+    NRF24L01_CE = 0;        //使能24L01
+    NRF24L01_CSN = 1;       //SPI片选取消
+    while (NRF24L01_Check())//检查NRF24L01是否在位.
     {
         USART_OUT(DEBUG_USART, "\r\n NRF24L01 Error \r\n");
         delay_ms(200);
@@ -109,175 +109,175 @@ void NRF24L01_Init(void)
     USART_OUT(DEBUG_USART, "\r\n NRF24L01 OK \r\n");
 
     NRF24L01_CE = 0;
-    /**********���ճ�ʼ��*****************/
-    NRF24L01_Write_Buf(NRF24L01_WRITE_REG + RX_ADDR_P0, (u8*)RX_ADDRESS, RX_ADR_WIDTH); //дRX�ڵ��ַ
+    /**********接收初始化*****************/
+    NRF24L01_Write_Buf(NRF24L01_WRITE_REG + RX_ADDR_P0, (u8*)RX_ADDRESS, RX_ADR_WIDTH); //写RX节点地址
 
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_AA, 0x01); //ʹ��ͨ��0���Զ�Ӧ��
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_RXADDR, 0x01); //ʹ��ͨ��0�Ľ��յ�ַ
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_CH, 40);      //����RFͨ��Ƶ��
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RX_PW_P0, RX_PLOAD_WIDTH); //ѡ��ͨ��0����Ч���ݿ���
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_SETUP, 0x0f); //����TX�������,0db����,2Mbps,���������濪��
-    /***********�����ʼ��****************/
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_AA, 0x01); //使能通道0的自动应答
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_RXADDR, 0x01); //使能通道0的接收地址
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_CH, 40);      //设置RF通信频率
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RX_PW_P0, RX_PLOAD_WIDTH); //选择通道0的有效数据宽度
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_SETUP, 0x0f); //设置TX发射参数,0db增益,2Mbps,低噪声增益开启
+    /***********发射初始化****************/
 
-    NRF24L01_Write_Buf(NRF24L01_WRITE_REG + TX_ADDR, (u8*)TX_ADDRESS, TX_ADR_WIDTH); //дTX�ڵ��ַ
-    NRF24L01_Write_Buf(NRF24L01_WRITE_REG + RX_ADDR_P0, (u8*)RX_ADDRESS, RX_ADR_WIDTH); //����TX�ڵ��ַ,��ҪΪ��ʹ��ACK
+    NRF24L01_Write_Buf(NRF24L01_WRITE_REG + TX_ADDR, (u8*)TX_ADDRESS, TX_ADR_WIDTH); //写TX节点地址
+    NRF24L01_Write_Buf(NRF24L01_WRITE_REG + RX_ADDR_P0, (u8*)RX_ADDRESS, RX_ADR_WIDTH); //设置TX节点地址,主要为了使能ACK
 
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_AA, 0x01);       //ʹ��ͨ��0���Զ�Ӧ��
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_RXADDR, 0x01);   //ʹ��ͨ��0�Ľ��յ�ַ
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + SETUP_RETR, 0x1a);//�����Զ��ط����ʱ��:500us + 86us;����Զ��ط�����:10��
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_CH, 40);         //����RFͨ��Ϊ40
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_SETUP, 0x0f);    //����TX�������,0db����,2Mbps,���������濪��
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_AA, 0x01);       //使能通道0的自动应答
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_RXADDR, 0x01);   //使能通道0的接收地址
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + SETUP_RETR, 0x1a);//设置自动重发间隔时间:500us + 86us;最大自动重发次数:10次
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_CH, 40);         //设置RF通道为40
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_SETUP, 0x0f);    //设置TX发射参数,0db增益,2Mbps,低噪声增益开启
     NRF24L01_CE = 1;
 }
-//���24L01�Ƿ����
-//����ֵ:0���ɹ�;1��ʧ��
+//检测24L01是否存在
+//返回值:0，成功;1，失败
 static u8 NRF24L01_Check(void)
 {
     u8 buf[5] = {0XA5, 0XA5, 0XA5, 0XA5, 0XA5};
     u8 i;
-    SPI2_SetSpeed(SPI_BaudRatePrescaler_8); //spi�ٶ�Ϊ9Mhz��24L01�����SPIʱ��Ϊ10Mhz��
-    NRF24L01_Write_Buf(NRF24L01_WRITE_REG + TX_ADDR, buf, 5); //д��5���ֽڵĵ�ַ.
-    NRF24L01_Read_Buf(TX_ADDR, buf, 5); //����д��ĵ�ַ
+    SPI2_SetSpeed(SPI_BaudRatePrescaler_8); //spi速度为9Mhz（24L01的最大SPI时钟为10Mhz）
+    NRF24L01_Write_Buf(NRF24L01_WRITE_REG + TX_ADDR, buf, 5); //写入5个字节的地址.
+    NRF24L01_Read_Buf(TX_ADDR, buf, 5); //读出写入的地址
     for (i = 0; i < 5; i++)if (buf[i] != 0XA5)break;
-    if (i != 5)return 1; //���24L01����
-    return 0;        //��⵽24L01
+    if (i != 5)return 1; //检测24L01错误
+    return 0;        //检测到24L01
 }
-//SPIд�Ĵ���
-//reg:ָ���Ĵ�����ַ
-//value:д���ֵ
+//SPI写寄存器
+//reg:指定寄存器地址
+//value:写入的值
 u8 NRF24L01_Write_Reg(u8 reg, u8 value)
 {
     u8 status;
     PCout(6) = 1;
-    NRF24L01_CSN = 0;                //ʹ��SPI����
-    status = SPI2_ReadWriteByte(reg);//���ͼĴ�����
-    SPI2_ReadWriteByte(value);       //д��Ĵ�����ֵ
-    NRF24L01_CSN = 1;                //��ֹSPI����
-    return (status);                 //����״ֵ̬
+    NRF24L01_CSN = 0;                //使能SPI传输
+    status = SPI2_ReadWriteByte(reg);//发送寄存器号
+    SPI2_ReadWriteByte(value);       //写入寄存器的值
+    NRF24L01_CSN = 1;                //禁止SPI传输
+    return (status);                 //返回状态值
 }
-//��ȡSPI�Ĵ���ֵ
-//reg:Ҫ���ļĴ���
+//读取SPI寄存器值
+//reg:要读的寄存器
 u8 NRF24L01_Read_Reg(u8 reg)
 {
     u8 reg_val;
     PCout(6) = 1;
-    NRF24L01_CSN = 0;          //ʹ��SPI����
-    SPI2_ReadWriteByte(reg);   //���ͼĴ�����
-    reg_val = SPI2_ReadWriteByte(0XFF); //��ȡ�Ĵ�������
-    NRF24L01_CSN = 1;          //��ֹSPI����
-    return (reg_val);          //����״ֵ̬
+    NRF24L01_CSN = 0;          //使能SPI传输
+    SPI2_ReadWriteByte(reg);   //发送寄存器号
+    reg_val = SPI2_ReadWriteByte(0XFF); //读取寄存器内容
+    NRF24L01_CSN = 1;          //禁止SPI传输
+    return (reg_val);          //返回状态值
 }
-//��ָ��λ�ö���ָ�����ȵ�����
-//reg:�Ĵ���(λ��)
-//*pBuf:����ָ��
-//len:���ݳ���
-//����ֵ,�˴ζ�����״̬�Ĵ���ֵ
+//在指定位置读出指定长度的数据
+//reg:寄存器(位置)
+//*pBuf:数据指针
+//len:数据长度
+//返回值,此次读到的状态寄存器值
 static u8 NRF24L01_Read_Buf(u8 reg, u8* pBuf, u8 len)
 {
     u8 status, u8_ctr;
     PCout(6) = 1;
-    NRF24L01_CSN = 0;           //ʹ��SPI����
-    status = SPI2_ReadWriteByte(reg); //���ͼĴ���ֵ(λ��),����ȡ״ֵ̬
-    for (u8_ctr = 0; u8_ctr < len; u8_ctr++)pBuf[u8_ctr] = SPI2_ReadWriteByte(0XFF); //��������
-    NRF24L01_CSN = 1;     //�ر�SPI����
-    return status;        //���ض�����״ֵ̬
+    NRF24L01_CSN = 0;           //使能SPI传输
+    status = SPI2_ReadWriteByte(reg); //发送寄存器值(位置),并读取状态值
+    for (u8_ctr = 0; u8_ctr < len; u8_ctr++)pBuf[u8_ctr] = SPI2_ReadWriteByte(0XFF); //读出数据
+    NRF24L01_CSN = 1;     //关闭SPI传输
+    return status;        //返回读到的状态值
 }
-//��ָ��λ��дָ�����ȵ�����
-//reg:�Ĵ���(λ��)
-//*pBuf:����ָ��
-//len:���ݳ���
-//����ֵ,�˴ζ�����״̬�Ĵ���ֵ
+//在指定位置写指定长度的数据
+//reg:寄存器(位置)
+//*pBuf:数据指针
+//len:数据长度
+//返回值,此次读到的状态寄存器值
 static u8 NRF24L01_Write_Buf(u8 reg, u8* pBuf, u8 len)
 {
     u8 status, u8_ctr;
     PCout(6) = 1;
-    NRF24L01_CSN = 0;          //ʹ��SPI����
-    status = SPI2_ReadWriteByte(reg);//���ͼĴ���ֵ(λ��),����ȡ״ֵ̬
-    for (u8_ctr = 0; u8_ctr < len; u8_ctr++)SPI2_ReadWriteByte(*pBuf++); //д������
-    NRF24L01_CSN = 1;       //�ر�SPI����
-    return status;          //���ض�����״ֵ̬
+    NRF24L01_CSN = 0;          //使能SPI传输
+    status = SPI2_ReadWriteByte(reg);//发送寄存器值(位置),并读取状态值
+    for (u8_ctr = 0; u8_ctr < len; u8_ctr++)SPI2_ReadWriteByte(*pBuf++); //写入数据
+    NRF24L01_CSN = 1;       //关闭SPI传输
+    return status;          //返回读到的状态值
 }
-//����NRF24L01����һ������
-//txbuf:�����������׵�ַ
-//����ֵ:�������״��
+//启动NRF24L01发送一次数据
+//txbuf:待发送数据首地址
+//返回值:发送完成状况
 static u8 NRF24L01_TxPacket(u8* txbuf)
 {
     u8 sta;
-    SPI2_SetSpeed(SPI_BaudRatePrescaler_8);//spi�ٶ�Ϊ9Mhz��24L01�����SPIʱ��Ϊ10Mhz��
+    SPI2_SetSpeed(SPI_BaudRatePrescaler_8);//spi速度为9Mhz（24L01的最大SPI时钟为10Mhz）
     NRF24L01_CE = 0;
-    NRF24L01_Write_Buf(WR_TX_PLOAD, txbuf, TX_PLOAD_WIDTH); //д���ݵ�TX BUF  32���ֽ�
-    NRF24L01_CE = 1; //��������
-    while (NRF24L01_IRQ != 0); //�ȴ��������
-    sta = NRF24L01_Read_Reg(STATUS);//��ȡ״̬�Ĵ�����ֵ
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + STATUS, sta); //���TX_DS��MAX_RT�жϱ�־
-    NRF24L01_Write_Reg(FLUSH_TX, 0xff); //���TX FIFO�Ĵ���
-    if (sta & MAX_TX) //�ﵽ����ط�����
+    NRF24L01_Write_Buf(WR_TX_PLOAD, txbuf, TX_PLOAD_WIDTH); //写数据到TX BUF  32个字节
+    NRF24L01_CE = 1; //启动发送
+    while (NRF24L01_IRQ != 0); //等待发送完成
+    sta = NRF24L01_Read_Reg(STATUS);//读取状态寄存器的值
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + STATUS, sta); //清除TX_DS或MAX_RT中断标志
+    NRF24L01_Write_Reg(FLUSH_TX, 0xff); //清除TX FIFO寄存器
+    if (sta & MAX_TX) //达到最大重发次数
     {
-        // NRF24L01_Write_Reg(FLUSH_TX, 0xff); //���TX FIFO�Ĵ���
+        // NRF24L01_Write_Reg(FLUSH_TX, 0xff); //清除TX FIFO寄存器
         return MAX_TX;
     }
-    if (sta & TX_OK) //�������
+    if (sta & TX_OK) //发送完成
     {
         return TX_OK;
     }
-    return 0xff;//����ԭ����ʧ��
+    return 0xff;//其他原因发送失败
 }
-//����NRF24L01����һ������
-//txbuf:���ݽ��ܻ���
-//����ֵ:0��������ɣ��������������
+//启动NRF24L01接受一次数据
+//txbuf:数据接受缓存
+//返回值:0，接收完成；其他，错误代码
 static u8 NRF24L01_RxPacket(u8* rxbuf)
 {
     u8 sta = 0;
     NRF24L01_CE = 1;
-    SPI2_SetSpeed(SPI_BaudRatePrescaler_8); //spi�ٶ�Ϊ9Mhz��24L01�����SPIʱ��Ϊ10Mhz��
-    while (NRF24L01_IRQ != 0) {}; //�ȴ��������
+    SPI2_SetSpeed(SPI_BaudRatePrescaler_8); //spi速度为9Mhz（24L01的最大SPI时钟为10Mhz）
+    while (NRF24L01_IRQ != 0) {}; //等待发送完成
 
-    sta = NRF24L01_Read_Reg(STATUS); //��ȡ״̬�Ĵ�����ֵ
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + STATUS, sta); //���TX_DS��MAX_RT�жϱ�־
-    if (sta & RX_OK) //���յ�����
+    sta = NRF24L01_Read_Reg(STATUS); //读取状态寄存器的值
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + STATUS, sta); //清除TX_DS或MAX_RT中断标志
+    if (sta & RX_OK) //接收到数据
     {
-        NRF24L01_Read_Buf(RD_RX_PLOAD, rxbuf, RX_PLOAD_WIDTH);//��ȡ����
-        NRF24L01_Write_Reg(FLUSH_RX, 0xff); //���RX FIFO�Ĵ���
+        NRF24L01_Read_Buf(RD_RX_PLOAD, rxbuf, RX_PLOAD_WIDTH);//读取数据
+        NRF24L01_Write_Reg(FLUSH_RX, 0xff); //清除RX FIFO寄存器
         NRF24L01_CE = 0;
         return 0;
     }
-    return 1;//û�յ��κ�����
+    return 1;//没收到任何数据
 }
-//�ú�����ʼ��NRF24L01��RXģʽ
-//����RX��ַ,дRX���ݿ���,ѡ��RFƵ��,�����ʺ�LNA HCURR
-//��CE��ߺ�,������RXģʽ,�����Խ���������
+//该函数初始化NRF24L01到RX模式
+//设置RX地址,写RX数据宽度,选择RF频道,波特率和LNA HCURR
+//当CE变高后,即进入RX模式,并可以接收数据了
 void NRF24L01_RX_Mode(void)
 {
     NRF24L01_CE = 0;
-    // NRF24L01_Write_Buf(NRF24L01_WRITE_REG + RX_ADDR_P0, (u8*)RX_ADDRESS, RX_ADR_WIDTH); //дRX�ڵ��ַ
+    // NRF24L01_Write_Buf(NRF24L01_WRITE_REG + RX_ADDR_P0, (u8*)RX_ADDRESS, RX_ADR_WIDTH); //写RX节点地址
 
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_AA, 0x01); //ʹ��ͨ��0���Զ�Ӧ��
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_RXADDR, 0x01); //ʹ��ͨ��0�Ľ��յ�ַ
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_CH, 40);      //����RFͨ��Ƶ��
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RX_PW_P0, RX_PLOAD_WIDTH); //ѡ��ͨ��0����Ч���ݿ���
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_SETUP, 0x0f); //����TX�������,0db����,2Mbps,���������濪��
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + CONFIG, 0x0f); //���û�������ģʽ�Ĳ���;PWR_UP,EN_CRC,16BIT_CRC,����ģʽ
-    NRF24L01_CE = 1; //CEΪ��,�������ģʽ
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_AA, 0x01); //使能通道0的自动应答
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_RXADDR, 0x01); //使能通道0的接收地址
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_CH, 40);      //设置RF通信频率
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RX_PW_P0, RX_PLOAD_WIDTH); //选择通道0的有效数据宽度
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_SETUP, 0x0f); //设置TX发射参数,0db增益,2Mbps,低噪声增益开启
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + CONFIG, 0x0f); //配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC,接收模式
+    NRF24L01_CE = 1; //CE为高,进入接收模式
     //delay_us(10);
 }
-//�ú�����ʼ��NRF24L01��TXģʽ
-//����TX��ַ,дTX���ݿ���,����RX�Զ�Ӧ��ĵ�ַ,���TX��������,ѡ��RFƵ��,�����ʺ�LNA HCURR
-//PWR_UP,CRCʹ��
-//��CE��ߺ�,������RXģʽ,�����Խ���������
-//CEΪ�ߴ���10us,����������.
+//该函数初始化NRF24L01到TX模式
+//设置TX地址,写TX数据宽度,设置RX自动应答的地址,填充TX发送数据,选择RF频道,波特率和LNA HCURR
+//PWR_UP,CRC使能
+//当CE变高后,即进入RX模式,并可以接收数据了
+//CE为高大于10us,则启动发送.
 void NRF24L01_TX_Mode(void)
 {
     NRF24L01_CE = 0;
-    // NRF24L01_Write_Buf(NRF24L01_WRITE_REG + TX_ADDR, (u8*)TX_ADDRESS, TX_ADR_WIDTH); //дTX�ڵ��ַ
-    // NRF24L01_Write_Buf(NRF24L01_WRITE_REG + RX_ADDR_P0, (u8*)RX_ADDRESS, RX_ADR_WIDTH); //����TX�ڵ��ַ,��ҪΪ��ʹ��ACK
+    // NRF24L01_Write_Buf(NRF24L01_WRITE_REG + TX_ADDR, (u8*)TX_ADDRESS, TX_ADR_WIDTH); //写TX节点地址
+    // NRF24L01_Write_Buf(NRF24L01_WRITE_REG + RX_ADDR_P0, (u8*)RX_ADDRESS, RX_ADR_WIDTH); //设置TX节点地址,主要为了使能ACK
 
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_AA, 0x01);         //ʹ��ͨ��0���Զ�Ӧ��
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_RXADDR, 0x01); //ʹ��ͨ��0�Ľ��յ�ַ
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + SETUP_RETR, 0x1a);//�����Զ��ط����ʱ��:500us + 86us;����Զ��ط�����:10��
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_CH, 40);           //����RFͨ��Ϊ40
-    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_SETUP, 0x0f);  //����TX�������,0db����,2Mbps,���������濪��
-    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + CONFIG, 0x0e);      //���û�������ģʽ�Ĳ���;PWR_UP,EN_CRC,16BIT_CRC,����ģʽ,���������ж�
-    NRF24L01_CE = 1; //CEΪ��,10us����������
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_AA, 0x01);         //使能通道0的自动应答
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + EN_RXADDR, 0x01); //使能通道0的接收地址
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + SETUP_RETR, 0x1a);//设置自动重发间隔时间:500us + 86us;最大自动重发次数:10次
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_CH, 40);           //设置RF通道为40
+    // NRF24L01_Write_Reg(NRF24L01_WRITE_REG + RF_SETUP, 0x0f);  //设置TX发射参数,0db增益,2Mbps,低噪声增益开启
+    NRF24L01_Write_Reg(NRF24L01_WRITE_REG + CONFIG, 0x0e);      //配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC,接收模式,开启所有中断
+    NRF24L01_CE = 1; //CE为高,10us后启动发送
     delay_us(10);
 }
 
@@ -289,7 +289,7 @@ void NRF24L01_TX_Mode(void)
 //    u8 key, mode;
 //    u32 t = 0;
 //    u8 tmp_buf[33];
-//    while (1) //�ڸò���ȷ�������ĸ�ģʽ!
+//    while (1) //在该部分确定进入哪个模式!
 //    {
 //        key = KEY_Scan(0);
 //        if (key == 1)
@@ -303,7 +303,7 @@ void NRF24L01_TX_Mode(void)
 //            break;
 //        }
 //        t++;
-//        if (t == 100)LCD_ShowString(10, 150, 230, 16, 16, "KEY0:RX_Mode  KEY1:TX_Mode"); //��˸��ʾ��ʾ��Ϣ
+//        if (t == 100)LCD_ShowString(10, 150, 230, 16, 16, "KEY0:RX_Mode  KEY1:TX_Mode"); //闪烁显示提示信息
 //        if (t == 200)
 //        {
 //            LCD_Fill(10, 150, 230, 150 + 16, WHITE);
@@ -311,35 +311,35 @@ void NRF24L01_TX_Mode(void)
 //        }
 //        delay_ms(5);
 //    }
-//    LCD_Fill(10, 150, 240, 166, WHITE); //����������ʾ
-//    POINT_COLOR = BLUE; //��������Ϊ��ɫ
-//    if (mode == 0) //RXģʽ
+//    LCD_Fill(10, 150, 240, 166, WHITE); //清空上面的显示
+//    POINT_COLOR = BLUE; //设置字体为蓝色
+//    if (mode == 0) //RX模式
 //    {
 //        LCD_ShowString(60, 150, 200, 16, 16, "NRF24L01 RX_Mode");
 //        LCD_ShowString(60, 170, 200, 16, 16, "Received DATA:");
 //        NRF24L01_RX_Mode();
 //        while (1)
 //        {
-//            if (NRF24L01_RxPacket(tmp_buf) == RX_OK) //һ�����յ���Ϣ,����ʾ����.
+//            if (NRF24L01_RxPacket(tmp_buf) == RX_OK) //一旦接收到信息,则显示出来.
 //            {
-//                tmp_buf[32] = 0; //�����ַ���������
+//                tmp_buf[32] = 0; //加入字符串结束符
 //                LCD_ShowString(0, 190, 239, 32, 16, (char*)tmp_buf);
 //                USART_OUT(USART2, "\r\n DATA:%s \r\n", (char*)tmp_buf);
 //            }
 //            else delay_us(10);
 //            t++;
-//            if (t == 10000) //��Լ1s�Ӹı�һ��״̬
+//            if (t == 10000) //大约1s钟改变一次状态
 //            {
 //                t = 0;
 //                LED1 = !LED1;
 //            }
 //        };
 //    }
-//    else //TXģʽ
+//    else //TX模式
 //    {
 //        LCD_ShowString(60, 150, 200, 16, 16, "NRF24L01 TX_Mode");
 //        NRF24L01_TX_Mode();
-//        mode = ' '; //�ӿո����ʼ
+//        mode = ' '; //从空格键开始
 //        while (1)
 //        {
 //            sta = NRF24L01_TxPacket(tmp_buf);
@@ -356,7 +356,7 @@ void NRF24L01_TX_Mode(void)
 //                }
 //                mode++;
 //                if (mode > '~')mode = ' ';
-//                tmp_buf[32] = 0; //���������
+//                tmp_buf[32] = 0; //加入结束符
 //            }
 //            else
 //            {
@@ -366,7 +366,7 @@ void NRF24L01_TX_Mode(void)
 //                else
 //                    //USART_OUT(USART2, "\r\n Send Failed \r\n");
 //                    LCD_ShowString(60, 170, 239, 32, 16, "Send Failed ");
-//                LCD_Fill(0, 188, 240, 218, WHITE); //����������ʾ
+//                LCD_Fill(0, 188, 240, 218, WHITE); //清空上面的显示
 //            };
 //            LED1 = !LED1;
 //            delay_ms(5);
@@ -387,7 +387,7 @@ u8* NRF24L01_IN(u8* temp)
     NRF24L01_RX_Mode();
     while (1)
     {
-        if (NRF24L01_RxPacket(temp) == 0) //һ�����յ���Ϣ,����ʾ����.
+        if (NRF24L01_RxPacket(temp) == 0) //一旦接收到信息,则显示出来.
         {
             break;
         }
@@ -408,7 +408,7 @@ u8* NRF24L01_TRANS_0(u8* temp)
     while (1)
     {
         USART_OUT(DEBUG_USART, "r");
-        if (NRF24L01_RxPacket(tmp_buf) == RX_OK) //һ�����յ���Ϣ,����ʾ����.
+        if (NRF24L01_RxPacket(tmp_buf) == RX_OK) //一旦接收到信息,则显示出来.
         {
             USART_OUT(USART2, "R");
             break;
@@ -426,7 +426,7 @@ void NRF24L01_TRANS_1(void)
         NRF24L01_RX_Mode();
         delay_us(50);
         USART_OUT(DEBUG_USART, "r");
-        if (NRF24L01_RxPacket(tmp_buf) == RX_OK) //һ�����յ���Ϣ,����ʾ����.
+        if (NRF24L01_RxPacket(tmp_buf) == RX_OK) //一旦接收到信息,则显示出来.
         {
         }
         else

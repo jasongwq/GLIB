@@ -2,7 +2,7 @@
 #define __UI_84_48_
 #include "sys.h"
 
-extern u8(*now_func)(u8);//当前显示函数;
+extern u8(*now_func)(u8);//褰撳墠鏄剧ず鍑芥暟;
 extern u8(*temp_func)(u8);
 extern u8(*last_func[])(u8);
 extern u8 dtbuf[];

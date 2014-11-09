@@ -5,25 +5,25 @@ static unsigned int fatbuf_Offset = 0;
 int task8(void)
 {
     _SS
-    exfuns_init();          //ÎªfatfsÏà¹Ø±äÁ¿ÉêÇëÄÚ´æ
-    f_mount(0, fxs[0]);     //¹ÒÔØSD¿¨
-    while (SD_Init())       //¼ì²âSD¿¨
+    exfuns_init();          //ä¸ºfatfsç›¸å…³å˜é‡ç”³è¯·å†…å­˜
+    f_mount(0, fxs[0]);     //æŒ‚è½½SDå¡
+    while (SD_Init())       //æ£€æµ‹SDå¡
     {
         WaitX(200);
 //        display_string_5x7(6, 1, (unsigned char *)"      SD ER          ");
     }
 //    display_string_5x7(6, 1, (unsigned char *)"      SD OK          ");
-    /**************²âÊÔ**************/
+    /**************æµ‹è¯•**************/
     // f_open(file, "0://hjk.txt", FA_CREATE_ALWAYS);
     // f_close (file);
     // f_open(file, "0://123.txt", FA_OPEN_ALWAYS);
     // f_open(file, "0://123.txt", FA_WRITE);
     // f_write(file, "I Love you!", 12, &bxw);
     // f_lseek(file, 20);
-    // f_write(file, "\nÄãºÃ", 6, &bxw);
-    // f_printf(file, "nihaoÄãºÃnihao");
+    // f_write(file, "\nä½ å¥½", 6, &bxw);
+    // f_printf(file, "nihaoä½ å¥½nihao");
     // f_close(file);
-    /**************²âÊÔ**************/
+    /**************æµ‹è¯•**************/
     f_open(file, "0://data.txt", FA_OPEN_ALWAYS);
 		//Open data file
 		f_open(file, "0://data.txt", FA_WRITE);

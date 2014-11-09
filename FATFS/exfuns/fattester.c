@@ -7,36 +7,36 @@
 #include "ff.h"
 #include "string.h"
 //////////////////////////////////////////////////////////////////////////////////	 
-//FATFS ²âÊÔ´úÂë
+//FATFS æµ‹è¯•ä»£ç 
 //////////////////////////////////////////////////////////////////////////////////
     
-//Îª´ÅÅÌ×¢²á¹¤×÷Çø	 
-//drv:ÅÌ·û
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//ä¸ºç£ç›˜æ³¨å†Œå·¥ä½œåŒº	 
+//drv:ç›˜ç¬¦
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_mount(u8 drv)
 {		   
 	return f_mount(drv,fs[drv]); 
 }
-//´ò¿ªÂ·¾¶ÏÂµÄÎÄ¼ş
-//path:Â·¾¶+ÎÄ¼şÃû
-//mode:´ò¿ªÄ£Ê½
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//æ‰“å¼€è·¯å¾„ä¸‹çš„æ–‡ä»¶
+//path:è·¯å¾„+æ–‡ä»¶å
+//mode:æ‰“å¼€æ¨¡å¼
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_open(u8*path,u8 mode)
 {
 	u8 res;	 
-	res=f_open(file,(const TCHAR*)path,mode);//´ò¿ªÎÄ¼ş¼Ğ
+	res=f_open(file,(const TCHAR*)path,mode);//æ‰“å¼€æ–‡ä»¶å¤¹
 	return res;
 } 
-//¹Ø±ÕÎÄ¼ş
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//å…³é—­æ–‡ä»¶
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_close(void)
 {
 	f_close(file);
 	return 0;
 }
-//¶Á³öÊı¾İ
-//len:¶Á³öµÄ³¤¶È
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//è¯»å‡ºæ•°æ®
+//len:è¯»å‡ºçš„é•¿åº¦
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_read(u16 len)
 {
 	u16 i,t;
@@ -59,7 +59,7 @@ u8 mf_read(u16 len)
 	if(len%512)
 	{
 		res=f_read(file,fatbuf,len%512,&br);
-		if(res)	//¶ÁÊı¾İ³ö´íÁË
+		if(res)	//è¯»æ•°æ®å‡ºé”™äº†
 		{
 			printf("\r\nRead Error:%d\r\n",res);   
 		}else
@@ -68,14 +68,14 @@ u8 mf_read(u16 len)
 			for(t=0;t<br;t++)printf("%c",fatbuf[t]); 
 		}	 
 	}
-	if(tlen)printf("\r\nReaded data len:%d\r\n",tlen);//¶Áµ½µÄÊı¾İ³¤¶È
+	if(tlen)printf("\r\nReaded data len:%d\r\n",tlen);//è¯»åˆ°çš„æ•°æ®é•¿åº¦
 	printf("Read data over\r\n");	 
 	return res;
 }
-//Ğ´ÈëÊı¾İ
-//dat:Êı¾İ»º´æÇø
-//len:Ğ´Èë³¤¶È
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//å†™å…¥æ•°æ®
+//dat:æ•°æ®ç¼“å­˜åŒº
+//len:å†™å…¥é•¿åº¦
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_write(u8*dat,u16 len)
 {			    
 	u8 res;	   					   
@@ -91,15 +91,15 @@ u8 mf_write(u8*dat,u16 len)
 	return res;
 }
 
-//´ò¿ªÎÄ¼ş¼Ğ
- //path:Â·¾¶
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//æ‰“å¼€æ–‡ä»¶å¤¹
+ //path:è·¯å¾„
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_opendir(u8* path)
 {
 	return f_opendir(&dir,(const TCHAR*)path);	
 }
-//´ò¶ÁÈ¡ÎÄ¼ş¼Ğ
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//æ‰“è¯»å–æ–‡ä»¶å¤¹
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_readdir(void)
 {
 	u8 res;
@@ -108,11 +108,11 @@ u8 mf_readdir(void)
  	fileinfo.lfsize = _MAX_LFN * 2 + 1;
 	fileinfo.lfname = mymalloc(SRAMIN,fileinfo.lfsize);
 #endif		  
-	res=f_readdir(&dir,&fileinfo);//¶ÁÈ¡Ò»¸öÎÄ¼şµÄĞÅÏ¢
+	res=f_readdir(&dir,&fileinfo);//è¯»å–ä¸€ä¸ªæ–‡ä»¶çš„ä¿¡æ¯
 	if(res!=FR_OK||fileinfo.fname[0]==0)
 	{
 		myfree(SRAMIN,fileinfo.lfname);
-		return res;//¶ÁÍêÁË.
+		return res;//è¯»å®Œäº†.
 	}
 #if _USE_LFN
 	fn=*fileinfo.lfname ? fileinfo.lfname : fileinfo.fname;
@@ -138,9 +138,9 @@ u8 mf_readdir(void)
 	return 0;
 }			 
 
- //±éÀúÎÄ¼ş
- //path:Â·¾¶
- //·µ»ØÖµ:Ö´ĞĞ½á¹û
+ //éå†æ–‡ä»¶
+ //path:è·¯å¾„
+ //è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_scan_files(u8 * path)
 {
 	FRESULT res;	  
@@ -150,136 +150,136 @@ u8 mf_scan_files(u8 * path)
 	fileinfo.lfname = mymalloc(SRAMIN,fileinfo.lfsize);
 #endif		  
 
-    res = f_opendir(&dir,(const TCHAR*)path); //´ò¿ªÒ»¸öÄ¿Â¼
+    res = f_opendir(&dir,(const TCHAR*)path); //æ‰“å¼€ä¸€ä¸ªç›®å½•
     if (res == FR_OK) 
 	{	
 		printf("\r\n"); 
 		while(1)
 		{
-	        res = f_readdir(&dir, &fileinfo);                   //¶ÁÈ¡Ä¿Â¼ÏÂµÄÒ»¸öÎÄ¼ş
-	        if (res != FR_OK || fileinfo.fname[0] == 0) break;  //´íÎóÁË/µ½Ä©Î²ÁË,ÍË³ö
-	        //if (fileinfo.fname[0] == '.') continue;             //ºöÂÔÉÏ¼¶Ä¿Â¼
+	        res = f_readdir(&dir, &fileinfo);                   //è¯»å–ç›®å½•ä¸‹çš„ä¸€ä¸ªæ–‡ä»¶
+	        if (res != FR_OK || fileinfo.fname[0] == 0) break;  //é”™è¯¯äº†/åˆ°æœ«å°¾äº†,é€€å‡º
+	        //if (fileinfo.fname[0] == '.') continue;             //å¿½ç•¥ä¸Šçº§ç›®å½•
 #if _USE_LFN
         	fn = *fileinfo.lfname ? fileinfo.lfname : fileinfo.fname;
 #else							   
         	fn = fileinfo.fname;
 #endif	                                              /* It is a file. */
-			printf("%s/", path);//´òÓ¡Â·¾¶	
-			printf("%s\r\n",  fn);//´òÓ¡ÎÄ¼şÃû	  
+			printf("%s/", path);//æ‰“å°è·¯å¾„	
+			printf("%s\r\n",  fn);//æ‰“å°æ–‡ä»¶å	  
 		} 
     }	  
 	myfree(SRAMIN,fileinfo.lfname);
     return res;	  
 }
-//ÏÔÊ¾Ê£ÓàÈİÁ¿
-//drv:ÅÌ·û
-//·µ»ØÖµ:Ê£ÓàÈİÁ¿(×Ö½Ú)
+//æ˜¾ç¤ºå‰©ä½™å®¹é‡
+//drv:ç›˜ç¬¦
+//è¿”å›å€¼:å‰©ä½™å®¹é‡(å­—èŠ‚)
 u32 mf_showfree(u8 *drv)
 {
 	FATFS *fs1;
 	u8 res;
     DWORD fre_clust=0, fre_sect=0, tot_sect=0;
-    //µÃµ½´ÅÅÌĞÅÏ¢¼°¿ÕÏĞ´ØÊıÁ¿
+    //å¾—åˆ°ç£ç›˜ä¿¡æ¯åŠç©ºé—²ç°‡æ•°é‡
     res = f_getfree((const TCHAR*)drv, &fre_clust, &fs1);
     if(res==0)
 	{											   
-	    tot_sect = (fs1->n_fatent - 2) * fs1->csize;//µÃµ½×ÜÉÈÇøÊı
-	    fre_sect = fre_clust * fs1->csize;			//µÃµ½¿ÕÏĞÉÈÇøÊı	   
+	    tot_sect = (fs1->n_fatent - 2) * fs1->csize;//å¾—åˆ°æ€»æ‰‡åŒºæ•°
+	    fre_sect = fre_clust * fs1->csize;			//å¾—åˆ°ç©ºé—²æ‰‡åŒºæ•°	   
 #if _MAX_SS!=512
 		tot_sect*=fs1->ssize/512;
 		fre_sect*=fs1->ssize/512;
 #endif	  
-		if(tot_sect<20480)//×ÜÈİÁ¿Ğ¡ÓÚ10M
+		if(tot_sect<20480)//æ€»å®¹é‡å°äº10M
 		{
 		    /* Print free space in unit of KB (assuming 512 bytes/sector) */
-		    printf("\r\n´ÅÅÌ×ÜÈİÁ¿:%d KB\r\n"
-		           "¿ÉÓÃ¿Õ¼ä:%d KB\r\n",
+		    printf("\r\nç£ç›˜æ€»å®¹é‡:%d KB\r\n"
+		           "å¯ç”¨ç©ºé—´:%d KB\r\n",
 		           tot_sect>>1,fre_sect>>1);
 		}else
 		{
 		    /* Print free space in unit of KB (assuming 512 bytes/sector) */
-		    printf("\r\n´ÅÅÌ×ÜÈİÁ¿:%d MB\r\n"
-		           "¿ÉÓÃ¿Õ¼ä:%d MB\r\n",
+		    printf("\r\nç£ç›˜æ€»å®¹é‡:%d MB\r\n"
+		           "å¯ç”¨ç©ºé—´:%d MB\r\n",
 		           tot_sect>>11,fre_sect>>11);
 		}
 	}
 	return fre_sect;
 }		    
-//ÎÄ¼ş¶ÁĞ´Ö¸ÕëÆ«ÒÆ
-//offset:Ïà¶ÔÊ×µØÖ·µÄÆ«ÒÆÁ¿
-//·µ»ØÖµ:Ö´ĞĞ½á¹û.
+//æ–‡ä»¶è¯»å†™æŒ‡é’ˆåç§»
+//offset:ç›¸å¯¹é¦–åœ°å€çš„åç§»é‡
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ.
 u8 mf_lseek(u32 offset)
 {
 	return f_lseek(file,offset);
 }
-//¶ÁÈ¡ÎÄ¼şµ±Ç°¶ÁĞ´Ö¸ÕëµÄÎ»ÖÃ.
-//·µ»ØÖµ:Î»ÖÃ
+//è¯»å–æ–‡ä»¶å½“å‰è¯»å†™æŒ‡é’ˆçš„ä½ç½®.
+//è¿”å›å€¼:ä½ç½®
 u32 mf_tell(void)
 {
 	return f_tell(file);
 }
-//¶ÁÈ¡ÎÄ¼ş´óĞ¡
-//·µ»ØÖµ:ÎÄ¼ş´óĞ¡
+//è¯»å–æ–‡ä»¶å¤§å°
+//è¿”å›å€¼:æ–‡ä»¶å¤§å°
 u32 mf_size(void)
 {
 	return f_size(file);
 } 
-//´´½¨Ä¿Â¼
-//pname:Ä¿Â¼Â·¾¶+Ãû×Ö
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//åˆ›å»ºç›®å½•
+//pname:ç›®å½•è·¯å¾„+åå­—
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_mkdir(u8*pname)
 {
 	return f_mkdir((const TCHAR *)pname);
 }
-//¸ñÊ½»¯
-//drv:ÅÌ·û
-//mode:Ä£Ê½
-//au:´Ø´óĞ¡
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//æ ¼å¼åŒ–
+//drv:ç›˜ç¬¦
+//mode:æ¨¡å¼
+//au:ç°‡å¤§å°
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_fmkfs(u8 drv,u8 mode,u16 au)
 {
-	return f_mkfs(drv,mode,au);//¸ñÊ½»¯,drv:ÅÌ·û;mode:Ä£Ê½;au:´Ø´óĞ¡
+	return f_mkfs(drv,mode,au);//æ ¼å¼åŒ–,drv:ç›˜ç¬¦;mode:æ¨¡å¼;au:ç°‡å¤§å°
 } 
-//É¾³ıÎÄ¼ş/Ä¿Â¼
-//pname:ÎÄ¼ş/Ä¿Â¼Â·¾¶+Ãû×Ö
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//åˆ é™¤æ–‡ä»¶/ç›®å½•
+//pname:æ–‡ä»¶/ç›®å½•è·¯å¾„+åå­—
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_unlink(u8 *pname)
 {
 	return  f_unlink((const TCHAR *)pname);
 }
 
-//ĞŞ¸ÄÎÄ¼ş/Ä¿Â¼Ãû×Ö(Èç¹ûÄ¿Â¼²»Í¬,»¹¿ÉÒÔÒÆ¶¯ÎÄ¼şÅ¶!)
-//oldname:Ö®Ç°µÄÃû×Ö
-//newname:ĞÂÃû×Ö
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//ä¿®æ”¹æ–‡ä»¶/ç›®å½•åå­—(å¦‚æœç›®å½•ä¸åŒ,è¿˜å¯ä»¥ç§»åŠ¨æ–‡ä»¶å“¦!)
+//oldname:ä¹‹å‰çš„åå­—
+//newname:æ–°åå­—
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_rename(u8 *oldname,u8* newname)
 {
 	return  f_rename((const TCHAR *)oldname,(const TCHAR *)newname);
 }
 
-//´ÓÎÄ¼şÀïÃæ¶ÁÈ¡Ò»¶Î×Ö·û´®
-//size:Òª¶ÁÈ¡µÄ³¤¶È
+//ä»æ–‡ä»¶é‡Œé¢è¯»å–ä¸€æ®µå­—ç¬¦ä¸²
+//size:è¦è¯»å–çš„é•¿åº¦
 void mf_gets(u16 size)
 {
  	TCHAR* rbuf;
 	rbuf=f_gets((TCHAR*)fatbuf,size,file);
-	if(*rbuf==0)return  ;//Ã»ÓĞÊı¾İ¶Áµ½
+	if(*rbuf==0)return  ;//æ²¡æœ‰æ•°æ®è¯»åˆ°
 	else
 	{
 		printf("\r\nThe String Readed Is:%s\r\n",rbuf);  	  
 	}			    	
 }
-//ĞèÒª_USE_STRFUNC>=1
-//Ğ´Ò»¸ö×Ö·ûµ½ÎÄ¼ş
-//c:ÒªĞ´ÈëµÄ×Ö·û
-//·µ»ØÖµ:Ö´ĞĞ½á¹û
+//éœ€è¦_USE_STRFUNC>=1
+//å†™ä¸€ä¸ªå­—ç¬¦åˆ°æ–‡ä»¶
+//c:è¦å†™å…¥çš„å­—ç¬¦
+//è¿”å›å€¼:æ‰§è¡Œç»“æœ
 u8 mf_putc(u8 c)
 {
 	return f_putc((TCHAR)c,file);
 }
-//Ğ´×Ö·û´®µ½ÎÄ¼ş
-//c:ÒªĞ´ÈëµÄ×Ö·û´®
-//·µ»ØÖµ:Ğ´ÈëµÄ×Ö·û´®³¤¶È
+//å†™å­—ç¬¦ä¸²åˆ°æ–‡ä»¶
+//c:è¦å†™å…¥çš„å­—ç¬¦ä¸²
+//è¿”å›å€¼:å†™å…¥çš„å­—ç¬¦ä¸²é•¿åº¦
 u8 mf_puts(u8*c)
 {
 	return f_puts((TCHAR*)c,file);

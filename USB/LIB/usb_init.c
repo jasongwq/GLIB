@@ -43,7 +43,7 @@ USER_STANDARD_REQUESTS  *pUser_Standard_Requests;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-//≥ı ºªØUSB
+//ÂàùÂßãÂåñUSB
 void USB_Init(void)
 {
 	pInformation = &Device_Info;

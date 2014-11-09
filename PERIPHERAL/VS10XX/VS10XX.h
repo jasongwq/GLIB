@@ -2,9 +2,9 @@
 #define __VS10XX_H__
 #include "sys.h"
 
-//VS10XX Çı¶¯´úÂë
+//VS10XX é©±åŠ¨ä»£ç 
 //////////////////////////////////////////////////////////////
-//ÓëÍâ²¿µÄ½Ó¿Ú
+//ä¸å¤–éƒ¨çš„æ¥å£
 //#define VS_DQ       PCin(7)   //DREQ
 //#define VS_RST      PEout(0)  //RST
 //#define VS_XCS      PBout(12) //XCS
@@ -33,21 +33,21 @@
 
 __packed typedef struct
 {
-    u8 mvol;        //Ö÷ÒôÁ¿,·¶Î§:0~254
-    u8 bflimit; //µÍÒôÆµÂÊÏŞ¶¨,·¶Î§:2~15(µ¥Î»:10Hz)
-    u8 bass;        //µÍÒô,·¶Î§:0~15.0±íÊ¾¹Ø±Õ.(µ¥Î»:1dB)
-    u8 tflimit; //¸ßÒôÆµÂÊÏŞ¶¨,·¶Î§:1~15(µ¥Î»:Khz)
-    u8 treble;  //¸ßÒô,·¶Î§:0~15(µ¥Î»:1.5dB)(Ô­±¾·¶Î§ÊÇ:-8~7,Í¨¹ıº¯ÊıĞŞ¸ÄÁË);
-    u8 effect;  //¿Õ¼äĞ§¹ûÉèÖÃ.0,¹Ø±Õ;1,×îĞ¡;2,ÖĞµÈ;3,×î´ó.
+    u8 mvol;        //ä¸»éŸ³é‡,èŒƒå›´:0~254
+    u8 bflimit; //ä½éŸ³é¢‘ç‡é™å®š,èŒƒå›´:2~15(å•ä½:10Hz)
+    u8 bass;        //ä½éŸ³,èŒƒå›´:0~15.0è¡¨ç¤ºå…³é—­.(å•ä½:1dB)
+    u8 tflimit; //é«˜éŸ³é¢‘ç‡é™å®š,èŒƒå›´:1~15(å•ä½:Khz)
+    u8 treble;  //é«˜éŸ³,èŒƒå›´:0~15(å•ä½:1.5dB)(åŸæœ¬èŒƒå›´æ˜¯:-8~7,é€šè¿‡å‡½æ•°ä¿®æ”¹äº†);
+    u8 effect;  //ç©ºé—´æ•ˆæœè®¾ç½®.0,å…³é—­;1,æœ€å°;2,ä¸­ç­‰;3,æœ€å¤§.
 
-    u8 saveflag;    //±£´æ±êÖ¾,0X0A,±£´æ¹ıÁË;ÆäËû,»¹´ÓÎ´±£´æ
+    u8 saveflag;    //ä¿å­˜æ ‡å¿—,0X0A,ä¿å­˜è¿‡äº†;å…¶ä»–,è¿˜ä»æœªä¿å­˜
 } _vs10xx_obj;
 
-extern _vs10xx_obj vsset;       //VS10XXÉèÖÃ
+extern _vs10xx_obj vsset;       //VS10XXè®¾ç½®
 
 #define VS_WRITE_COMMAND    0x02
 #define VS_READ_COMMAND     0x03
-//VS10XX¼Ä´æÆ÷¶¨Òå
+//VS10XXå¯„å­˜å™¨å®šä¹‰
 #define SPI_MODE            0x00
 #define SPI_STATUS          0x01
 #define SPI_BASS            0x02
@@ -82,34 +82,34 @@ extern _vs10xx_obj vsset;       //VS10XXÉèÖÃ
 
 
 
-u16  VS_RD_Reg(u8 address);             //¶Á¼Ä´æÆ÷
-u16  VS_WRAM_Read(u16 addr);        //¶ÁRAM
-void VS_WR_Data(u8 data);                 //Ğ´Êı¾İ
-void VS_WR_Cmd(u8 address, u16 data); //Ğ´ÃüÁî
-u8   VS_HD_Reset(void);                 //Ó²¸´Î»
-void VS_Soft_Reset(void);         //Èí¸´Î»
-u16  VS_Ram_Test(void);           //RAM²âÊÔ
-void VS_Sine_Test(void);          //ÕıÏÒ²âÊÔ
+u16  VS_RD_Reg(u8 address);             //è¯»å¯„å­˜å™¨
+u16  VS_WRAM_Read(u16 addr);        //è¯»RAM
+void VS_WR_Data(u8 data);                 //å†™æ•°æ®
+void VS_WR_Cmd(u8 address, u16 data); //å†™å‘½ä»¤
+u8   VS_HD_Reset(void);                 //ç¡¬å¤ä½
+void VS_Soft_Reset(void);         //è½¯å¤ä½
+u16  VS_Ram_Test(void);           //RAMæµ‹è¯•
+void VS_Sine_Test(void);          //æ­£å¼¦æµ‹è¯•
 
 u8   VS_SPI_ReadWriteByte(u8 data);
 void VS_SPI_SpeedLow(void);
 void VS_SPI_SpeedHigh(void);
-void VS_Init(void);                       //³õÊ¼»¯VS10XX
-void VS_Set_Speed(u8 t);                //ÉèÖÃ²¥·ÅËÙ¶È
-u16  VS_Get_HeadInfo(void);     //µÃµ½±ÈÌØÂÊ
-u32  VS_Get_ByteRate(void);         //µÃµ½×Ö½ÚËÙÂÊ
-u16  VS_Get_EndFillByte(void);  //µÃµ½Ìî³ä×Ö½Ú
-u8   VS_Send_MusicData(u8* buf);//ÏòVS10XX·¢ËÍ32×Ö½Ú
-void VS_Restart_Play(void);         //ÖØĞÂ¿ªÊ¼ÏÂÒ»Ê×¸è²¥·Å
-void VS_Reset_DecodeTime(void); //ÖØÉè½âÂëÊ±¼ä
-u16  VS_Get_DecodeTime(void);   //µÃµ½½âÂëÊ±¼ä
+void VS_Init(void);                       //åˆå§‹åŒ–VS10XX
+void VS_Set_Speed(u8 t);                //è®¾ç½®æ’­æ”¾é€Ÿåº¦
+u16  VS_Get_HeadInfo(void);     //å¾—åˆ°æ¯”ç‰¹ç‡
+u32  VS_Get_ByteRate(void);         //å¾—åˆ°å­—èŠ‚é€Ÿç‡
+u16  VS_Get_EndFillByte(void);  //å¾—åˆ°å¡«å……å­—èŠ‚
+u8   VS_Send_MusicData(u8* buf);//å‘VS10XXå‘é€32å­—èŠ‚
+void VS_Restart_Play(void);         //é‡æ–°å¼€å§‹ä¸‹ä¸€é¦–æ­Œæ’­æ”¾
+void VS_Reset_DecodeTime(void); //é‡è®¾è§£ç æ—¶é—´
+u16  VS_Get_DecodeTime(void);   //å¾—åˆ°è§£ç æ—¶é—´
 
-void VS_Load_Patch(u16* patch, u16 len); //¼ÓÔØÓÃ»§patch
-u8   VS_Get_Spec(u16* p);                 //µÃµ½·ÖÎöÊı¾İ
-void VS_Set_Bands(u16* buf, u8 bands);  //ÉèÖÃÖĞĞÄÆµÂÊ
-void VS_Set_Vol(u8 volx);                     //ÉèÖÃÖ÷ÒôÁ¿
-void VS_Set_Bass(u8 bfreq, u8 bass, u8 tfreq, u8 treble); //ÉèÖÃ¸ßµÍÒô
-void VS_Set_Effect(u8 eft);                 //ÉèÖÃÒôĞ§
+void VS_Load_Patch(u16* patch, u16 len); //åŠ è½½ç”¨æˆ·patch
+u8   VS_Get_Spec(u16* p);                 //å¾—åˆ°åˆ†ææ•°æ®
+void VS_Set_Bands(u16* buf, u8 bands);  //è®¾ç½®ä¸­å¿ƒé¢‘ç‡
+void VS_Set_Vol(u8 volx);                     //è®¾ç½®ä¸»éŸ³é‡
+void VS_Set_Bass(u8 bfreq, u8 bass, u8 tfreq, u8 treble); //è®¾ç½®é«˜ä½éŸ³
+void VS_Set_Effect(u8 eft);                 //è®¾ç½®éŸ³æ•ˆ
 void VS_Set_All(void);
 
 void vs10xx_read_para(_vs10xx_obj* vs10xxdev);

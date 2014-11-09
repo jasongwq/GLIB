@@ -14,12 +14,12 @@
 
 
 /*---------------------*
-*    Æ÷¼şI2CµØÖ·¶¨Òå   * 
+*    å™¨ä»¶I2Cåœ°å€å®šä¹‰   * 
 *----------------------*/
-#define BMP085_Addr         0xee            //ÆøÑ¹´«¸ĞÆ÷Æ÷¼şµØÖ·
+#define BMP085_Addr         0xee            //æ°”å‹ä¼ æ„Ÿå™¨å™¨ä»¶åœ°å€
 
 /*---------------------* 
-*   BMP085 Êı¾İÀàĞÍ    * 
+*   BMP085 æ•°æ®ç±»å‹    * 
 *----------------------*/
 typedef struct
 {
@@ -29,17 +29,17 @@ typedef struct
 }tg_BMP085_TYPE;
 
 /*---------------------* 
-*   BMP085 ²ÎÊı        * 
+*   BMP085 å‚æ•°        * 
 *----------------------*/
-#define P0_PRESSURE 101325.0f    //±ê×¼º£°Îpa
+#define P0_PRESSURE 101325.0f    //æ ‡å‡†æµ·æ‹”pa
 
 
 
 extern void BMP085_Init(void);
-extern void BMP085_Read(tg_BMP085_TYPE * ptResult);         //ÆÕÍ¨ÍêÕûµÄ²âÁ¿ÎÂ¶ÈÆøÑ¹(ÓĞÖÁÉÙ10msÊ±ĞòÑÓÊ±)
-//Ğ£×¼´«¸ĞÆ÷
-extern void BMP085_Calibrate(void);                         //Ö÷ÒªĞ£×¼ÆøÑ¹¶ÔÓ¦¸ß¶ÈĞÅÏ¢
-//´òÓ¡´«¸ĞÆ÷Êı¾İ
+extern void BMP085_Read(tg_BMP085_TYPE * ptResult);         //æ™®é€šå®Œæ•´çš„æµ‹é‡æ¸©åº¦æ°”å‹(æœ‰è‡³å°‘10msæ—¶åºå»¶æ—¶)
+//æ ¡å‡†ä¼ æ„Ÿå™¨
+extern void BMP085_Calibrate(void);                         //ä¸»è¦æ ¡å‡†æ°”å‹å¯¹åº”é«˜åº¦ä¿¡æ¯
+//æ‰“å°ä¼ æ„Ÿå™¨æ•°æ®
 extern void BMP085_Printf(tg_BMP085_TYPE * ptResult);
 
 

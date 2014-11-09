@@ -4,115 +4,115 @@
 #include "spi.h"
 //#include "usart.h"
 //////////////////////////////////////////////////////////////////////////////////
-//VS10XX Çı¶¯´úÂë
+//VS10XX é©±åŠ¨ä»£ç 
 //////////////////////////////////////////////////////////////////////////////////
-//VS10XXÄ¬ÈÏÉèÖÃ²ÎÊı
+//VS10XXé»˜è®¤è®¾ç½®å‚æ•°
 _vs10xx_obj vsset =
 {
-    220,    //ÒôÁ¿:220
-    6,      //µÍÒôÉÏÏß 60Hz
-    15,     //µÍÒôÌáÉı 15dB
-    10,     //¸ßÒôÏÂÏŞ 10Khz
-    15,     //¸ßÒôÌáÉı 10.5dB
-    0,      //¿Õ¼äĞ§¹û
+    220,    //éŸ³é‡:220
+    6,      //ä½éŸ³ä¸Šçº¿ 60Hz
+    15,     //ä½éŸ³æå‡ 15dB
+    10,     //é«˜éŸ³ä¸‹é™ 10Khz
+    15,     //é«˜éŸ³æå‡ 10.5dB
+    0,      //ç©ºé—´æ•ˆæœ
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-//ÒÆÖ²Ê±ºòµÄ½Ó¿Ú
+//ç§»æ¤æ—¶å€™çš„æ¥å£
 void SPI_INIT(void)
 {
 	SPI2_Init();
 }
-//data:ÒªĞ´ÈëµÄÊı¾İ
-//·µ»ØÖµ:¶Áµ½µÄÊı¾İ
+//data:è¦å†™å…¥çš„æ•°æ®
+//è¿”å›å€¼:è¯»åˆ°çš„æ•°æ®
 u8 VS_SPI_ReadWriteByte(u8 data)
 {
     return SPI2_ReadWriteByte(data);
 }
-//SD¿¨³õÊ¼»¯µÄÊ±ºò,ĞèÒªµÍËÙ
+//SDå¡åˆå§‹åŒ–çš„æ—¶å€™,éœ€è¦ä½é€Ÿ
 void VS_SPI_SpeedLow(void)
 {
-    SPI2_SetSpeed(SPI_BaudRatePrescaler_32);//ÉèÖÃµ½µÍËÙÄ£Ê½
+    SPI2_SetSpeed(SPI_BaudRatePrescaler_32);//è®¾ç½®åˆ°ä½é€Ÿæ¨¡å¼
 }
-//SD¿¨Õı³£¹¤×÷µÄÊ±ºò,¿ÉÒÔ¸ßËÙÁË
+//SDå¡æ­£å¸¸å·¥ä½œçš„æ—¶å€™,å¯ä»¥é«˜é€Ÿäº†
 void VS_SPI_SpeedHigh(void)
 {
-    SPI2_SetSpeed(SPI_BaudRatePrescaler_8);//ÉèÖÃµ½¸ßËÙÄ£Ê½
+    SPI2_SetSpeed(SPI_BaudRatePrescaler_8);//è®¾ç½®åˆ°é«˜é€Ÿæ¨¡å¼
 }
-//³õÊ¼»¯VS10XXµÄIO¿Ú
+//åˆå§‹åŒ–VS10XXçš„IOå£
 void VS_Init(void)
 {
     GPIO_InitTypeDef  GPIO_InitStructure;
 
     //DREQ PC.7
-    RCC_APB2PeriphClockCmd(VS_DQ_RCC, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
+    RCC_APB2PeriphClockCmd(VS_DQ_RCC, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
     GPIO_InitStructure.GPIO_Pin = VS_DQ_PIN;            //PC.7
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;         //ÊäÈë
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;         //è¾“å…¥
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(VS_DQ_GPIO, &GPIO_InitStructure);
 
     //RES PE.0
-    RCC_APB2PeriphClockCmd(VS_RST_RCC, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
+    RCC_APB2PeriphClockCmd(VS_RST_RCC, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
     GPIO_InitStructure.GPIO_Pin = VS_RST_PIN;       //PE6
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;//ÍÆÍìÊä³ö
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;//æ¨æŒ½è¾“å‡º
     GPIO_Init(VS_RST_GPIO, &GPIO_InitStructure);
     //CS PB.12
-    RCC_APB2PeriphClockCmd(VS_XCS_RCC, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
+    RCC_APB2PeriphClockCmd(VS_XCS_RCC, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
     GPIO_InitStructure.GPIO_Pin = VS_XCS_PIN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;         //ÍÆÍìÊä³ö
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;         //æ¨æŒ½è¾“å‡º
     GPIO_Init(VS_XCS_GPIO, &GPIO_InitStructure);
 
     //XDCS PC.6
-    RCC_APB2PeriphClockCmd(VS_XDCS_RCC, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
+    RCC_APB2PeriphClockCmd(VS_XDCS_RCC, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
     GPIO_InitStructure.GPIO_Pin = VS_XDCS_PIN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;         //ÍÆÍìÊä³ö
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;         //æ¨æŒ½è¾“å‡º
     GPIO_Init(VS_XDCS_GPIO, &GPIO_InitStructure);
 
     SPI_INIT();
     VS_Sine_Test();
-    //USART_OUT(DEBUG_USART, "Ram Test:0X%04X\r\n", VS_Ram_Test()); //´òÓ¡RAM²âÊÔ½á¹û
+    //USART_OUT(DEBUG_USART, "Ram Test:0X%04X\r\n", VS_Ram_Test()); //æ‰“å°RAMæµ‹è¯•ç»“æœ
     VS_HD_Reset();
     VS_Soft_Reset();
-    VS_Restart_Play();                      //ÖØÆô²¥·Å
-    VS_Set_All();                           //ÉèÖÃÒôÁ¿µÈĞÅÏ¢
-    VS_Reset_DecodeTime();                  //¸´Î»½âÂëÊ±¼ä
-    VS_SPI_SpeedHigh(); //¸ßËÙ
+    VS_Restart_Play();                      //é‡å¯æ’­æ”¾
+    VS_Set_All();                           //è®¾ç½®éŸ³é‡ç­‰ä¿¡æ¯
+    VS_Reset_DecodeTime();                  //å¤ä½è§£ç æ—¶é—´
+    VS_SPI_SpeedHigh(); //é«˜é€Ÿ
     VS_Set_Vol(250);
 }
 ////////////////////////////////////////////////////////////////////////////////
-//Èí¸´Î»VS10XX
+//è½¯å¤ä½VS10XX
 void VS_Soft_Reset(void)
 {
     u8 retry = 0;
-    while (VS_DQ == 0); //µÈ´ıÈí¼ş¸´Î»½áÊø
-    VS_SPI_ReadWriteByte(0Xff);//Æô¶¯´«Êä
+    while (VS_DQ == 0); //ç­‰å¾…è½¯ä»¶å¤ä½ç»“æŸ
+    VS_SPI_ReadWriteByte(0Xff);//å¯åŠ¨ä¼ è¾“
     retry = 0;
-    while (VS_RD_Reg(SPI_MODE) != 0x0800) // Èí¼ş¸´Î»,ĞÂÄ£Ê½
+    while (VS_RD_Reg(SPI_MODE) != 0x0800) // è½¯ä»¶å¤ä½,æ–°æ¨¡å¼
     {
-        VS_WR_Cmd(SPI_MODE, 0x0804); // Èí¼ş¸´Î»,ĞÂÄ£Ê½
-        delay_ms(2);//µÈ´ıÖÁÉÙ1.35ms
+        VS_WR_Cmd(SPI_MODE, 0x0804); // è½¯ä»¶å¤ä½,æ–°æ¨¡å¼
+        delay_ms(2);//ç­‰å¾…è‡³å°‘1.35ms
         if (retry++ > 100)break;
     }
-    while (VS_DQ == 0); //µÈ´ıÈí¼ş¸´Î»½áÊø
+    while (VS_DQ == 0); //ç­‰å¾…è½¯ä»¶å¤ä½ç»“æŸ
     retry = 0;
-    while (VS_RD_Reg(SPI_CLOCKF) != 0X9800) //ÉèÖÃVS10XXµÄÊ±ÖÓ,3±¶Æµ ,1.5xADD
+    while (VS_RD_Reg(SPI_CLOCKF) != 0X9800) //è®¾ç½®VS10XXçš„æ—¶é’Ÿ,3å€é¢‘ ,1.5xADD
     {
-        VS_WR_Cmd(SPI_CLOCKF, 0X9800); //ÉèÖÃVS10XXµÄÊ±ÖÓ,3±¶Æµ ,1.5xADD
+        VS_WR_Cmd(SPI_CLOCKF, 0X9800); //è®¾ç½®VS10XXçš„æ—¶é’Ÿ,3å€é¢‘ ,1.5xADD
         if (retry++ > 100)break;
     }
     delay_ms(20);
 }
-//Ó²¸´Î»MP3
-//·µ»Ø1:¸´Î»Ê§°Ü;0:¸´Î»³É¹¦
+//ç¡¬å¤ä½MP3
+//è¿”å›1:å¤ä½å¤±è´¥;0:å¤ä½æˆåŠŸ
 u8 VS_HD_Reset(void)
 {
     u8 retry = 0;
     VS_RST_L;
     delay_ms(20);
-    VS_XDCS_H; //È¡ÏûÊı¾İ´«Êä
-    VS_XCS_H; //È¡ÏûÊı¾İ´«Êä
+    VS_XDCS_H; //å–æ¶ˆæ•°æ®ä¼ è¾“
+    VS_XCS_H; //å–æ¶ˆæ•°æ®ä¼ è¾“
     VS_RST_H;
-    while (VS_DQ == 0 && retry < 200) //µÈ´ıDREQÎª¸ß
+    while (VS_DQ == 0 && retry < 200) //ç­‰å¾…DREQä¸ºé«˜
     {
         retry++;
         delay_us(50);
@@ -121,18 +121,18 @@ u8 VS_HD_Reset(void)
     if (retry >= 200)return 1;
     else return 0;
 }
-//ÕıÏÒ²âÊÔ
+//æ­£å¼¦æµ‹è¯•
 void VS_Sine_Test(void)
 {
     VS_HD_Reset();
-    VS_WR_Cmd(0x0b, 0X2020);  //ÉèÖÃÒôÁ¿
-    VS_WR_Cmd(SPI_MODE, 0x0820); //½øÈëVS10XXµÄ²âÊÔÄ£Ê½
-    while (VS_DQ == 0);  //µÈ´ıDREQÎª¸ß
+    VS_WR_Cmd(0x0b, 0X2020);  //è®¾ç½®éŸ³é‡
+    VS_WR_Cmd(SPI_MODE, 0x0820); //è¿›å…¥VS10XXçš„æµ‹è¯•æ¨¡å¼
+    while (VS_DQ == 0);  //ç­‰å¾…DREQä¸ºé«˜
     //printf("mode sin:%x\n",VS_RD_Reg(SPI_MODE));
-    //ÏòVS10XX·¢ËÍÕıÏÒ²âÊÔÃüÁî£º0x53 0xef 0x6e n 0x00 0x00 0x00 0x00
-    //ÆäÖĞn = 0x24, Éè¶¨VS10XXËù²úÉúµÄÕıÏÒ²¨µÄÆµÂÊÖµ£¬¾ßÌå¼ÆËã·½·¨¼ûVS10XXµÄdatasheet
-    VS_SPI_SpeedLow();//µÍËÙ
-    VS_XDCS_L; //Ñ¡ÖĞÊı¾İ´«Êä
+    //å‘VS10XXå‘é€æ­£å¼¦æµ‹è¯•å‘½ä»¤ï¼š0x53 0xef 0x6e n 0x00 0x00 0x00 0x00
+    //å…¶ä¸­n = 0x24, è®¾å®šVS10XXæ‰€äº§ç”Ÿçš„æ­£å¼¦æ³¢çš„é¢‘ç‡å€¼ï¼Œå…·ä½“è®¡ç®—æ–¹æ³•è§VS10XXçš„datasheet
+    VS_SPI_SpeedLow();//ä½é€Ÿ
+    VS_XDCS_L; //é€‰ä¸­æ•°æ®ä¼ è¾“
     VS_SPI_ReadWriteByte(0x53);
     VS_SPI_ReadWriteByte(0xef);
     VS_SPI_ReadWriteByte(0x6e);
@@ -143,8 +143,8 @@ void VS_Sine_Test(void)
     VS_SPI_ReadWriteByte(0x00);
     delay_ms(100);
     VS_XDCS_H;
-    //ÍË³öÕıÏÒ²âÊÔ
-    VS_XDCS_L; //Ñ¡ÖĞÊı¾İ´«Êä
+    //é€€å‡ºæ­£å¼¦æµ‹è¯•
+    VS_XDCS_L; //é€‰ä¸­æ•°æ®ä¼ è¾“
     VS_SPI_ReadWriteByte(0x45);
     VS_SPI_ReadWriteByte(0x78);
     VS_SPI_ReadWriteByte(0x69);
@@ -156,8 +156,8 @@ void VS_Sine_Test(void)
     delay_ms(100);
     VS_XDCS_H;
 
-    //ÔÙ´Î½øÈëÕıÏÒ²âÊÔ²¢ÉèÖÃnÖµÎª0x44£¬¼´½«ÕıÏÒ²¨µÄÆµÂÊÉèÖÃÎªÁíÍâµÄÖµ
-    VS_XDCS_L; //Ñ¡ÖĞÊı¾İ´«Êä
+    //å†æ¬¡è¿›å…¥æ­£å¼¦æµ‹è¯•å¹¶è®¾ç½®nå€¼ä¸º0x44ï¼Œå³å°†æ­£å¼¦æ³¢çš„é¢‘ç‡è®¾ç½®ä¸ºå¦å¤–çš„å€¼
+    VS_XDCS_L; //é€‰ä¸­æ•°æ®ä¼ è¾“
     VS_SPI_ReadWriteByte(0x53);
     VS_SPI_ReadWriteByte(0xef);
     VS_SPI_ReadWriteByte(0x6e);
@@ -168,8 +168,8 @@ void VS_Sine_Test(void)
     VS_SPI_ReadWriteByte(0x00);
     delay_ms(100);
     VS_XDCS_H;
-    //ÍË³öÕıÏÒ²âÊÔ
-    VS_XDCS_L; //Ñ¡ÖĞÊı¾İ´«Êä
+    //é€€å‡ºæ­£å¼¦æµ‹è¯•
+    VS_XDCS_L; //é€‰ä¸­æ•°æ®ä¼ è¾“
     VS_SPI_ReadWriteByte(0x45);
     VS_SPI_ReadWriteByte(0x78);
     VS_SPI_ReadWriteByte(0x69);
@@ -181,16 +181,16 @@ void VS_Sine_Test(void)
     delay_ms(100);
     VS_XDCS_H;
 }
-//ram ²âÊÔ
-//·µ»ØÖµ:RAM²âÊÔ½á¹û
-// VS1003Èç¹ûµÃµ½µÄÖµÎª0x807F£¬Ôò±íÃ÷ÍêºÃ;VS1053Îª0X83FF.
+//ram æµ‹è¯•
+//è¿”å›å€¼:RAMæµ‹è¯•ç»“æœ
+// VS1003å¦‚æœå¾—åˆ°çš„å€¼ä¸º0x807Fï¼Œåˆ™è¡¨æ˜å®Œå¥½;VS1053ä¸º0X83FF.
 u16 VS_Ram_Test(void)
 {
     VS_HD_Reset();
-    VS_WR_Cmd(SPI_MODE, 0x0820); // ½øÈëVS10XXµÄ²âÊÔÄ£Ê½
-    while (VS_DQ == 0); // µÈ´ıDREQÎª¸ß
-    VS_SPI_SpeedLow();//µÍËÙ
-    VS_XDCS_L;                // xDCS_H£¬Ñ¡ÔñVS10XXµÄÊı¾İ½Ó¿Ú
+    VS_WR_Cmd(SPI_MODE, 0x0820); // è¿›å…¥VS10XXçš„æµ‹è¯•æ¨¡å¼
+    while (VS_DQ == 0); // ç­‰å¾…DREQä¸ºé«˜
+    VS_SPI_SpeedLow();//ä½é€Ÿ
+    VS_XDCS_L;                // xDCS_Hï¼Œé€‰æ‹©VS10XXçš„æ•°æ®æ¥å£
     VS_SPI_ReadWriteByte(0x4d);
     VS_SPI_ReadWriteByte(0xea);
     VS_SPI_ReadWriteByte(0x6d);
@@ -201,56 +201,56 @@ u16 VS_Ram_Test(void)
     VS_SPI_ReadWriteByte(0x00);
     delay_ms(150);
     VS_XDCS_H;
-    return VS_RD_Reg(SPI_HDAT0);// VS1003Èç¹ûµÃµ½µÄÖµÎª0x807F£¬Ôò±íÃ÷ÍêºÃ;VS1053Îª0X83FF.;
+    return VS_RD_Reg(SPI_HDAT0);// VS1003å¦‚æœå¾—åˆ°çš„å€¼ä¸º0x807Fï¼Œåˆ™è¡¨æ˜å®Œå¥½;VS1053ä¸º0X83FF.;
 }
-//ÏòVS10XXĞ´ÃüÁî
-//address:ÃüÁîµØÖ·
-//data:ÃüÁîÊı¾İ
+//å‘VS10XXå†™å‘½ä»¤
+//address:å‘½ä»¤åœ°å€
+//data:å‘½ä»¤æ•°æ®
 void VS_WR_Cmd(u8 address, u16 data)
 {
-    while (VS_DQ == 0); //µÈ´ı¿ÕÏĞ
-    VS_SPI_SpeedLow();//µÍËÙ
+    while (VS_DQ == 0); //ç­‰å¾…ç©ºé—²
+    VS_SPI_SpeedLow();//ä½é€Ÿ
     VS_XDCS_H;
     VS_XCS_L;
-    VS_SPI_ReadWriteByte(VS_WRITE_COMMAND);//·¢ËÍVS10XXµÄĞ´ÃüÁî
-    VS_SPI_ReadWriteByte(address); //µØÖ·
-    VS_SPI_ReadWriteByte(data >> 8); //·¢ËÍ¸ß°ËÎ»
-    VS_SPI_ReadWriteByte(data);  //µÚ°ËÎ»
+    VS_SPI_ReadWriteByte(VS_WRITE_COMMAND);//å‘é€VS10XXçš„å†™å‘½ä»¤
+    VS_SPI_ReadWriteByte(address); //åœ°å€
+    VS_SPI_ReadWriteByte(data >> 8); //å‘é€é«˜å…«ä½
+    VS_SPI_ReadWriteByte(data);  //ç¬¬å…«ä½
     VS_XCS_H;
-    VS_SPI_SpeedHigh();//¸ßËÙ
+    VS_SPI_SpeedHigh();//é«˜é€Ÿ
 }
-//ÏòVS10XXĞ´Êı¾İ
-//data:ÒªĞ´ÈëµÄÊı¾İ
+//å‘VS10XXå†™æ•°æ®
+//data:è¦å†™å…¥çš„æ•°æ®
 void VS_WR_Data(u8 data)
 {
-    VS_SPI_SpeedHigh();//¸ßËÙ,¶ÔVS1003B,×î´óÖµ²»ÄÜ³¬¹ı36.864/4Mhz£¬ÕâÀïÉèÖÃÎª9M
+    VS_SPI_SpeedHigh();//é«˜é€Ÿ,å¯¹VS1003B,æœ€å¤§å€¼ä¸èƒ½è¶…è¿‡36.864/4Mhzï¼Œè¿™é‡Œè®¾ç½®ä¸º9M
     VS_XDCS_L;
     VS_SPI_ReadWriteByte(data);
     VS_XDCS_H;
 }
-//¶ÁVS10XXµÄ¼Ä´æÆ÷
-//address£º¼Ä´æÆ÷µØÖ·
-//·µ»ØÖµ£º¶Áµ½µÄÖµ
-//×¢Òâ²»ÒªÓÃ±¶ËÙ¶ÁÈ¡,»á³ö´í
+//è¯»VS10XXçš„å¯„å­˜å™¨
+//addressï¼šå¯„å­˜å™¨åœ°å€
+//è¿”å›å€¼ï¼šè¯»åˆ°çš„å€¼
+//æ³¨æ„ä¸è¦ç”¨å€é€Ÿè¯»å–,ä¼šå‡ºé”™
 u16 VS_RD_Reg(u8 address)
 {
     u16 temp = 0;
-    while (VS_DQ == 0); //·ÇµÈ´ı¿ÕÏĞ×´Ì¬
-    VS_SPI_SpeedLow();//µÍËÙ
+    while (VS_DQ == 0); //éç­‰å¾…ç©ºé—²çŠ¶æ€
+    VS_SPI_SpeedLow();//ä½é€Ÿ
     VS_XDCS_H;
     VS_XCS_L;
-    VS_SPI_ReadWriteByte(VS_READ_COMMAND);  //·¢ËÍVS10XXµÄ¶ÁÃüÁî
-    VS_SPI_ReadWriteByte(address);          //µØÖ·
-    temp = VS_SPI_ReadWriteByte(0xff);      //¶ÁÈ¡¸ß×Ö½Ú
+    VS_SPI_ReadWriteByte(VS_READ_COMMAND);  //å‘é€VS10XXçš„è¯»å‘½ä»¤
+    VS_SPI_ReadWriteByte(address);          //åœ°å€
+    temp = VS_SPI_ReadWriteByte(0xff);      //è¯»å–é«˜å­—èŠ‚
     temp = temp << 8;
-    temp += VS_SPI_ReadWriteByte(0xff);     //¶ÁÈ¡µÍ×Ö½Ú
+    temp += VS_SPI_ReadWriteByte(0xff);     //è¯»å–ä½å­—èŠ‚
     VS_XCS_H;
-    VS_SPI_SpeedHigh();//¸ßËÙ
+    VS_SPI_SpeedHigh();//é«˜é€Ÿ
     return temp;
 }
-//¶ÁÈ¡VS10xxµÄRAM
-//addr£ºRAMµØÖ·
-//·µ»ØÖµ£º¶Áµ½µÄÖµ
+//è¯»å–VS10xxçš„RAM
+//addrï¼šRAMåœ°å€
+//è¿”å›å€¼ï¼šè¯»åˆ°çš„å€¼
 u16 VS_WRAM_Read(u16 addr)
 {
     u16 res;
@@ -258,26 +258,26 @@ u16 VS_WRAM_Read(u16 addr)
     res = VS_RD_Reg(SPI_WRAM);
     return res;
 }
-//ÉèÖÃ²¥·ÅËÙ¶È£¨½öVS1053ÓĞĞ§£©
-//t:0,1,Õı³£ËÙ¶È;2,2±¶ËÙ¶È;3,3±¶ËÙ¶È;4,4±¶ËÙ;ÒÔ´ËÀàÍÆ
+//è®¾ç½®æ’­æ”¾é€Ÿåº¦ï¼ˆä»…VS1053æœ‰æ•ˆï¼‰
+//t:0,1,æ­£å¸¸é€Ÿåº¦;2,2å€é€Ÿåº¦;3,3å€é€Ÿåº¦;4,4å€é€Ÿ;ä»¥æ­¤ç±»æ¨
 void VS_Set_Speed(u8 t)
 {
-    VS_WR_Cmd(SPI_WRAMADDR, 0X1E04); //ËÙ¶È¿ØÖÆµØÖ·
-    while (VS_DQ == 0);             //µÈ´ı¿ÕÏĞ
-    VS_WR_Cmd(SPI_WRAM, t);         //Ğ´Èë²¥·ÅËÙ¶È
+    VS_WR_Cmd(SPI_WRAMADDR, 0X1E04); //é€Ÿåº¦æ§åˆ¶åœ°å€
+    while (VS_DQ == 0);             //ç­‰å¾…ç©ºé—²
+    VS_WR_Cmd(SPI_WRAM, t);         //å†™å…¥æ’­æ”¾é€Ÿåº¦
 }
 //FOR WAV HEAD0 :0X7761 HEAD1:0X7665
 //FOR MIDI HEAD0 :other info HEAD1:0X4D54
 //FOR WMA HEAD0 :data speed HEAD1:0X574D
 //FOR MP3 HEAD0 :data speed HEAD1:ID
-//±ÈÌØÂÊÔ¤¶¨Öµ,½×²ãIII
+//æ¯”ç‰¹ç‡é¢„å®šå€¼,é˜¶å±‚III
 const u16 bitrate[2][16] =
 {
     {0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0},
     {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0}
 };
-//·µ»ØKbpsµÄ´óĞ¡
-//·µ»ØÖµ£ºµÃµ½µÄÂëÂÊ
+//è¿”å›Kbpsçš„å¤§å°
+//è¿”å›å€¼ï¼šå¾—åˆ°çš„ç ç‡
 u16 VS_Get_HeadInfo(void)
 {
     unsigned int HEAD0;
@@ -287,21 +287,21 @@ u16 VS_Get_HeadInfo(void)
     //printf("(H0,H1):%x,%x\n",HEAD0,HEAD1);
     switch (HEAD1)
     {
-    case 0x7665://WAV¸ñÊ½
-    case 0X4D54://MIDI¸ñÊ½
+    case 0x7665://WAVæ ¼å¼
+    case 0X4D54://MIDIæ ¼å¼
     case 0X4154://AAC_ADTS
     case 0X4144://AAC_ADIF
     case 0X4D34://AAC_MP4/M4A
     case 0X4F67://OGG
-    case 0X574D://WMA¸ñÊ½
-    case 0X664C://FLAC¸ñÊ½
+    case 0X574D://WMAæ ¼å¼
+    case 0X664C://FLACæ ¼å¼
     {
         ////printf("HEAD0:%d\n",HEAD0);
-        HEAD1 = HEAD0 * 2 / 25; //Ïàµ±ÓÚ*8/100
-        if ((HEAD1 % 10) > 5)return HEAD1 / 10 + 1; //¶ÔĞ¡ÊıµãµÚÒ»Î»ËÄÉáÎåÈë
+        HEAD1 = HEAD0 * 2 / 25; //ç›¸å½“äº*8/100
+        if ((HEAD1 % 10) > 5)return HEAD1 / 10 + 1; //å¯¹å°æ•°ç‚¹ç¬¬ä¸€ä½å››èˆäº”å…¥
         else return HEAD1 / 10;
     }
-    default://MP3¸ñÊ½,½ö×öÁË½×²ãIIIµÄ±í
+    default://MP3æ ¼å¼,ä»…åšäº†é˜¶å±‚IIIçš„è¡¨
     {
         HEAD1 >>= 3;
         HEAD1 = HEAD1 & 0x03;
@@ -311,26 +311,26 @@ u16 VS_Get_HeadInfo(void)
     }
     }
 }
-//µÃµ½Æ½¾ù×Ö½ÚÊı
-//·µ»ØÖµ£ºÆ½¾ù×Ö½ÚÊıËÙ¶È
+//å¾—åˆ°å¹³å‡å­—èŠ‚æ•°
+//è¿”å›å€¼ï¼šå¹³å‡å­—èŠ‚æ•°é€Ÿåº¦
 u32 VS_Get_ByteRate(void)
 {
-    return VS_WRAM_Read(0X1E05);//Æ½¾ùÎ»ËÙ
+    return VS_WRAM_Read(0X1E05);//å¹³å‡ä½é€Ÿ
 }
-//µÃµ½ĞèÒªÌî³äµÄÊı×Ö
-//·µ»ØÖµ:ĞèÒªÌî³äµÄÊı×Ö
+//å¾—åˆ°éœ€è¦å¡«å……çš„æ•°å­—
+//è¿”å›å€¼:éœ€è¦å¡«å……çš„æ•°å­—
 u16 VS_Get_EndFillByte(void)
 {
-    return VS_WRAM_Read(0X1E06);//Ìî³ä×Ö½Ú
+    return VS_WRAM_Read(0X1E06);//å¡«å……å­—èŠ‚
 }
-//·¢ËÍÒ»´ÎÒôÆµÊı¾İ
-//¹Ì¶¨Îª32×Ö½Ú
-//·µ»ØÖµ:0,·¢ËÍ³É¹¦
-//       1,VS10xx²»È±Êı¾İ,±¾´ÎÊı¾İÎ´³É¹¦·¢ËÍ
+//å‘é€ä¸€æ¬¡éŸ³é¢‘æ•°æ®
+//å›ºå®šä¸º32å­—èŠ‚
+//è¿”å›å€¼:0,å‘é€æˆåŠŸ
+//       1,VS10xxä¸ç¼ºæ•°æ®,æœ¬æ¬¡æ•°æ®æœªæˆåŠŸå‘é€
 u8 VS_Send_MusicData(u8* buf)
 {
     u8 n;
-    if (VS_DQ != 0) //ËÍÊı¾İ¸øVS10XX
+    if (VS_DQ != 0) //é€æ•°æ®ç»™VS10XX
     {
         //PBout(0)_H;
         VS_XDCS_L;
@@ -341,65 +341,65 @@ u8 VS_Send_MusicData(u8* buf)
         VS_XDCS_H;
     }
     else return 1;
-    return 0;//³É¹¦·¢ËÍÁË
+    return 0;//æˆåŠŸå‘é€äº†
 }
-//ÇĞ¸è
-//Í¨¹ı´Ëº¯ÊıÇĞ¸è£¬²»»á³öÏÖÇĞ»»¡°ÔëÉù¡±
+//åˆ‡æ­Œ
+//é€šè¿‡æ­¤å‡½æ•°åˆ‡æ­Œï¼Œä¸ä¼šå‡ºç°åˆ‡æ¢â€œå™ªå£°â€
 void VS_Restart_Play(void)
 {
     u16 temp;
     u16 i;
     u8 n;
     u8 vsbuf[32];
-    for (n = 0; n < 32; n++)vsbuf[n] = 0; //ÇåÁã
-    temp = VS_RD_Reg(SPI_MODE); //¶ÁÈ¡SPI_MODEµÄÄÚÈİ
-    temp |= 1 << 3;             //ÉèÖÃSM_CANCELÎ»
-    temp |= 1 << 2;             //ÉèÖÃSM_LAYER12Î»,ÔÊĞí²¥·ÅMP1,MP2
-    VS_WR_Cmd(SPI_MODE, temp);  //ÉèÖÃÈ¡Ïûµ±Ç°½âÂëÖ¸Áî
-    for (i = 0; i < 2048;)      //·¢ËÍ2048¸ö0,ÆÚ¼ä¶ÁÈ¡SM_CANCELÎ».Èç¹ûÎª0,Ôò±íÊ¾ÒÑ¾­È¡ÏûÁËµ±Ç°½âÂë
+    for (n = 0; n < 32; n++)vsbuf[n] = 0; //æ¸…é›¶
+    temp = VS_RD_Reg(SPI_MODE); //è¯»å–SPI_MODEçš„å†…å®¹
+    temp |= 1 << 3;             //è®¾ç½®SM_CANCELä½
+    temp |= 1 << 2;             //è®¾ç½®SM_LAYER12ä½,å…è®¸æ’­æ”¾MP1,MP2
+    VS_WR_Cmd(SPI_MODE, temp);  //è®¾ç½®å–æ¶ˆå½“å‰è§£ç æŒ‡ä»¤
+    for (i = 0; i < 2048;)      //å‘é€2048ä¸ª0,æœŸé—´è¯»å–SM_CANCELä½.å¦‚æœä¸º0,åˆ™è¡¨ç¤ºå·²ç»å–æ¶ˆäº†å½“å‰è§£ç 
     {
-        if (VS_Send_MusicData(vsbuf) == 0) //Ã¿·¢ËÍ32¸ö×Ö½Úºó¼ì²âÒ»´Î
+        if (VS_Send_MusicData(vsbuf) == 0) //æ¯å‘é€32ä¸ªå­—èŠ‚åæ£€æµ‹ä¸€æ¬¡
         {
-            i += 32;                    //·¢ËÍÁË32¸ö×Ö½Ú
-            temp = VS_RD_Reg(SPI_MODE); //¶ÁÈ¡SPI_MODEµÄÄÚÈİ
-            if ((temp & (1 << 3)) == 0)break; //³É¹¦È¡ÏûÁË
+            i += 32;                    //å‘é€äº†32ä¸ªå­—èŠ‚
+            temp = VS_RD_Reg(SPI_MODE); //è¯»å–SPI_MODEçš„å†…å®¹
+            if ((temp & (1 << 3)) == 0)break; //æˆåŠŸå–æ¶ˆäº†
         }
     }
-    if (i < 2048) //SM_CANCELÕı³£
+    if (i < 2048) //SM_CANCELæ­£å¸¸
     {
-        temp = VS_Get_EndFillByte() & 0xff; //¶ÁÈ¡Ìî³ä×Ö½Ú
-        for (n = 0; n < 32; n++)vsbuf[n] = temp; //Ìî³ä×Ö½Ú·ÅÈëÊı×é
+        temp = VS_Get_EndFillByte() & 0xff; //è¯»å–å¡«å……å­—èŠ‚
+        for (n = 0; n < 32; n++)vsbuf[n] = temp; //å¡«å……å­—èŠ‚æ”¾å…¥æ•°ç»„
         for (i = 0; i < 2052;)
         {
-            if (VS_Send_MusicData(vsbuf) == 0)i += 32; //Ìî³ä
+            if (VS_Send_MusicData(vsbuf) == 0)i += 32; //å¡«å……
         }
     }
-    else VS_Soft_Reset();       //SM_CANCEL²»³É¹¦,»µÇé¿ö,ĞèÒªÈí¸´Î»
+    else VS_Soft_Reset();       //SM_CANCELä¸æˆåŠŸ,åæƒ…å†µ,éœ€è¦è½¯å¤ä½
     temp = VS_RD_Reg(SPI_HDAT0);
     temp += VS_RD_Reg(SPI_HDAT1);
-    if (temp)                   //Èí¸´Î»,»¹ÊÇÃ»ÓĞ³É¹¦È¡Ïû,·ÅÉ±ÊÖïµ,Ó²¸´Î»
+    if (temp)                   //è½¯å¤ä½,è¿˜æ˜¯æ²¡æœ‰æˆåŠŸå–æ¶ˆ,æ”¾æ€æ‰‹é”,ç¡¬å¤ä½
     {
-        VS_HD_Reset();          //Ó²¸´Î»
-        VS_Soft_Reset();        //Èí¸´Î»
+        VS_HD_Reset();          //ç¡¬å¤ä½
+        VS_Soft_Reset();        //è½¯å¤ä½
     }
 }
-//ÖØÉè½âÂëÊ±¼ä
+//é‡è®¾è§£ç æ—¶é—´
 void VS_Reset_DecodeTime(void)
 {
     VS_WR_Cmd(SPI_DECODE_TIME, 0x0000);
-    VS_WR_Cmd(SPI_DECODE_TIME, 0x0000); //²Ù×÷Á½´Î
+    VS_WR_Cmd(SPI_DECODE_TIME, 0x0000); //æ“ä½œä¸¤æ¬¡
 }
-//µÃµ½mp3µÄ²¥·ÅÊ±¼än sec
-//·µ»ØÖµ£º½âÂëÊ±³¤
+//å¾—åˆ°mp3çš„æ’­æ”¾æ—¶é—´n sec
+//è¿”å›å€¼ï¼šè§£ç æ—¶é•¿
 u16 VS_Get_DecodeTime(void)
 {
     u16 dt = 0;
     dt = VS_RD_Reg(SPI_DECODE_TIME);
     return dt;
 }
-//vs10xx×°ÔØpatch.
-//patch£ºpatchÊ×µØÖ·
-//len£ºpatch³¤¶È
+//vs10xxè£…è½½patch.
+//patchï¼špatché¦–åœ°å€
+//lenï¼špatché•¿åº¦
 void VS_Load_Patch(u16* patch, u16 len)
 {
     u16 i;
@@ -424,51 +424,51 @@ void VS_Load_Patch(u16* patch, u16 len)
         }
     }
 }
-//Éè¶¨VS10XX²¥·ÅµÄÒôÁ¿ºÍ¸ßµÍÒô
-//volx:ÒôÁ¿´óĞ¡(0~254)
+//è®¾å®šVS10XXæ’­æ”¾çš„éŸ³é‡å’Œé«˜ä½éŸ³
+//volx:éŸ³é‡å¤§å°(0~254)
 void VS_Set_Vol(u8 volx)
 {
-    u16 volt = 0;           //Ôİ´æÒôÁ¿Öµ
-    volt = 254 - volx;      //È¡·´Ò»ÏÂ,µÃµ½×î´óÖµ,±íÊ¾×î´óµÄ±íÊ¾
+    u16 volt = 0;           //æš‚å­˜éŸ³é‡å€¼
+    volt = 254 - volx;      //å–åä¸€ä¸‹,å¾—åˆ°æœ€å¤§å€¼,è¡¨ç¤ºæœ€å¤§çš„è¡¨ç¤º
     volt <<= 8;
-    volt += 254 - volx;     //µÃµ½ÒôÁ¿ÉèÖÃºó´óĞ¡
-    VS_WR_Cmd(SPI_VOL, volt); //ÉèÒôÁ¿
+    volt += 254 - volx;     //å¾—åˆ°éŸ³é‡è®¾ç½®åå¤§å°
+    VS_WR_Cmd(SPI_VOL, volt); //è®¾éŸ³é‡
 }
-//Éè¶¨¸ßµÍÒô¿ØÖÆ
-//bfreq:µÍÆµÉÏÏŞÆµÂÊ  2~15(µ¥Î»:10Hz)
-//bass:µÍÆµÔöÒæ         0~15(µ¥Î»:1dB)
-//tfreq:¸ßÆµÏÂÏŞÆµÂÊ  1~15(µ¥Î»:Khz)
-//treble:¸ßÆµÔöÒæ       0~15(µ¥Î»:1.5dB,Ğ¡ÓÚ9µÄÊ±ºòÎª¸ºÊı)
+//è®¾å®šé«˜ä½éŸ³æ§åˆ¶
+//bfreq:ä½é¢‘ä¸Šé™é¢‘ç‡  2~15(å•ä½:10Hz)
+//bass:ä½é¢‘å¢ç›Š         0~15(å•ä½:1dB)
+//tfreq:é«˜é¢‘ä¸‹é™é¢‘ç‡  1~15(å•ä½:Khz)
+//treble:é«˜é¢‘å¢ç›Š       0~15(å•ä½:1.5dB,å°äº9çš„æ—¶å€™ä¸ºè´Ÿæ•°)
 void VS_Set_Bass(u8 bfreq, u8 bass, u8 tfreq, u8 treble)
 {
-    u16 bass_set = 0; //Ôİ´æÒôµ÷¼Ä´æÆ÷Öµ
+    u16 bass_set = 0; //æš‚å­˜éŸ³è°ƒå¯„å­˜å™¨å€¼
     signed char temp = 0;
-    if (treble == 0)temp = 0;       //±ä»»
+    if (treble == 0)temp = 0;       //å˜æ¢
     else if (treble > 8)temp = treble - 8;
     else temp = treble - 9;
-    bass_set = temp & 0X0F;         //¸ßÒôÉè¶¨
+    bass_set = temp & 0X0F;         //é«˜éŸ³è®¾å®š
     bass_set <<= 4;
-    bass_set += tfreq & 0xf;        //¸ßÒôÏÂÏŞÆµÂÊ
+    bass_set += tfreq & 0xf;        //é«˜éŸ³ä¸‹é™é¢‘ç‡
     bass_set <<= 4;
-    bass_set += bass & 0xf;         //µÍÒôÉè¶¨
+    bass_set += bass & 0xf;         //ä½éŸ³è®¾å®š
     bass_set <<= 4;
-    bass_set += bfreq & 0xf;        //µÍÒôÉÏÏŞ
+    bass_set += bfreq & 0xf;        //ä½éŸ³ä¸Šé™
     VS_WR_Cmd(SPI_BASS, bass_set);  //BASS
 }
-//Éè¶¨ÒôĞ§
-//eft:0,¹Ø±Õ;1,×îĞ¡;2,ÖĞµÈ;3,×î´ó.
+//è®¾å®šéŸ³æ•ˆ
+//eft:0,å…³é—­;1,æœ€å°;2,ä¸­ç­‰;3,æœ€å¤§.
 void VS_Set_Effect(u8 eft)
 {
     u16 temp;
-    temp = VS_RD_Reg(SPI_MODE); //¶ÁÈ¡SPI_MODEµÄÄÚÈİ
-    if (eft & 0X01)temp |= 1 << 4; //Éè¶¨LO
-    else temp &= ~(1 << 5);     //È¡ÏûLO
-    if (eft & 0X02)temp |= 1 << 7; //Éè¶¨HO
-    else temp &= ~(1 << 7);     //È¡ÏûHO
-    VS_WR_Cmd(SPI_MODE, temp);  //Éè¶¨Ä£Ê½
+    temp = VS_RD_Reg(SPI_MODE); //è¯»å–SPI_MODEçš„å†…å®¹
+    if (eft & 0X01)temp |= 1 << 4; //è®¾å®šLO
+    else temp &= ~(1 << 5);     //å–æ¶ˆLO
+    if (eft & 0X02)temp |= 1 << 7; //è®¾å®šHO
+    else temp &= ~(1 << 7);     //å–æ¶ˆHO
+    VS_WR_Cmd(SPI_MODE, temp);  //è®¾å®šæ¨¡å¼
 }
 ///////////////////////////////////////////////////////////////////////////////
-//ÉèÖÃÒôÁ¿,ÒôĞ§µÈ.
+//è®¾ç½®éŸ³é‡,éŸ³æ•ˆç­‰.
 void VS_Set_All(void)
 {
     VS_Set_Vol(vsset.mvol);

@@ -1,33 +1,33 @@
 #ifndef __RTC_H
 #define __RTC_H
 #include "sys.h"
-//Mini STM32¿ª·¢°å
-//RTCÊµÊ±Ê±ÖÓ Çı¶¯´úÂë
-//ÕıµãÔ­×Ó@ALIENTEK
+//Mini STM32å¼€å‘æ¿
+//RTCå®æ—¶æ—¶é’Ÿ é©±åŠ¨ä»£ç 
+//æ­£ç‚¹åŸå­@ALIENTEK
 //2010/6/6
 
-//Ê±¼ä½á¹¹Ìå
+//æ—¶é—´ç»“æ„ä½“
 typedef struct
 {
     vu8 hour;
     vu8 min;
     vu8 sec;
-    //¹«ÀúÈÕÔÂÄêÖÜ
+    //å…¬å†æ—¥æœˆå¹´å‘¨
     vu16 w_year;
     vu8  w_month;
     vu8  w_date;
     vu8  week;
 } _calendar_obj;
-extern _calendar_obj calendar;  //ÈÕÀú½á¹¹Ìå
+extern _calendar_obj calendar;  //æ—¥å†ç»“æ„ä½“
 
-extern u8 const mon_table[12];  //ÔÂ·İÈÕÆÚÊı¾İ±í
-void Disp_Time(u8 x, u8 y, u8 size); //ÔÚÖÆ¶¨Î»ÖÃ¿ªÊ¼ÏÔÊ¾Ê±¼ä
-void Disp_Week(u8 x, u8 y, u8 size, u8 lang); //ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾ĞÇÆÚ
-u8 RTC_Init(void);        //³õÊ¼»¯RTC,·µ»Ø0,Ê§°Ü;1,³É¹¦;
-u8 Is_Leap_Year(u16 year);//Æ½Äê,ÈòÄêÅĞ¶Ï
-u8 RTC_Get(void);         //¸üĞÂÊ±¼ä
+extern u8 const mon_table[12];  //æœˆä»½æ—¥æœŸæ•°æ®è¡¨
+void Disp_Time(u8 x, u8 y, u8 size); //åœ¨åˆ¶å®šä½ç½®å¼€å§‹æ˜¾ç¤ºæ—¶é—´
+void Disp_Week(u8 x, u8 y, u8 size, u8 lang); //åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºæ˜ŸæœŸ
+u8 RTC_Init(void);        //åˆå§‹åŒ–RTC,è¿”å›0,å¤±è´¥;1,æˆåŠŸ;
+u8 Is_Leap_Year(u16 year);//å¹³å¹´,é—°å¹´åˆ¤æ–­
+u8 RTC_Get(void);         //æ›´æ–°æ—¶é—´
 u8 RTC_Get_Week(u16 year, u8 month, u8 day);
-u8 RTC_Set(u16 syear, u8 smon, u8 sday, u8 hour, u8 min, u8 sec); //ÉèÖÃÊ±¼ä
+u8 RTC_Set(u16 syear, u8 smon, u8 sday, u8 hour, u8 min, u8 sec); //è®¾ç½®æ—¶é—´
 #endif
 
 

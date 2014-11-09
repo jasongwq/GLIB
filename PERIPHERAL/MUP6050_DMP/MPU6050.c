@@ -20,18 +20,18 @@ static struct
     int16_t gyr[3];
 }mpu6050_rawData;
 
-    // ÉèÖÃMPU6050µÄ²ÎÊı¡£
+    // è®¾ç½®MPU6050çš„å‚æ•°ã€‚
     const uint8_t param[][2] = 
     {
-        // {¼Ä´æÆ÷µØÖ·,¼Ä´æÆ÷Öµ},
-        {0x6B,1     }, // ÍË³öË¯ÃßÄ£Ê½£¬ÉèÈ¡ÑùÊ±ÖÓÎªÍÓÂİXÖá¡£
-        {0x19,4     }, // È¡ÑùÊ±ÖÓ4·ÖÆµ£¬1k/4£¬È¡ÑùÂÊÎª25Hz¡£
-        {0x1A,2     }, // µÍÍ¨ÂË²¨£¬½ØÖ¹ÆµÂÊ100Hz×óÓÒ¡£
-        {0x1B,3<<3  }, // ÍÓÂİÁ¿³Ì£¬2000dps¡£
-        {0x1C,2<<3  }, // ¼ÓËÙ¶È¼ÆÁ¿³Ì£¬8g¡£
-        {0x37,0x32  }, // ÖĞ¶ÏĞÅºÅÎª¸ßµçÆ½£¬ÍÆÍìÊä³ö£¬Ö±µ½ÓĞ¶ÁÈ¡²Ù×÷²ÅÏûÊ§£¬Ö±Í¨¸¨ÖúI2C¡£
-        {0x38,1     }, // Ê¹ÓÃ¡°Êı¾İ×¼±¸ºÃ¡±ÖĞ¶Ï¡£
-        {0x6A,0x00  }, // ²»Ê¹ÓÃ¸¨ÖúI2C¡£
+        // {å¯„å­˜å™¨åœ°å€,å¯„å­˜å™¨å€¼},
+        {0x6B,1     }, // é€€å‡ºç¡çœ æ¨¡å¼ï¼Œè®¾å–æ ·æ—¶é’Ÿä¸ºé™€èºXè½´ã€‚
+        {0x19,4     }, // å–æ ·æ—¶é’Ÿ4åˆ†é¢‘ï¼Œ1k/4ï¼Œå–æ ·ç‡ä¸º25Hzã€‚
+        {0x1A,2     }, // ä½é€šæ»¤æ³¢ï¼Œæˆªæ­¢é¢‘ç‡100Hzå·¦å³ã€‚
+        {0x1B,3<<3  }, // é™€èºé‡ç¨‹ï¼Œ2000dpsã€‚
+        {0x1C,2<<3  }, // åŠ é€Ÿåº¦è®¡é‡ç¨‹ï¼Œ8gã€‚
+        {0x37,0x32  }, // ä¸­æ–­ä¿¡å·ä¸ºé«˜ç”µå¹³ï¼Œæ¨æŒ½è¾“å‡ºï¼Œç›´åˆ°æœ‰è¯»å–æ“ä½œæ‰æ¶ˆå¤±ï¼Œç›´é€šè¾…åŠ©I2Cã€‚
+        {0x38,1     }, // ä½¿ç”¨â€œæ•°æ®å‡†å¤‡å¥½â€ä¸­æ–­ã€‚
+        {0x6A,0x00  }, // ä¸ä½¿ç”¨è¾…åŠ©I2Cã€‚
     };
 
 #define i2c_read(dev,reg,data,len) (!i2cread((dev)>>1,reg,len,(uint8_t *)data))
@@ -44,7 +44,7 @@ s32 mpu6050_init(void)
 	uint8_t check;
     for(i=0;i<sizeof(mpu6050_rawData);i++)
         ((uint8_t *)&mpu6050_rawData)[i] = 0;
-    // ¼ì²éID¡£
+    // æ£€æŸ¥IDã€‚
     if(i2c_read(MPU6050_ADDRESS,0x75,&id,1) != 0)
         return MPU6050_FAILED;
     if(id != 0x68)
@@ -69,7 +69,7 @@ int32_t mpu6050_read(void)
         ,sizeof(mpu6050_rawData)) != 0)
         return MPU6050_FAILED;
     //
-    // ´ó¶Ë×ªĞ¡¶Ë¡£
+    // å¤§ç«¯è½¬å°ç«¯ã€‚
     uint8_t * p = (uint8_t *)&mpu6050_rawData;
     for(i=0;i<sizeof(mpu6050_rawData)/2;i++)
     {
@@ -188,7 +188,7 @@ static  unsigned short inv_orientation_matrix_to_scalar(
 }
 
 
-/*×Ô²â*/
+/*è‡ªæµ‹*/
 static void run_self_test(void)
 {
     int result;
@@ -237,14 +237,14 @@ void Clock_Enable(void)
 char mpu6050_dmp_init(void)
 {
     int result;
-    result = mpu_init();/*mpu³õÊ¼»¯*/
+    result = mpu_init();/*mpuåˆå§‹åŒ–*/
     //USART_OUT(DEBUG_USART,"1.mpu initialization complete......%d\r\n ",result);
     if (!result)
     {
         //1.
         USART_OUT(DEBUG_USART, "1.mpu initialization complete......\n ");
         //2.
-        if (!mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL)) /*ÉèÖÃ´«¸ĞÆ÷ ¼ÓËÙ¶È|ÍÓÂİÒÇ*/
+        if (!mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL)) /*è®¾ç½®ä¼ æ„Ÿå™¨ åŠ é€Ÿåº¦|é™€èºä»ª*/
             USART_OUT(DEBUG_USART, "2.mpu_set_sensor complete ......\r\n");
         else
             USART_OUT(DEBUG_USART, "mpu_set_sensor come across error ......\r\n");
@@ -254,17 +254,17 @@ char mpu6050_dmp_init(void)
         else
             USART_OUT(DEBUG_USART, "mpu_configure_fifo come across error ......\r\n");
         //4.//mpu_set_sample_rate
-        if (!mpu_set_sample_rate(DEFAULT_MPU_HZ)) /*²ÉÑùÆµÂÊ*/
+        if (!mpu_set_sample_rate(DEFAULT_MPU_HZ)) /*é‡‡æ ·é¢‘ç‡*/
             USART_OUT(DEBUG_USART, "4.mpu_set_sample_rate complete ......\r\n");
         else
             USART_OUT(DEBUG_USART, "mpu_set_sample_rate error ......\r\n");
         //5.//dmp_load_motion_driver_firmvare
-        if (!dmp_load_motion_driver_firmware()) /*¼ÓÔØDMP*/
+        if (!dmp_load_motion_driver_firmware()) /*åŠ è½½DMP*/
             USART_OUT(DEBUG_USART, "5.dmp_load_motion_driver_firmware complete ......\r\n");
         else
             USART_OUT(DEBUG_USART, "dmp_load_motion_driver_firmware come across error ......\r\n");
         //6.//dmp_set_orientation
-        if (!dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation))) /*·½Ïò*/
+        if (!dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation))) /*æ–¹å‘*/
             USART_OUT(DEBUG_USART, "6.dmp_set_orientation complete ......\r\n");
         else
             USART_OUT(DEBUG_USART, "dmp_set_orientation come across error ......\r\n");

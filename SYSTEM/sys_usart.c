@@ -169,13 +169,12 @@ void Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
 
 static u8 TxBuffer[3][0xff];//发送缓存
 static u8 TxCount[3] = {0};//发送尾
-int RC_flag_ok=0; 
-u8 RC_data_cnt=0;   
-u8* p_RxBuffer;
+//int RC_flag_ok=0; 
+//u8 RC_data_cnt=0;   
+//u8* p_RxBuffer;
 
 void SYS_UART_IQR(USART_TypeDef *USARTx)
 {
-
     static u8 TxCounter[3] = {0};//当前发送
 		static u8 RxBuffer[50];
 
@@ -242,9 +241,10 @@ void SYS_UART_IQR(USART_TypeDef *USARTx)
         {
             RxState = 0;
             RxBuffer[4 + _data_cnt] = com_data;
-						RC_flag_ok=1;
-						p_RxBuffer=RxBuffer;
-						RC_data_cnt=_data_cnt;
+//						RC_flag_ok=1;
+            Data_Receive_Anl(RxBuffer, _data_cnt + 5);
+//						p_RxBuffer=RxBuffer;
+//						RC_data_cnt=_data_cnt;
         }
         else
             RxState = 0;

@@ -6,17 +6,19 @@
 tg_HMC5883L_TYPE hmc5883l;
 
 /*** 硬件 ***/
-//#define I2c_Write      HI2c_Write
-//#define I2c_ReadBuffer HI2c_ReadBuffer
-//#define I2c_Init       HI2c1_Init
+#define I2c_Write      HI2c_Write
+#define I2c_ReadBuffer HI2c_ReadBuffer
+#define I2c_Init       HI2c1_Init
 /*** 硬件 ***/
 
 /*** 软件 ***/
-#define I2c_Write      Soft_I2c2_Write
-#define I2c_ReadBuffer Soft_I2c2_ReadBuffer
-#define I2c_Init       Soft_I2c2_Init
+//#define I2c_Write      Soft_I2c2_Write
+//#define I2c_ReadBuffer Soft_I2c2_ReadBuffer
+//#define I2c_Init       Soft_I2c2_Init
 /*** 软件 ***/
-
+//#define I2c_Write      Soft_I2c1_Write
+//#define I2c_ReadBuffer Soft_I2c1_ReadBuffer
+//#define I2c_Init       Soft_I2c1_Init
 
 
 void  HMC5883L_Init(void)

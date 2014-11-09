@@ -6,123 +6,123 @@
 #include "beep.h"
 
 //////////////////////////////////////////////////////////////////////////////////
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEKÕ½½¢STM32¿ª·¢°å
-//Íâ²¿ÖĞ¶Ï Çı¶¯´úÂë
-//ÕıµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//ĞŞ¸ÄÈÕÆÚ:2012/9/3
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2009-2019
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEKæˆ˜èˆ°STM32å¼€å‘æ¿
+//å¤–éƒ¨ä¸­æ–­ é©±åŠ¨ä»£ç 
+//æ­£ç‚¹åŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//ä¿®æ”¹æ—¥æœŸ:2012/9/3
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2009-2019
 //All rights reserved
 //////////////////////////////////////////////////////////////////////////////////
-//Íâ²¿ÖĞ¶Ï0·şÎñ³ÌĞò
+//å¤–éƒ¨ä¸­æ–­0æœåŠ¡ç¨‹åº
 void EXTIX_Init(void)
 {
 
     EXTI_InitTypeDef EXTI_InitStructure;
     NVIC_InitTypeDef NVIC_InitStructure;
 
-    KEY_Init();  // °´¼ü¶Ë¿Ú³õÊ¼»¯
+    KEY_Init();  // æŒ‰é”®ç«¯å£åˆå§‹åŒ–
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //Ê¹ÄÜ¸´ÓÃ¹¦ÄÜÊ±ÖÓ
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //ä½¿èƒ½å¤ç”¨åŠŸèƒ½æ—¶é’Ÿ
 
-    //GPIOE.2 ÖĞ¶ÏÏßÒÔ¼°ÖĞ¶Ï³õÊ¼»¯ÅäÖÃ   ÏÂ½µÑØ´¥·¢
+    //GPIOE.2 ä¸­æ–­çº¿ä»¥åŠä¸­æ–­åˆå§‹åŒ–é…ç½®   ä¸‹é™æ²¿è§¦å‘
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource2);
 
     EXTI_InitStructure.EXTI_Line = EXTI_Line2;  //KEY2
     EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-    EXTI_Init(&EXTI_InitStructure);     //¸ù¾İEXTI_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèEXTI¼Ä´æÆ÷
+    EXTI_Init(&EXTI_InitStructure);     //æ ¹æ®EXTI_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾EXTIå¯„å­˜å™¨
 
-    //GPIOE.3    ÖĞ¶ÏÏßÒÔ¼°ÖĞ¶Ï³õÊ¼»¯ÅäÖÃ ÏÂ½µÑØ´¥·¢ //KEY1
+    //GPIOE.3    ä¸­æ–­çº¿ä»¥åŠä¸­æ–­åˆå§‹åŒ–é…ç½® ä¸‹é™æ²¿è§¦å‘ //KEY1
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource3);
     EXTI_InitStructure.EXTI_Line = EXTI_Line3;
-    EXTI_Init(&EXTI_InitStructure);     //¸ù¾İEXTI_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèEXTI¼Ä´æÆ÷
+    EXTI_Init(&EXTI_InitStructure);     //æ ¹æ®EXTI_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾EXTIå¯„å­˜å™¨
 
-    //GPIOE.4    ÖĞ¶ÏÏßÒÔ¼°ÖĞ¶Ï³õÊ¼»¯ÅäÖÃ  ÏÂ½µÑØ´¥·¢ //KEY0
+    //GPIOE.4    ä¸­æ–­çº¿ä»¥åŠä¸­æ–­åˆå§‹åŒ–é…ç½®  ä¸‹é™æ²¿è§¦å‘ //KEY0
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource4);
     EXTI_InitStructure.EXTI_Line = EXTI_Line4;
-    EXTI_Init(&EXTI_InitStructure);     //¸ù¾İEXTI_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèEXTI¼Ä´æÆ÷
+    EXTI_Init(&EXTI_InitStructure);     //æ ¹æ®EXTI_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾EXTIå¯„å­˜å™¨
 
 
-    //GPIOA.0   ÖĞ¶ÏÏßÒÔ¼°ÖĞ¶Ï³õÊ¼»¯ÅäÖÃ ÉÏÉıÑØ´¥·¢ PA0  WK_UP
+    //GPIOA.0   ä¸­æ–­çº¿ä»¥åŠä¸­æ–­åˆå§‹åŒ–é…ç½® ä¸Šå‡æ²¿è§¦å‘ PA0  WK_UP
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource0);
 
     EXTI_InitStructure.EXTI_Line = EXTI_Line0;
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
-    EXTI_Init(&EXTI_InitStructure);     //¸ù¾İEXTI_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèEXTI¼Ä´æÆ÷
+    EXTI_Init(&EXTI_InitStructure);     //æ ¹æ®EXTI_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾EXTIå¯„å­˜å™¨
 
 
-    NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;            //Ê¹ÄÜ°´¼üWK_UPËùÔÚµÄÍâ²¿ÖĞ¶ÏÍ¨µÀ
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;    //ÇÀÕ¼ÓÅÏÈ¼¶2£¬
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x03;                   //×ÓÓÅÏÈ¼¶3
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                             //Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
+    NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;            //ä½¿èƒ½æŒ‰é”®WK_UPæ‰€åœ¨çš„å¤–éƒ¨ä¸­æ–­é€šé“
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;    //æŠ¢å ä¼˜å…ˆçº§2ï¼Œ
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x03;                   //å­ä¼˜å…ˆçº§3
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                             //ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
     NVIC_Init(&NVIC_InitStructure);
 
-    NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;            //Ê¹ÄÜ°´¼üKEY2ËùÔÚµÄÍâ²¿ÖĞ¶ÏÍ¨µÀ
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;    //ÇÀÕ¼ÓÅÏÈ¼¶2£¬
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x02;                   //×ÓÓÅÏÈ¼¶2
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                             //Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
+    NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;            //ä½¿èƒ½æŒ‰é”®KEY2æ‰€åœ¨çš„å¤–éƒ¨ä¸­æ–­é€šé“
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;    //æŠ¢å ä¼˜å…ˆçº§2ï¼Œ
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x02;                   //å­ä¼˜å…ˆçº§2
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                             //ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
     NVIC_Init(&NVIC_InitStructure);
 
 
-    NVIC_InitStructure.NVIC_IRQChannel = EXTI3_IRQn;            //Ê¹ÄÜ°´¼üKEY1ËùÔÚµÄÍâ²¿ÖĞ¶ÏÍ¨µÀ
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;    //ÇÀÕ¼ÓÅÏÈ¼¶2
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;                   //×ÓÓÅÏÈ¼¶1
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                             //Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
-    NVIC_Init(&NVIC_InitStructure);       //¸ù¾İNVIC_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèNVIC¼Ä´æÆ÷
+    NVIC_InitStructure.NVIC_IRQChannel = EXTI3_IRQn;            //ä½¿èƒ½æŒ‰é”®KEY1æ‰€åœ¨çš„å¤–éƒ¨ä¸­æ–­é€šé“
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;    //æŠ¢å ä¼˜å…ˆçº§2
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;                   //å­ä¼˜å…ˆçº§1
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                             //ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
+    NVIC_Init(&NVIC_InitStructure);       //æ ¹æ®NVIC_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾NVICå¯„å­˜å™¨
 
-    NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;            //Ê¹ÄÜ°´¼üKEY0ËùÔÚµÄÍâ²¿ÖĞ¶ÏÍ¨µÀ
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;    //ÇÀÕ¼ÓÅÏÈ¼¶2
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;                   //×ÓÓÅÏÈ¼¶0
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                             //Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
-    NVIC_Init(&NVIC_InitStructure);       //¸ù¾İNVIC_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèNVIC¼Ä´æÆ÷
+    NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;            //ä½¿èƒ½æŒ‰é”®KEY0æ‰€åœ¨çš„å¤–éƒ¨ä¸­æ–­é€šé“
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;    //æŠ¢å ä¼˜å…ˆçº§2
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;                   //å­ä¼˜å…ˆçº§0
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                             //ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
+    NVIC_Init(&NVIC_InitStructure);       //æ ¹æ®NVIC_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾NVICå¯„å­˜å™¨
 
 }
 
-//Íâ²¿ÖĞ¶Ï0·şÎñ³ÌĞò
+//å¤–éƒ¨ä¸­æ–­0æœåŠ¡ç¨‹åº
 void EXTI0_IRQHandler(void)
 {
-    delay_ms(10); //Ïû¶¶
-    if (KEY3 == 1)//WK_UP°´¼ü
+    delay_ms(10); //æ¶ˆæŠ–
+    if (KEY3 == 1)//WK_UPæŒ‰é”®
     {
         BEEP = !BEEP;
     }
-    EXTI_ClearITPendingBit(EXTI_Line0); //Çå³ıLINE0ÉÏµÄÖĞ¶Ï±êÖ¾Î»
+    EXTI_ClearITPendingBit(EXTI_Line0); //æ¸…é™¤LINE0ä¸Šçš„ä¸­æ–­æ ‡å¿—ä½
 }
 
-//Íâ²¿ÖĞ¶Ï2·şÎñ³ÌĞò
+//å¤–éƒ¨ä¸­æ–­2æœåŠ¡ç¨‹åº
 void EXTI2_IRQHandler(void)
 {
-    delay_ms(10);//Ïû¶¶
-    if (KEY2 == 0) //°´¼üKEY2
+    delay_ms(10);//æ¶ˆæŠ–
+    if (KEY2 == 0) //æŒ‰é”®KEY2
     {
         LED0 = !LED0;
     }
-    EXTI_ClearITPendingBit(EXTI_Line2);  //Çå³ıLINE2ÉÏµÄÖĞ¶Ï±êÖ¾Î»
+    EXTI_ClearITPendingBit(EXTI_Line2);  //æ¸…é™¤LINE2ä¸Šçš„ä¸­æ–­æ ‡å¿—ä½
 }
-//Íâ²¿ÖĞ¶Ï3·şÎñ³ÌĞò
+//å¤–éƒ¨ä¸­æ–­3æœåŠ¡ç¨‹åº
 void EXTI3_IRQHandler(void)
 {
-    delay_ms(10);//Ïû¶¶
-    if (KEY1 == 0) //°´¼üKEY1
+    delay_ms(10);//æ¶ˆæŠ–
+    if (KEY1 == 0) //æŒ‰é”®KEY1
     {
         LED1 = !LED1;
     }
-    EXTI_ClearITPendingBit(EXTI_Line3);  //Çå³ıLINE3ÉÏµÄÖĞ¶Ï±êÖ¾Î»
+    EXTI_ClearITPendingBit(EXTI_Line3);  //æ¸…é™¤LINE3ä¸Šçš„ä¸­æ–­æ ‡å¿—ä½
 }
 
 void EXTI4_IRQHandler(void)
 {
-    delay_ms(10);//Ïû¶¶
-    if (KEY0 == 0) //°´¼üKEY0
+    delay_ms(10);//æ¶ˆæŠ–
+    if (KEY0 == 0) //æŒ‰é”®KEY0
     {
         LED0 = !LED0;
         LED1 = !LED1;
     }
-    EXTI_ClearITPendingBit(EXTI_Line4);  //Çå³ıLINE4ÉÏµÄÖĞ¶Ï±êÖ¾Î»
+    EXTI_ClearITPendingBit(EXTI_Line4);  //æ¸…é™¤LINE4ä¸Šçš„ä¸­æ–­æ ‡å¿—ä½
 }
 
