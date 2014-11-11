@@ -4,14 +4,14 @@
 /*最大 256
 unsigned char
  */
-#define MAXTASKS 9
+#define MAXTASKS 5
 #define MAX_LOOPTASKS 2
 
 extern volatile unsigned int timers[MAXTASKS];
 extern volatile unsigned int timers_loop[MAX_LOOPTASKS];
 
 #define _SS static unsigned char _lc=0; switch(_lc){default:
-#define _EE ;}; _lc=0; return 255;
+#define _EE ;};// _lc=0; return 255;
 #define _LOOP_SS _lc=(__LINE__+((__LINE__%256)==0))%256;for(;;){case (__LINE__+((__LINE__%256)==0))%256:
 #define WaitX(tickets)  do {_lc=(__LINE__+((__LINE__%256)==0))%256; return tickets ;} while(0); case (__LINE__+((__LINE__%256)==0))%256:
 #define LoopX(tickets); return tickets;}
