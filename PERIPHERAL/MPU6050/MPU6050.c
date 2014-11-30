@@ -381,7 +381,7 @@ void MPU6050_Dataanl(void)
     MPU6050_ACC_LAST.x = ((((int16_t)mpu6050_buffer[0]) << 8)  | mpu6050_buffer[1 ]) - ACC_OFFSET.x;
     MPU6050_ACC_LAST.y = ((((int16_t)mpu6050_buffer[2]) << 8)  | mpu6050_buffer[3 ]) - ACC_OFFSET.y;
     MPU6050_ACC_LAST.z = ((((int16_t)mpu6050_buffer[4]) << 8)  | mpu6050_buffer[5 ]) - ACC_OFFSET.z;
-    //????ADC
+
     MPU6050_GYRO_LAST.x = ((((int16_t)mpu6050_buffer[8]) << 8)  | mpu6050_buffer[9 ]) - GYRO_OFFSET.x;
     MPU6050_GYRO_LAST.y = ((((int16_t)mpu6050_buffer[10]) << 8) | mpu6050_buffer[11]) - GYRO_OFFSET.y;
     MPU6050_GYRO_LAST.z = ((((int16_t)mpu6050_buffer[12]) << 8) | mpu6050_buffer[13]) - GYRO_OFFSET.z;

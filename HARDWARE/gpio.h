@@ -1,5 +1,8 @@
 #ifndef __GPIO_H
 #define __GPIO_H
+#ifdef __cplusplus
+       extern "C" {
+#endif
 #include "sys.h"
 #define PU 1//
 #define PD 0//
@@ -649,6 +652,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define G14      ((GPIOG->IDR&(1<<14))?1:0)
 #define G15      ((GPIOG->IDR&(1<<15))?1:0)
 #define G(n)     ((GPIOG->IDR&(1<<n))?1:0)
-
+#ifdef __cplusplus
+        }
+#endif
 
 #endif

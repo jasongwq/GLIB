@@ -1,9 +1,19 @@
 #include "sys_usart.h"
 #include <stdarg.h>
 #include "some.h"
-static uint8_t SYS_USART_SendData(USART_TypeDef *USARTx, unsigned char DataToSend);
-void Uart_DataAnl(u8 buf_num);       //串口缓存数据分析
+static uint8_t Sys_Putchar(USART_TypeDef *USARTx, unsigned char DataToSend);
 
+#include "stdio.h"
+int Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
+{
+    char sprintf_buf[0xff];
+    __va_list ap;//定义一个va_list类型的变量，用来储存单个参数
+    va_start(ap, Data);//使args指向可变参数的第一个参数
+    int num = vsprintf(sprintf_buf, Data, ap);
+    va_end(ap);
+    Sys_sPrintf(USARTx, (u8 *)sprintf_buf, num);
+    return num;
+}
 
 /******************************************************
         整形数据转字符串函数
@@ -66,7 +76,7 @@ char *itoa(int value, char *string, int radix)
             "%d"    十进制      USART_OUT(USARTx, "a=%d",10)
 * 调用方法：无
 ****************************************************************************/
-void Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
+void vSys_Printf(USART_TypeDef *USARTx, char *Data, ...)
 {
     const char *s;
     int d;
@@ -79,11 +89,11 @@ void Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
             switch (*++Data)
             {
             case 'r':                                     //回车符
-                SYS_USART_SendData(USARTx, 0x0d);
+                Sys_Putchar(USARTx, 0x0d);
                 Data++;
                 break;
             case 'n':                                     //换行符
-                SYS_USART_SendData(USARTx, 0x0a);
+                Sys_Putchar(USARTx, 0x0a);
                 Data++;
                 break;
             default:
@@ -97,7 +107,7 @@ void Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
                 s = va_arg(ap, const char *);
                 for ( ; *s; s++)
                 {
-                    SYS_USART_SendData(USARTx, *s);
+                    Sys_Putchar(USARTx, *s);
                     while (USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET);
                 }
                 Data++;
@@ -107,7 +117,7 @@ void Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
                 itoa(d, buf, 10);
                 for (s = buf; *s; s++)
                 {
-                    SYS_USART_SendData(USARTx, *s);
+                    Sys_Putchar(USARTx, *s);
                     while (USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET);
                 }
                 Data++;
@@ -116,67 +126,21 @@ void Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
                 Data++;
                 break;
             }
-        else SYS_USART_SendData(USARTx, *Data++);
+        else Sys_Putchar(USARTx, *Data++);
         //while (USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET);
     }
 }
-//u8 RxState =0;
-//u8 RxBuffer[256];
-//void UART4_IRQ()
-//{
-//  if (USART1->SR & (1 << 5))//判断接收缓冲区是否满
-//  {
-//      u8 com_data = (UART4->D);   //接受数据
-//      static u8 _data_len = 0,_data_cnt = 0;
-//      if(RxState==0&&com_data==0xAA)
-//      {
-//          RxState=1;
-//          RxBuffer[_data_len++]=com_data;
-//      }
-//      else if(RxState==1&&com_data==0xAF)
-//      {
-//          RxState=2;
-//          RxBuffer[_data_len++]=com_data;
-//      }
-//      else if(RxState==2&&com_data>0&&com_data<0XF1)
-//      {
-//          RxState=3;
-//          RxBuffer[_data_len++]=com_data;
-//      }
-//      else if(RxState==3&&com_data<50)
-//      {
-//          RxState = 4;
-//          RxBuffer[_data_len++]=com_data;
-//          _data_len = com_data;
-//          _data_cnt = 0;
-//      }
-//      else if(RxState==4&&_data_len>0)
-//      {
-//          _data_len--;
-//          RxBuffer[_data_len++]=com_data;
-//          if(_data_len==0)
-//              RxState = 5;
-//      }
-//      else if(RxState==5)
-//      {
-//          RxState = 0;
-//          Data_Receive_Anl(RxBuffer,_data_cnt);
-//      }
-//      else
-//          RxState = 0;
-//  }
-//}
 
 static u8 TxBuffer[3][0xff];//发送缓存
 static u8 TxCount[3] = {0};//发送尾
-//int RC_flag_ok=0; 
-//u8 RC_data_cnt=0;   
+//int RC_flag_ok=0;
+//u8 RC_data_cnt=0;
 //u8* p_RxBuffer;
 
 void SYS_UART_IQR(USART_TypeDef *USARTx)
 {
     static u8 TxCounter[3] = {0};//当前发送
-		static u8 RxBuffer[50];
+    static u8 RxBuffer[50];
 
     static u8 RxState = 0;
     if (USARTx->SR & USART_IT_ORE)
@@ -241,10 +205,10 @@ void SYS_UART_IQR(USART_TypeDef *USARTx)
         {
             RxState = 0;
             RxBuffer[4 + _data_cnt] = com_data;
-//						RC_flag_ok=1;
+            //                      RC_flag_ok=1;
             Data_Receive_Anl(RxBuffer, _data_cnt + 5);
-//						p_RxBuffer=RxBuffer;
-//						RC_data_cnt=_data_cnt;
+            //                      p_RxBuffer=RxBuffer;
+            //                      RC_data_cnt=_data_cnt;
         }
         else
             RxState = 0;
@@ -256,7 +220,7 @@ void SYS_UART_IQR(USART_TypeDef *USARTx)
 }
 /**************************实现函数********************************************
 *******************************************************************************/
-static uint8_t SYS_USART_SendData(USART_TypeDef *USARTx, unsigned char DataToSend)
+static uint8_t Sys_Putchar(USART_TypeDef *USARTx, unsigned char DataToSend)
 {
     int USARTn;
     if (USARTx == USART1)

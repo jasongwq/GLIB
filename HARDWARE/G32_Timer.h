@@ -1,5 +1,8 @@
 #ifndef __TIMER_H
 #define __TIMER_H
+#ifdef __cplusplus
+       extern "C" {
+#endif
 #include "sys.h"
 /*****************************************************
 REMAP        |   00    |   01    |   10    |   11    |
@@ -56,5 +59,7 @@ void TIM2_ADC_Init(u16 arr, u16 psc);
 
 void TIM2_Irgo_Init(u16 arr, u16 psc);
 void TIM3_Irgo_Init(u16 arr, u16 psc);
-
+#ifdef __cplusplus
+        }
+#endif
 #endif

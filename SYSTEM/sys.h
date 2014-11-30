@@ -1,5 +1,10 @@
 #ifndef __SYS_H
 #define __SYS_H
+#ifdef __cplusplus
+       extern "C" {
+#endif
+
+
 #include "stm32f10x.h"
 #include "stdint.h"
 
@@ -76,5 +81,9 @@
 #define Dprintf /\
     /Dprintf
 #endif
+extern void NVIC_Configuration(void);
 
+#ifdef __cplusplus
+        }
+#endif
 #endif

@@ -11,7 +11,7 @@ extern u8 Rx_Buf[3][2][32]; //两个32字节的串口接收缓存
 #define Printf_USART USART3
 #endif
 
-void Sys_Printf(USART_TypeDef *USARTx, char *Data, ...);
+int Sys_Printf(USART_TypeDef* USARTx, char* Data, ...);
 extern uint8_t *Sys_sPrintf(USART_TypeDef *USARTx, unsigned char *DataToSend, unsigned char num);
 void Uart_CheckEvent(void);
 #endif

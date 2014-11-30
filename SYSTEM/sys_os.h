@@ -1,10 +1,13 @@
 #ifndef __SYS_OS_H
 #define __SYS_OS_H
+#ifdef __cplusplus
+       extern "C" {
+#endif
 #include "sys.h"
 /*最大 256
 unsigned char
  */
-#define MAXTASKS 5
+#define MAXTASKS 6
 #define MAX_LOOPTASKS 2
 
 extern volatile unsigned int timers[MAXTASKS];
@@ -42,5 +45,7 @@ extern volatile unsigned int timers_loop[MAX_LOOPTASKS];
 #define OS_CRITICAL_METHOD
 //每秒钟 多少次
 #define OS_TICKS_PER_SEC 1000
-
+#ifdef __cplusplus
+        }
+#endif
 #endif

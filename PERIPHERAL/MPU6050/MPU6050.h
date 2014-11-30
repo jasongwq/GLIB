@@ -1,7 +1,9 @@
 #ifndef __MPU6050_H_
 #define __MPU6050_H_
+#ifdef __cplusplus
+       extern "C" {
+#endif
 #include "stm32f10x.h"
-
 
 typedef struct{
 				int16_t x;
@@ -18,4 +20,7 @@ void MPU6050_Read(void);
 void MPU6050_Dataanl(void);
 void MPU6050_CalOff_Acc(void);
 void MPU6050_CalOff_Gyr(void);
+#ifdef __cplusplus
+        }
+#endif
 #endif

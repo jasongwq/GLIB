@@ -62,12 +62,12 @@ void delay_ms(u16 nms)
     }
 }
 extern u32 SysTick_Time;
-int SysTick_Clock(void)
+u32 SysTick_Clock(void)
 {
     return (((SysTick_Time + 1) * SysTick->LOAD) - SysTick->VAL) / (fac_us*1000 / OS_TICKS_PER_SEC);
 }
 
-#else//不用ucos时
+#else //不用ucos时
 //延时nus
 //nus为要延时的us数.
 void delay_us(u32 nus)
