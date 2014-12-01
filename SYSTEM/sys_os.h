@@ -7,7 +7,7 @@
 /*最大 256
 unsigned char
  */
-#define MAXTASKS 6
+#define MAXTASKS 8
 #define MAX_LOOPTASKS 2
 
 extern volatile unsigned int timers[MAXTASKS];
