@@ -1,5 +1,8 @@
 #ifndef _BMP085_H_
 #define _BMP085_H_
+#ifdef __cplusplus
+       extern "C" {
+#endif
 #include <math.h>
 #include "G32_I2c.h"
 #include "USART.h"
@@ -41,13 +44,19 @@ extern void BMP085_Read(tg_BMP085_TYPE * ptResult);         //普通完整的测
 extern void BMP085_Calibrate(void);                         //主要校准气压对应高度信息
 //打印传感器数据
 extern void BMP085_Printf(tg_BMP085_TYPE * ptResult);
+extern void Calculate(int32_t inUt, int32_t inUp, tg_BMP085_TYPE *ptOut);
+extern int32_t bmp085ReadTemp(void);
+extern int32_t bmp085ReadPressure(void);
 
 
 extern void BMP085_temperature_start(void);
-extern int16_t BMP085_temperature_get(void);
+extern int32_t BMP085_temperature_get(void);
+extern int32_t BMP085_pressure_get(void);
 extern void BMP085_pressure_start(void);
 extern void BMP085_Calculate(int16_t ut,tg_BMP085_TYPE *ptResult);
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

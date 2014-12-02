@@ -124,5 +124,5 @@ void HMC5883L_Printf(tg_HMC5883L_TYPE *ptResult)
 		tmp+=sprintf((char *)temp+tmp,"%4d ",
             ptResult->ha);
 		
-    Sys_sPrintf(DEBUG_USART, (u8*)temp,tmp);
+    Sys_sPrintf(Printf_USART, (u8*)temp,tmp);
 }

@@ -35,7 +35,7 @@ short mb;
 short mc;
 short md;
 
-double ref_Altitude;
+float ref_Altitude;
 
 /*---------------------*
 *       内部自用       *
@@ -71,8 +71,7 @@ void  BMP085_Init(void)
 
 /******************************************************************************
 ******************************************************************************/
-//static 
-int32_t bmp085ReadTemp(void)
+static int32_t bmp085ReadTemp(void)
 {
     int16_t  temp_ut;
     I2c_Write(BMP085_Addr, 0xF4, 0x2E);
@@ -87,8 +86,7 @@ int32_t bmp085ReadTemp(void)
 
 /******************************************************************************
 ******************************************************************************/
-//static 
-int32_t bmp085ReadPressure(void)
+static int32_t bmp085ReadPressure(void)
 {
     int32_t pressure = 0;
     I2c_Write(BMP085_Addr, 0xF4, 0x34);
@@ -171,13 +169,11 @@ void  BMP085_Printf(tg_BMP085_TYPE *ptResult)
 ******************************************************************************/
 void BMP085_Calibrate(void)
 {
-    int32_t up, ut, i,j;
+    int32_t up, ut, i;
     tg_BMP085_TYPE tmp_Bmp085;
 
     up = ut = 0;
     ref_Altitude = 0;               //补偿归零
-		for(j=0;j<50;i++)
-		{
     for (i = 0; i < 50; i++)
     {
         ut += bmp085ReadTemp();     // 读取温度
@@ -186,9 +182,7 @@ void BMP085_Calibrate(void)
     ut /= 50;                        // 取温度平均值
     up /= 50;                        // 取气压平均值
     Calculate(ut, up, &tmp_Bmp085);     // 计算温度气压和高度
-		ref_Altitude += tmp_Bmp085.altitude; //得到产考值
-		}
-    ref_Altitude /= 50;
+    ref_Altitude = tmp_Bmp085.altitude; //得到产考值
 }
 
 
@@ -198,49 +192,45 @@ void BMP085_temperature_start(void)
     I2c_Write(BMP085_Addr, 0xF4, 0x2E);
     // delay_ms(5); // max time is 4.5ms
 }
-int32_t BMP085_temperature_get(void)
+int16_t BMP085_temperature_get(void)
 {
-    int32_t  temp_ut;
+    int16_t  temp_ut;
     uint8_t tmp[2];
     I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //读出2个数据
     temp_ut = (int16_t)( (tmp[0] << 8) + tmp[1]  );
     return temp_ut;
 }
-void BMP085_pressure_start(void)
-{
-    I2c_Write(BMP085_Addr, 0xF4, BMP085_PRESSURE_45);
-    //delay_ms(5); // max time is 4.5ms
-}
-int32_t BMP085_pressure_get(void)
+int16_t BMP085_pressure_get(void)
 {
 	  int32_t temp_up = 0;
     uint8_t tmp[2];
     I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //读出2个数据
     temp_up = (int16_t)( (tmp[0] << 8) + tmp[1]  );
-    temp_up &= 0x0000FFFF; //不能去掉 原因未知
     return temp_up;
 }
-
+void BMP085_pressure_start(void)
+{
+    I2c_Write(BMP085_Addr, 0xF4, BMP085_PRESSURE_255);
+}
 void BMP085_Calculate(int16_t ut, tg_BMP085_TYPE *ptResult)
 {
     int32_t pressure = 0;
     uint8_t tmp[2];
     I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //读出2个数据
     pressure = (int16_t)( (tmp[0] << 8) + tmp[1]  );
-//#define FILTERNUM 1
-//    static int32_t temp_pressure[FILTERNUM];
-//    static char filter_cnt;
-//    int32_t temp = 0;
-//		pressure &= 0x0000FFFF; //不能去掉 原因未知
-//    temp_pressure[filter_cnt] = pressure;
-//    for (int i = 0; i < FILTERNUM; i++)
-//    {
-//        temp += temp_pressure[i];
-//    }
-//    pressure = temp / FILTERNUM;
-//    filter_cnt++;
-//    if (filter_cnt >= FILTERNUM)filter_cnt = 0;
-    //pressure &= 0x0000FFFF; //不能去掉 原因未知
+#define FILTERNUM 5
+    static int16_t temp_pressure[FILTERNUM];
+    static char filter_cnt;
+    int32_t temp = 0;
+    temp_pressure[filter_cnt] = pressure;
+    for (int i = 0; i < FILTERNUM; i++)
+    {
+        temp += temp_pressure[i];
+    }
+    pressure = temp / FILTERNUM;
+    filter_cnt++;
+    if (filter_cnt >= FILTERNUM)filter_cnt = 0;
+    pressure &= 0x0000FFFF; //不能去掉 原因未知
     Calculate((int32_t)ut, (int32_t)pressure, ptResult); //计算结果放入结构体
 }
 
