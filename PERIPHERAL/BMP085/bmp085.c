@@ -171,13 +171,14 @@ void  BMP085_Printf(tg_BMP085_TYPE *ptResult)
 ******************************************************************************/
 void BMP085_Calibrate(void)
 {
-    int32_t up, ut, i,j;
+    int32_t up, ut, i;
+//		int j;
     tg_BMP085_TYPE tmp_Bmp085;
 
     up = ut = 0;
     ref_Altitude = 0;               //补偿归零
-		for(j=0;j<50;i++)
-		{
+//		for(j=0;j<2;j++)
+//		{
     for (i = 0; i < 50; i++)
     {
         ut += bmp085ReadTemp();     // 读取温度
@@ -187,8 +188,9 @@ void BMP085_Calibrate(void)
     up /= 50;                        // 取气压平均值
     Calculate(ut, up, &tmp_Bmp085);     // 计算温度气压和高度
 		ref_Altitude += tmp_Bmp085.altitude; //得到产考值
-		}
-    ref_Altitude /= 50;
+		
+//		}
+//    ref_Altitude /= 2;
 }
 
 
