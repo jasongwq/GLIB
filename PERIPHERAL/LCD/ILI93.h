@@ -1,7 +1,7 @@
 #ifndef __ILI93_H
 #define __ILI93_H
 #include "sys.h"
-
+#include "Display_Config.h"
 //Ð´¼Ä´æÆ÷µØÖ·º¯Êý
 //regval:¼Ä´æÆ÷Öµ
 #define LCD_WR_REG(regval) LCD->LCD_REG =regval

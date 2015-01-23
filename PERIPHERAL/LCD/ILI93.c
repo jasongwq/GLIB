@@ -1273,7 +1273,7 @@ void LCD_Init(void)
     }
     LCD_Display_Dir(0);         //默认为竖屏
     LCD_LED_1;//点亮背光
-    LCD_Clear(WHITE);
+    LCD_Clear(BLUE);
     // POINT_COLOR = 0;
     //      上下左右颠倒 9328
     //      LCD_WR_CMD(0x0001, 0x00001);
