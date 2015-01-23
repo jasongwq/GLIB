@@ -610,11 +610,25 @@ u8 TP_Init(void)
                 tp_dev.xoff,
                 tp_dev.yoff,
                 tp_dev.touchtype); //将LCD ID打印到lcd_id数组。
-        //LCD_ShowString(16,16,12,16*10,10,ubuf);
+        LCD_ShowString(16, 16, 12, 16 * 10, 10, ubuf);
         //USART_OUT(DEBUG_USART, ubuf);
         //SYS_USART_SendBuf(DEBUG_USART, (unsigned char *)ubuf,255);
         //TP_Save_Adjdata();
     }
     //    TP_Get_Adjdata();
     return 1;
+}
+void TP_TestAdjust(void)
+{
+    char ubuf[256];
+    LCD_Clear(WHITE);//清屏
+    TP_Adjust();  //屏幕校准
+
+    sprintf(ubuf, "%8f %8f %8d %8d %d",
+            tp_dev.xfac,
+            tp_dev.yfac,
+            tp_dev.xoff,
+            tp_dev.yoff,
+            tp_dev.touchtype); //将LCD ID打印到lcd_id数组。
+    LCD_ShowString(0, 0, 16*9, 16 * 5, 16, ubuf);
 }

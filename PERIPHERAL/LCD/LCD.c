@@ -413,7 +413,6 @@ void LCD_ShowNum(u16 x, u16 y, s32 num, u8 len, u8 size)
                 continue;
             }
             else enshow = 1;
-
         }
         LCD_ShowChar(x + (size / 2)*t, y, temp + '0', size, 0);
     }
@@ -469,6 +468,24 @@ void LCD_ShowString(u16 x, u16 y, u16 width, u16 height, u8 size, char *p)
         }
         if (y >= height)break; //退出
         LCD_ShowChar(x, y, *p, size, 0);
+        x += size / 2;
+        p++;
+    }
+}
+void LCD_ShowxString(u16 x, u16 y, u16 width, u16 height, u8 size, char *p,u8 mode)
+{
+    u8 x0 = x;
+    width += x;
+    height += y;
+    while ((*p <= '~') && (*p >= ' ')) //判断是不是非法字符!
+    {
+        if (x >= width)
+        {
+            x = x0;
+            y += size;
+        }
+        if (y >= height)break; //退出
+        LCD_ShowChar(x, y, *p, size, mode);
         x += size / 2;
         p++;
     }

@@ -1273,13 +1273,16 @@ void LCD_Init(void)
     }
     LCD_Display_Dir(0);         //默认为竖屏
     LCD_LED_1;//点亮背光
-    LCD_Clear(BLUE);
+    LCD_Clear(WHITE);
     // POINT_COLOR = 0;
     //      上下左右颠倒 9328
     //      LCD_WR_CMD(0x0001, 0x00001);
     //      LCD_WR_CMD(0x0400, 0x00000);
 }
-
+void LCD_Test(void)
+{
+	LCD_Clear(BLUE);
+}
 //++++++++根据数值获取各位的数字字符数据首地址+++++++++++++++++++++++++++++++++++++++++++
 // unsigned char* num_pub(unsigned  int a)
 // {

@@ -1,5 +1,8 @@
 #ifndef __LCD_H
 #define __LCD_H
+#ifdef __cplusplus
+       extern "C" {
+#endif
 #include "sys.h"
 #include "ili93.h"
 //////////////////////////////////////////////////////////////////////////////////	 
@@ -120,6 +123,7 @@ typedef struct
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
 void LCD_Init(void);                                                        //初始化
+void LCD_Test(void);                                                        //初始化
 void LCD_DisplayOn(void);                                                   //开显示
 void LCD_DisplayOff(void);                                                  //关显示
 void LCD_Clear(u16 Color);                                                  //清屏
@@ -137,6 +141,7 @@ void LCD_ShowChar(u16 x, u16 y, u8 num, u8 size, u8 mode);                  //显
 void LCD_ShowNum(u16 x, u16 y, s32 num, u8 len, u8 size);                   //显示一个数字
 void LCD_ShowxNum(u16 x, u16 y, u32 num, u8 len, u8 size, u8 mode);         //显示 数字
 void LCD_ShowString(u16 x, u16 y, u16 width, u16 height, u8 size, char* p);   //显示一个字符串,12/16字体
+void LCD_ShowxString(u16 x, u16 y, u16 width, u16 height, u8 size, char* p,u8 mode);   //显示一个字符串,12/16字体
 
 //void LCD_WriteReg(u16 LCD_Reg, u16 LCD_RegValue);
 u16 LCD_ReadReg(u8 LCD_Reg);
@@ -263,7 +268,10 @@ extern s8 curve[];
 #define R193           0xC1
 #define R229           0xE5	
 #endif
-
+	 
+#ifdef __cplusplus
+        }
+#endif
 
 
 
