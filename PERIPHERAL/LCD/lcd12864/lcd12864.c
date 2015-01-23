@@ -44,44 +44,44 @@ void waitkey()
 
 }
 
-/*LCD æ¨¡å—åˆå§‹åŒ–*/
+/*LCD Ä£¿é³õÊ¼»¯*/
 void initial_lcd()
 {
     CS_CLR;//cs1=0;
-    RST_CLR;//  reset=0;        /*ä½ç”µå¹³å¤ä½*/
+    RST_CLR;//  reset=0;        /*µÍµçÆ½¸´Î»*/
     delay(100);
-    RST_SET;// reset=1;        /*å¤ä½å®Œæ¯•*/
+    RST_SET;// reset=1;        /*¸´Î»Íê±Ï*/
     delay(20);
-    transfer_command(0xe2);   /*è½¯å¤ä½*/
+    transfer_command(0xe2);   /*Èí¸´Î»*/
     delay(5);
-    transfer_command(0x2c);  /*å‡å‹æ­¥èš 1*/
+    transfer_command(0x2c);  /*ÉıÑ¹²½¾Û 1*/
     delay(5);
-    transfer_command(0x2e);  /*å‡å‹æ­¥èš 2*/
+    transfer_command(0x2e);  /*ÉıÑ¹²½¾Û 2*/
     delay(5);
-    transfer_command(0x2f);  /*å‡å‹æ­¥èš 3*/
+    transfer_command(0x2f);  /*ÉıÑ¹²½¾Û 3*/
     delay(5);
-    transfer_command(0x23);  /*ç²—è°ƒå¯¹æ¯”åº¦ï¼Œå¯è®¾ç½®èŒƒå›´ 0x20ï½0x27*/
-    transfer_command(0x81);  /*å¾®è°ƒå¯¹æ¯”åº¦*/
-    transfer_command(0x28);  /*0x1a,å¾®è°ƒå¯¹æ¯”åº¦çš„å€¼ï¼Œå¯è®¾ç½®èŒƒå›´ 0x00ï½0x3f*/
-    transfer_command(0xa2);  /*1/9 åå‹æ¯”ï¼ˆbiasï¼‰*/
-    transfer_command(0xc8);  /*è¡Œæ‰«æé¡ºåºï¼šä»ä¸Šåˆ°ä¸‹*/
-    transfer_command(0xa0);  /*åˆ—æ‰«æé¡ºåºï¼šä»å·¦åˆ°å³*/
-    transfer_command(0x40);  /*èµ·å§‹è¡Œï¼šç¬¬ä¸€è¡Œå¼€å§‹*/
-    transfer_command(0xaf);  /*å¼€æ˜¾ç¤º*/
+    transfer_command(0x23);  /*´Öµ÷¶Ô±È¶È£¬¿ÉÉèÖÃ·¶Î§ 0x20¡«0x27*/
+    transfer_command(0x81);  /*Î¢µ÷¶Ô±È¶È*/
+    transfer_command(0x28);  /*0x1a,Î¢µ÷¶Ô±È¶ÈµÄÖµ£¬¿ÉÉèÖÃ·¶Î§ 0x00¡«0x3f*/
+    transfer_command(0xa2);  /*1/9 Æ«Ñ¹±È£¨bias£©*/
+    transfer_command(0xc8);  /*ĞĞÉ¨ÃèË³Ğò£º´ÓÉÏµ½ÏÂ*/
+    transfer_command(0xa0);  /*ÁĞÉ¨ÃèË³Ğò£º´Ó×óµ½ÓÒ*/
+    transfer_command(0x40);  /*ÆğÊ¼ĞĞ£ºµÚÒ»ĞĞ¿ªÊ¼*/
+    transfer_command(0xaf);  /*¿ªÏÔÊ¾*/
     CS_SET;//cs1=1;
 }
 
 void lcd_address(unsigned char page, unsigned char column)
 {
     CS_CLR;//cs1=0;
-    column = column - 1;       //æˆ‘ä»¬å¹³å¸¸æ‰€è¯´çš„ç¬¬ 1 åˆ—ï¼Œåœ¨ LCD é©±åŠ¨ IC é‡Œæ˜¯ç¬¬ 0 åˆ—ã€‚æ‰€ä»¥åœ¨è¿™é‡Œå‡å» 1.
+    column = column - 1;       //ÎÒÃÇÆ½³£ËùËµµÄµÚ 1 ÁĞ£¬ÔÚ LCD Çı¶¯ IC ÀïÊÇµÚ 0 ÁĞ¡£ËùÒÔÔÚÕâÀï¼õÈ¥ 1.
     page = page - 1;
-    transfer_command(0xb0 + page);      //è®¾ç½®é¡µåœ°å€ã€‚æ¯é¡µæ˜¯ 8 è¡Œã€‚ä¸€ä¸ªç”»é¢çš„ 64 è¡Œè¢«åˆ†æˆ 8 ä¸ªé¡µ ã€‚æˆ‘ä»¬å¹³å¸¸æ‰€è¯´çš„ç¬¬ 1 é¡µï¼Œåœ¨ LCD é©±åŠ¨ IC é‡Œæ˜¯ç¬¬ 0 é¡µï¼Œæ‰€ä»¥åœ¨è¿™é‡Œå‡å» 1*/
-    transfer_command(((column >> 4) & 0x0f) + 0x10); //è®¾ç½®åˆ—åœ°å€çš„é«˜ 4 ä½
-    transfer_command(column & 0x0f);      //è®¾ç½®åˆ—åœ°å€çš„ä½ 4 ä½
+    transfer_command(0xb0 + page);      //ÉèÖÃÒ³µØÖ·¡£Ã¿Ò³ÊÇ 8 ĞĞ¡£Ò»¸ö»­ÃæµÄ 64 ĞĞ±»·Ö³É 8 ¸öÒ³ ¡£ÎÒÃÇÆ½³£ËùËµµÄµÚ 1 Ò³£¬ÔÚ LCD Çı¶¯ IC ÀïÊÇµÚ 0 Ò³£¬ËùÒÔÔÚÕâÀï¼õÈ¥ 1*/
+    transfer_command(((column >> 4) & 0x0f) + 0x10); //ÉèÖÃÁĞµØÖ·µÄ¸ß 4 Î»
+    transfer_command(column & 0x0f);      //ÉèÖÃÁĞµØÖ·µÄµÍ 4 Î»
 }
 
-/*å…¨å±æ¸…å±*/
+/*È«ÆÁÇåÆÁ*/
 void clear_screen()
 {
     unsigned char i, j;
@@ -124,7 +124,7 @@ void display_string_5x7(unsigned int page, unsigned int column, unsigned char *t
             lcd_address(page, column);
             for (k = 0; k < 5; k++)
             {
-                transfer_data(ascii_table_5x7[j][k]);/*æ˜¾ç¤º 5x7 çš„ ASCII å­—åˆ° LCD ä¸Šï¼Œy ä¸ºé¡µåœ°å€ï¼Œx ä¸ºåˆ—åœ°å€ï¼Œæœ€åä¸ºæ•°æ®*/
+                transfer_data(ascii_table_5x7[j][k]);/*ÏÔÊ¾ 5x7 µÄ ASCII ×Öµ½ LCD ÉÏ£¬y ÎªÒ³µØÖ·£¬x ÎªÁĞµØÖ·£¬×îºóÎªÊı¾İ*/
             }
             i++;
             column += 6;

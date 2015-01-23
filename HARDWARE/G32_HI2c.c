@@ -31,13 +31,13 @@ void HI2c1_Init(void)
     I2C_InitStructure.I2C_ClockSpeed = 400000;
 
     I2C_Cmd(I2C1, ENABLE); I2C_Init(I2C1, &I2C_InitStructure);
-    //ç ”ç©¶åº“ä»£ç å‘ç°I2C_Initå‡½æ•°æ‰§è¡ŒåI2Cå°±å·²ç»ä½¿èƒ½äº†ï¼Œæ‰€ä»¥æ— éœ€I2C_Cmd(I2C1, ENABLE)
+    //ÑĞ¾¿¿â´úÂë·¢ÏÖI2C_Initº¯ÊıÖ´ĞĞºóI2C¾ÍÒÑ¾­Ê¹ÄÜÁË£¬ËùÒÔÎŞĞèI2C_Cmd(I2C1, ENABLE)
 
     NVIC_InitStructure.NVIC_IRQChannel = I2C1_EV_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3 ;  //æŠ¢å ä¼˜å…ˆçº§3
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;          //å­ä¼˜å…ˆçº§3
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;             //IRQé€šé“ä½¿èƒ½
-    NVIC_Init(&NVIC_InitStructure);                             //æ ¹æ®æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–VICå¯„å­˜å™¨
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3 ;  //ÇÀÕ¼ÓÅÏÈ¼¶3
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;          //×ÓÓÅÏÈ¼¶3
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;             //IRQÍ¨µÀÊ¹ÄÜ
+    NVIC_Init(&NVIC_InitStructure);                             //¸ù¾İÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯VIC¼Ä´æÆ÷
 
     I2C_ITConfig(I2C1, I2C_IT_EVT | I2C_IT_ERR, ENABLE);
 }
@@ -208,4 +208,4 @@ void I2C1_EV_IRQHandler(void)
     }
 }
 
-//å½“ç„¶mainå‡½æ•°é‡Œé¢ä¼šè°ƒç”¨24HI2cè¯»æˆ–å†™å‡½æ•°å»å‘é€startä¿¡å·
+//µ±È»mainº¯ÊıÀïÃæ»áµ÷ÓÃ24HI2c¶Á»òĞ´º¯ÊıÈ¥·¢ËÍstartĞÅºÅ

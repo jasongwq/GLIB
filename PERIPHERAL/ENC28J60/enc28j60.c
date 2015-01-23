@@ -4,38 +4,38 @@
 #include <stdio.h>
 #include "enc28j60.h"	  
 //////////////////////////////////////////////////////////////////////////////////	 
-//ALIENTEK战舰STM32开发板
-//ENC28J60驱动 代码	   
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//修改日期:2012/9/28
-//版本：V1.0			   								  
+//ALIENTEKս��STM32������
+//ENC28J60���� ����	   
+//����ԭ��@ALIENTEK
+//������̳:www.openedv.com
+//�޸�����:2012/9/28
+//�汾��V1.0			   								  
 //////////////////////////////////////////////////////////////////////////////////
 
 static u8 ENC28J60BANK;
 static u32 NextPacketPtr;
 
 
-//复位ENC28J60
-//包括SPI初始化/IO初始化等
+//��λENC28J60
+//����SPI��ʼ��/IO��ʼ����
 
 static void ENC28J60_SPI1_Init(void)
 {
    	SPI_InitTypeDef  SPI_InitStructure;
 	GPIO_InitTypeDef  GPIO_InitStructure;
-	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_SPI1,  ENABLE );//SPI1时钟使能 	
-   	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOB|RCC_APB2Periph_GPIOC, ENABLE );//PORTB,D,G时钟使能 
+	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_SPI1,  ENABLE );//SPI1ʱ��ʹ�� 	
+   	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOB|RCC_APB2Periph_GPIOC, ENABLE );//PORTB,D,Gʱ��ʹ�� 
  
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;;				 // 端口配置
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; 		 //推挽输出
- 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 //IO口速度为50MHz
- 	GPIO_Init(GPIOA, &GPIO_InitStructure);					 //根据设定参数初始化GPIOD.2
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;;				 // �˿�����
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; 		 //�������
+ 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 //IO���ٶ�Ϊ50MHz
+ 	GPIO_Init(GPIOA, &GPIO_InitStructure);					 //�����趨������ʼ��GPIOD.2
 
-    GPIO_SetBits(GPIOA, GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7); //PB13/14/15上拉
+    GPIO_SetBits(GPIOA, GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7); //PB13/14/15����
 
 
 	
-	/* 配置SPI1的ENC28J60片选 */
+	/* ����SPI1��ENC28J60Ƭѡ */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -44,54 +44,54 @@ static void ENC28J60_SPI1_Init(void)
 	GPIO_SetBits(GPIOA, GPIO_Pin_4);  
 	
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;					 //SST25VF016B SPI片选
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;					 //SST25VF016B SPIƬѡ
   	GPIO_Init(GPIOC, &GPIO_InitStructure);
   
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_7;		 //PB12---VS1003 SPI片选（V2.1) 
-	GPIO_Init(GPIOB, &GPIO_InitStructure);					 //PB7---触摸屏芯片XPT2046 SPI 片选
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_7;		 //PB12---VS1003 SPIƬѡ��V2.1) 
+	GPIO_Init(GPIOB, &GPIO_InitStructure);					 //PB7---������оƬXPT2046 SPI Ƭѡ
   
-  /* 禁止SPI1总线上的其他设备 */
-	GPIO_SetBits(GPIOB, GPIO_Pin_7);						     //触摸屏芯片XPT2046 SPI 片选禁止  
-	GPIO_SetBits(GPIOB, GPIO_Pin_12);						     //VS1003 SPI片选（V2.1)禁止 
-	GPIO_SetBits(GPIOC, GPIO_Pin_4);						     //SST25VF016B SPI片选禁止  
+  /* ��ֹSPI1�����ϵ������豸 */
+	GPIO_SetBits(GPIOB, GPIO_Pin_7);						     //������оƬXPT2046 SPI Ƭѡ��ֹ  
+	GPIO_SetBits(GPIOB, GPIO_Pin_12);						     //VS1003 SPIƬѡ��V2.1)��ֹ 
+	GPIO_SetBits(GPIOC, GPIO_Pin_4);						     //SST25VF016B SPIƬѡ��ֹ  
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;	         	 	//ENC28J60接收完成中断引脚 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;   	 		//内部上拉输入
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;	         	 	//ENC28J60��������ж����� 
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;   	 		//�ڲ���������
 	GPIO_Init(GPIOA, &GPIO_InitStructure);		 
 
  		  
 	
-	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
-	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
-	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;		//设置SPI的数据大小:SPI发送接收8位帧结构
-	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为低电平
-	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	//串行同步时钟的第一个跳变沿（上升或下降）数据被采样
-	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
-	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;		//定义波特率预分频的值:波特率预分频值为256
-	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
-	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
-	SPI_Init(SPI1, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
+	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  //����SPI�������˫�������ģʽ:SPI����Ϊ˫��˫��ȫ˫��
+	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//����SPI����ģʽ:����Ϊ��SPI
+	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;		//����SPI�����ݴ�С:SPI���ͽ���8λ֡�ṹ
+	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//����ͬ��ʱ�ӵĿ���״̬Ϊ�͵�ƽ
+	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	//����ͬ��ʱ�ӵĵ�һ�������أ��������½������ݱ�����
+	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS�ź���Ӳ����NSS�ܽţ�����������ʹ��SSIλ������:�ڲ�NSS�ź���SSIλ����
+	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;		//���岨����Ԥ��Ƶ��ֵ:������Ԥ��ƵֵΪ256
+	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//ָ�����ݴ����MSBλ����LSBλ��ʼ:���ݴ����MSBλ��ʼ
+	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRCֵ����Ķ���ʽ
+	SPI_Init(SPI1, &SPI_InitStructure);  //����SPI_InitStruct��ָ���Ĳ�����ʼ������SPIx�Ĵ���
  
-	SPI_Cmd(SPI1, ENABLE); //使能SPI外设
+	SPI_Cmd(SPI1, ENABLE); //ʹ��SPI����
 	
-	SPI1_ReadWriteByte(0xff);//启动传输		 
+	SPI1_ReadWriteByte(0xff);//��������		 
 
 }
 void ENC28J60_Reset(void)
 {
  	 
-	ENC28J60_SPI1_Init();//SPI1初始化
-	SPI1_SetSpeed(SPI_BaudRatePrescaler_4);	//SPI1 SCK频率为36M/4=9Mhz
- 	TIM6_Int_Init(1000,719);//100Khz计数频率，计数到1000为10ms
-	ENC28J60_RST=0;			//复位ENC28J60
+	ENC28J60_SPI1_Init();//SPI1��ʼ��
+	SPI1_SetSpeed(SPI_BaudRatePrescaler_4);	//SPI1 SCKƵ��Ϊ36M/4=9Mhz
+ 	TIM6_Int_Init(1000,719);//100Khz����Ƶ�ʣ�������1000Ϊ10ms
+	ENC28J60_RST=0;			//��λENC28J60
 	delay_ms(10);	 
-	ENC28J60_RST=1;			//复位结束				    
+	ENC28J60_RST=1;			//��λ����				    
 	delay_ms(10);	 
 }
-//读取ENC28J60寄存器(带操作码) 
-//op：操作码
-//addr:寄存器地址/参数
-//返回值:读到的数据
+//��ȡENC28J60�Ĵ���(��������) 
+//op��������
+//addr:�Ĵ�����ַ/����
+//����ֵ:����������
 u8 ENC28J60_Read_Op(u8 op,u8 addr)
 {
 	u8 dat=0;	 
@@ -99,15 +99,15 @@ u8 ENC28J60_Read_Op(u8 op,u8 addr)
 	dat=op|(addr&ADDR_MASK);
 	SPI1_ReadWriteByte(dat);
 	dat=SPI1_ReadWriteByte(0xFF);
-	//如果是读取MAC/MII寄存器,则第二次读到的数据才是正确的,见手册29页
+	//����Ƕ�ȡMAC/MII�Ĵ���,��ڶ��ζ��������ݲ�����ȷ��,���ֲ�29ҳ
  	if(addr&0x80)dat=SPI1_ReadWriteByte(0xFF);
 	ENC28J60_CS=1;
 	return dat;
 }
-//读取ENC28J60寄存器(带操作码) 
-//op：操作码
-//addr:寄存器地址
-//data:参数
+//��ȡENC28J60�Ĵ���(��������) 
+//op��������
+//addr:�Ĵ�����ַ
+//data:����
 void ENC28J60_Write_Op(u8 op,u8 addr,u8 data)
 {
 	u8 dat = 0;	    
@@ -117,9 +117,9 @@ void ENC28J60_Write_Op(u8 op,u8 addr,u8 data)
 	SPI1_ReadWriteByte(data);
 	ENC28J60_CS=1;
 }
-//读取ENC28J60接收缓存数据
-//len:要读取的数据长度
-//data:输出数据缓存区(末尾自动添加结束符)
+//��ȡENC28J60���ջ�������
+//len:Ҫ��ȡ�����ݳ���
+//data:������ݻ�����(ĩβ�Զ����ӽ�����)
 void ENC28J60_Read_Buf(u32 len,u8* data)
 {
 	ENC28J60_CS=0;			 
@@ -133,9 +133,9 @@ void ENC28J60_Read_Buf(u32 len,u8* data)
 	*data='\0';
 	ENC28J60_CS=1;
 }
-//向ENC28J60写发送缓存数据
-//len:要写入的数据长度
-//data:数据缓存区 
+//��ENC28J60д���ͻ�������
+//len:Ҫд������ݳ���
+//data:���ݻ����� 
 void ENC28J60_Write_Buf(u32 len,u8* data)
 {
 	ENC28J60_CS=0;			   
@@ -148,91 +148,91 @@ void ENC28J60_Write_Buf(u32 len,u8* data)
 	}
 	ENC28J60_CS=1;
 }
-//设置ENC28J60寄存器Bank
-//ban:要设置的bank
+//����ENC28J60�Ĵ���Bank
+//ban:Ҫ���õ�bank
 void ENC28J60_Set_Bank(u8 bank)
 {								    
-	if((bank&BANK_MASK)!=ENC28J60BANK)//和当前bank不一致的时候,才设置
+	if((bank&BANK_MASK)!=ENC28J60BANK)//�͵�ǰbank��һ�µ�ʱ��,������
 	{				  
 		ENC28J60_Write_Op(ENC28J60_BIT_FIELD_CLR,ECON1,(ECON1_BSEL1|ECON1_BSEL0));
 		ENC28J60_Write_Op(ENC28J60_BIT_FIELD_SET,ECON1,(bank&BANK_MASK)>>5);
 		ENC28J60BANK=(bank&BANK_MASK);
 	}
 }
-//读取ENC28J60指定寄存器 
-//addr:寄存器地址
-//返回值:读到的数据
+//��ȡENC28J60ָ���Ĵ��� 
+//addr:�Ĵ�����ַ
+//����ֵ:����������
 u8 ENC28J60_Read(u8 addr)
 {						  
-	ENC28J60_Set_Bank(addr);//设置BANK		 
+	ENC28J60_Set_Bank(addr);//����BANK		 
 	return ENC28J60_Read_Op(ENC28J60_READ_CTRL_REG,addr);
 }
-//向ENC28J60指定寄存器写数据
-//addr:寄存器地址
-//data:要写入的数据		 
+//��ENC28J60ָ���Ĵ���д����
+//addr:�Ĵ�����ַ
+//data:Ҫд�������		 
 void ENC28J60_Write(u8 addr,u8 data)
 {					  
 	ENC28J60_Set_Bank(addr);		 
 	ENC28J60_Write_Op(ENC28J60_WRITE_CTRL_REG,addr,data);
 }
-//向ENC28J60的PHY寄存器写入数据
-//addr:寄存器地址
-//data:要写入的数据		 
+//��ENC28J60��PHY�Ĵ���д������
+//addr:�Ĵ�����ַ
+//data:Ҫд�������		 
 void ENC28J60_PHY_Write(u8 addr,u32 data)
 {
 	u16 retry=0;
-	ENC28J60_Write(MIREGADR,addr);	//设置PHY寄存器地址
-	ENC28J60_Write(MIWRL,data);		//写入数据
+	ENC28J60_Write(MIREGADR,addr);	//����PHY�Ĵ�����ַ
+	ENC28J60_Write(MIWRL,data);		//д������
 	ENC28J60_Write(MIWRH,data>>8);		   
-	while((ENC28J60_Read(MISTAT)&MISTAT_BUSY)&&retry<0XFFF)retry++;//等待写入PHY结束		  
+	while((ENC28J60_Read(MISTAT)&MISTAT_BUSY)&&retry<0XFFF)retry++;//�ȴ�д��PHY����		  
 }
-//初始化ENC28J60
-//macaddr:MAC地址
-//返回值:0,初始化成功;
-//       1,初始化失败;
+//��ʼ��ENC28J60
+//macaddr:MAC��ַ
+//����ֵ:0,��ʼ���ɹ�;
+//       1,��ʼ��ʧ��;
 u8 ENC28J60_Init(u8* macaddr)
 {		
 	u16 retry=0;		  
 	ENC28J60_Reset();
-	ENC28J60_Write_Op(ENC28J60_SOFT_RESET,0,ENC28J60_SOFT_RESET);//软件复位
-	while(!(ENC28J60_Read(ESTAT)&ESTAT_CLKRDY)&&retry<500)//等待时钟稳定
+	ENC28J60_Write_Op(ENC28J60_SOFT_RESET,0,ENC28J60_SOFT_RESET);//������λ
+	while(!(ENC28J60_Read(ESTAT)&ESTAT_CLKRDY)&&retry<500)//�ȴ�ʱ���ȶ�
 	{
 		retry++;
 		delay_ms(1);
 	};
-	if(retry>=500)return 1;//ENC28J60初始化失败
+	if(retry>=500)return 1;//ENC28J60��ʼ��ʧ��
 	// do bank 0 stuff
 	// initialize receive buffer
 	// 16-bit transfers,must write low byte first
-	// set receive buffer start address	   设置接收缓冲区地址  8K字节容量
+	// set receive buffer start address	   ���ý��ջ�������ַ  8K�ֽ�����
 	NextPacketPtr=RXSTART_INIT;
 	// Rx start
-	//接收缓冲器由一个硬件管理的循环FIFO 缓冲器构成。
-	//寄存器对ERXSTH:ERXSTL 和ERXNDH:ERXNDL 作
-	//为指针，定义缓冲器的容量和其在存储器中的位置。
-	//ERXST和ERXND指向的字节均包含在FIFO缓冲器内。
-	//当从以太网接口接收数据字节时，这些字节被顺序写入
-	//接收缓冲器。 但是当写入由ERXND 指向的存储单元
-	//后，硬件会自动将接收的下一字节写入由ERXST 指向
-	//的存储单元。 因此接收硬件将不会写入FIFO 以外的单
-	//元。
-	//设置接收起始字节
+	//���ջ�������һ��Ӳ��������ѭ��FIFO ���������ɡ�
+	//�Ĵ�����ERXSTH:ERXSTL ��ERXNDH:ERXNDL ��
+	//Ϊָ�룬���建���������������ڴ洢���е�λ�á�
+	//ERXST��ERXNDָ����ֽھ�������FIFO�������ڡ�
+	//������̫���ӿڽ��������ֽ�ʱ����Щ�ֽڱ�˳��д��
+	//���ջ������� ���ǵ�д����ERXND ָ��Ĵ洢��Ԫ
+	//��Ӳ�����Զ������յ���һ�ֽ�д����ERXST ָ��
+	//�Ĵ洢��Ԫ�� ��˽���Ӳ��������д��FIFO ����ĵ�
+	//Ԫ��
+	//���ý�����ʼ�ֽ�
 	ENC28J60_Write(ERXSTL,RXSTART_INIT&0xFF);	
 	ENC28J60_Write(ERXSTH,RXSTART_INIT>>8);	  
-	//ERXWRPTH:ERXWRPTL 寄存器定义硬件向FIFO 中
-	//的哪个位置写入其接收到的字节。 指针是只读的，在成
-	//功接收到一个数据包后，硬件会自动更新指针。 指针可
-	//用于判断FIFO 内剩余空间的大小  8K-1500。 
-	//设置接收读指针字节
+	//ERXWRPTH:ERXWRPTL �Ĵ�������Ӳ����FIFO ��
+	//���ĸ�λ��д������յ����ֽڡ� ָ����ֻ���ģ��ڳ�
+	//�����յ�һ�����ݰ���Ӳ�����Զ�����ָ�롣 ָ���
+	//�����ж�FIFO ��ʣ��ռ�Ĵ�С  8K-1500�� 
+	//���ý��ն�ָ���ֽ�
 	ENC28J60_Write(ERXRDPTL,RXSTART_INIT&0xFF);
 	ENC28J60_Write(ERXRDPTH,RXSTART_INIT>>8);
-	//设置接收结束字节
+	//���ý��ս����ֽ�
 	ENC28J60_Write(ERXNDL,RXSTOP_INIT&0xFF);
 	ENC28J60_Write(ERXNDH,RXSTOP_INIT>>8);
-	//设置发送起始字节
+	//���÷�����ʼ�ֽ�
 	ENC28J60_Write(ETXSTL,TXSTART_INIT&0xFF);
 	ENC28J60_Write(ETXSTH,TXSTART_INIT>>8);
-	//设置发送结束字节
+	//���÷��ͽ����ֽ�
 	ENC28J60_Write(ETXNDL,TXSTOP_INIT&0xFF);
 	ENC28J60_Write(ETXNDH,TXSTOP_INIT>>8);
 	// do bank 1 stuff,packet filter:
@@ -245,24 +245,24 @@ u8 ENC28J60_Init(u8* macaddr)
 	// 06 08 -- ff ff ff ff ff ff -> ip checksum for theses bytes=f7f9
 	// in binary these poitions are:11 0000 0011 1111
 	// This is hex 303F->EPMM0=0x3f,EPMM1=0x30
-	//接收过滤器
-	//UCEN：单播过滤器使能位
-	//当ANDOR = 1 时：
-	//1 = 目标地址与本地MAC 地址不匹配的数据包将被丢弃
-	//0 = 禁止过滤器
-	//当ANDOR = 0 时：
-	//1 = 目标地址与本地MAC 地址匹配的数据包会被接受
-	//0 = 禁止过滤器
-	//CRCEN：后过滤器CRC 校验使能位
-	//1 = 所有CRC 无效的数据包都将被丢弃
-	//0 = 不考虑CRC 是否有效
-	//PMEN：格式匹配过滤器使能位
-	//当ANDOR = 1 时：
-	//1 = 数据包必须符合格式匹配条件，否则将被丢弃
-	//0 = 禁止过滤器
-	//当ANDOR = 0 时：
-	//1 = 符合格式匹配条件的数据包将被接受
-	//0 = 禁止过滤器
+	//���չ�����
+	//UCEN������������ʹ��λ
+	//��ANDOR = 1 ʱ��
+	//1 = Ŀ���ַ�뱾��MAC ��ַ��ƥ������ݰ���������
+	//0 = ��ֹ������
+	//��ANDOR = 0 ʱ��
+	//1 = Ŀ���ַ�뱾��MAC ��ַƥ������ݰ��ᱻ����
+	//0 = ��ֹ������
+	//CRCEN���������CRC У��ʹ��λ
+	//1 = ����CRC ��Ч�����ݰ�����������
+	//0 = ������CRC �Ƿ���Ч
+	//PMEN����ʽƥ�������ʹ��λ
+	//��ANDOR = 1 ʱ��
+	//1 = ���ݰ�������ϸ�ʽƥ�����������򽫱�����
+	//0 = ��ֹ������
+	//��ANDOR = 0 ʱ��
+	//1 = ���ϸ�ʽƥ�����������ݰ���������
+	//0 = ��ֹ������
 	ENC28J60_Write(ERXFCON,ERXFCON_UCEN|ERXFCON_CRCEN|ERXFCON_PMEN);
 	ENC28J60_Write(EPMM0,0x3f);
 	ENC28J60_Write(EPMM1,0x30);
@@ -270,163 +270,163 @@ u8 ENC28J60_Init(u8* macaddr)
 	ENC28J60_Write(EPMCSH,0xf7);
 	// do bank 2 stuff
 	// enable MAC receive
-	//bit 0 MARXEN：MAC 接收使能位
-	//1 = 允许MAC 接收数据包
-	//0 = 禁止数据包接收
-	//bit 3 TXPAUS：暂停控制帧发送使能位
-	//1 = 允许MAC 发送暂停控制帧（用于全双工模式下的流量控制）
-	//0 = 禁止暂停帧发送
-	//bit 2 RXPAUS：暂停控制帧接收使能位
-	//1 = 当接收到暂停控制帧时，禁止发送（正常操作）
-	//0 = 忽略接收到的暂停控制帧
+	//bit 0 MARXEN��MAC ����ʹ��λ
+	//1 = ����MAC �������ݰ�
+	//0 = ��ֹ���ݰ�����
+	//bit 3 TXPAUS����ͣ����֡����ʹ��λ
+	//1 = ����MAC ������ͣ����֡������ȫ˫��ģʽ�µ��������ƣ�
+	//0 = ��ֹ��ͣ֡����
+	//bit 2 RXPAUS����ͣ����֡����ʹ��λ
+	//1 = �����յ���ͣ����֡ʱ����ֹ���ͣ�����������
+	//0 = ���Խ��յ�����ͣ����֡
 	ENC28J60_Write(MACON1,MACON1_MARXEN|MACON1_TXPAUS|MACON1_RXPAUS);
 	// bring MAC out of reset
-	//将MACON2 中的MARST 位清零，使MAC 退出复位状态。
+	//��MACON2 �е�MARST λ���㣬ʹMAC �˳���λ״̬��
 	ENC28J60_Write(MACON2,0x00);
 	// enable automatic padding to 60bytes and CRC operations
-	//bit 7-5 PADCFG2:PACDFG0：自动填充和CRC 配置位
-	//111 = 用0 填充所有短帧至64 字节长，并追加一个有效的CRC
-	//110 = 不自动填充短帧
-	//101 = MAC 自动检测具有8100h 类型字段的VLAN 协议帧，并自动填充到64 字节长。如果不
-	//是VLAN 帧，则填充至60 字节长。填充后还要追加一个有效的CRC
-	//100 = 不自动填充短帧
-	//011 = 用0 填充所有短帧至64 字节长，并追加一个有效的CRC
-	//010 = 不自动填充短帧
-	//001 = 用0 填充所有短帧至60 字节长，并追加一个有效的CRC
-	//000 = 不自动填充短帧
-	//bit 4 TXCRCEN：发送CRC 使能位
-	//1 = 不管PADCFG如何，MAC都会在发送帧的末尾追加一个有效的CRC。 如果PADCFG规定要
-	//追加有效的CRC，则必须将TXCRCEN 置1。
-	//0 = MAC不会追加CRC。 检查最后4 个字节，如果不是有效的CRC 则报告给发送状态向量。
-	//bit 0 FULDPX：MAC 全双工使能位
-	//1 = MAC工作在全双工模式下。 PHCON1.PDPXMD 位必须置1。
-	//0 = MAC工作在半双工模式下。 PHCON1.PDPXMD 位必须清零。
+	//bit 7-5 PADCFG2:PACDFG0���Զ�����CRC ����λ
+	//111 = ��0 ������ж�֡��64 �ֽڳ�����׷��һ����Ч��CRC
+	//110 = ���Զ�����֡
+	//101 = MAC �Զ�������8100h �����ֶε�VLAN Э��֡�����Զ���䵽64 �ֽڳ��������
+	//��VLAN ֡���������60 �ֽڳ�������Ҫ׷��һ����Ч��CRC
+	//100 = ���Զ�����֡
+	//011 = ��0 ������ж�֡��64 �ֽڳ�����׷��һ����Ч��CRC
+	//010 = ���Զ�����֡
+	//001 = ��0 ������ж�֡��60 �ֽڳ�����׷��һ����Ч��CRC
+	//000 = ���Զ�����֡
+	//bit 4 TXCRCEN������CRC ʹ��λ
+	//1 = ����PADCFG��Σ�MAC�����ڷ���֡��ĩβ׷��һ����Ч��CRC�� ���PADCFG�涨Ҫ
+	//׷����Ч��CRC������뽫TXCRCEN ��1��
+	//0 = MAC����׷��CRC�� ������4 ���ֽڣ����������Ч��CRC �򱨸������״̬������
+	//bit 0 FULDPX��MAC ȫ˫��ʹ��λ
+	//1 = MAC������ȫ˫��ģʽ�¡� PHCON1.PDPXMD λ������1��
+	//0 = MAC�����ڰ�˫��ģʽ�¡� PHCON1.PDPXMD λ�������㡣
 	ENC28J60_Write_Op(ENC28J60_BIT_FIELD_SET,MACON3,MACON3_PADCFG0|MACON3_TXCRCEN|MACON3_FRMLNEN|MACON3_FULDPX);
 	// set inter-frame gap (non-back-to-back)
-	//配置非背对背包间间隔寄存器的低字节
-	//MAIPGL。 大多数应用使用12h 编程该寄存器。
-	//如果使用半双工模式，应编程非背对背包间间隔
-	//寄存器的高字节MAIPGH。 大多数应用使用0Ch
-	//编程该寄存器。
+	//���÷Ǳ��Ա��������Ĵ����ĵ��ֽ�
+	//MAIPGL�� �����Ӧ��ʹ��12h ��̸üĴ�����
+	//���ʹ�ð�˫��ģʽ��Ӧ��̷Ǳ��Ա�������
+	//�Ĵ����ĸ��ֽ�MAIPGH�� �����Ӧ��ʹ��0Ch
+	//��̸üĴ�����
 	ENC28J60_Write(MAIPGL,0x12);
 	ENC28J60_Write(MAIPGH,0x0C);
 	// set inter-frame gap (back-to-back)
-	//配置背对背包间间隔寄存器MABBIPG。当使用
-	//全双工模式时，大多数应用使用15h 编程该寄存
-	//器，而使用半双工模式时则使用12h 进行编程。
+	//���ñ��Ա��������Ĵ���MABBIPG����ʹ��
+	//ȫ˫��ģʽʱ�������Ӧ��ʹ��15h ��̸üĴ�
+	//������ʹ�ð�˫��ģʽʱ��ʹ��12h ���б�̡�
 	ENC28J60_Write(MABBIPG,0x15);
 	// Set the maximum packet size which the controller will accept
 	// Do not send packets longer than MAX_FRAMELEN:
-	// 最大帧长度  1500
+	// ���֡����  1500
 	ENC28J60_Write(MAMXFLL,MAX_FRAMELEN&0xFF);	
 	ENC28J60_Write(MAMXFLH,MAX_FRAMELEN>>8);
 	// do bank 3 stuff
 	// write MAC address
 	// NOTE: MAC address in ENC28J60 is byte-backward
-	//设置MAC地址
+	//����MAC��ַ
 	ENC28J60_Write(MAADR5,macaddr[0]);	
 	ENC28J60_Write(MAADR4,macaddr[1]);
 	ENC28J60_Write(MAADR3,macaddr[2]);
 	ENC28J60_Write(MAADR2,macaddr[3]);
 	ENC28J60_Write(MAADR1,macaddr[4]);
 	ENC28J60_Write(MAADR0,macaddr[5]);
-	//配置PHY为全双工  LEDB为拉电流
+	//����PHYΪȫ˫��  LEDBΪ������
 	ENC28J60_PHY_Write(PHCON1,PHCON1_PDPXMD);	 
-	// no loopback of transmitted frames	 禁止环回
-	//HDLDIS：PHY 半双工环回禁止位
-	//当PHCON1.PDPXMD = 1 或PHCON1.PLOOPBK = 1 时：
-	//此位可被忽略。
-	//当PHCON1.PDPXMD = 0 且PHCON1.PLOOPBK = 0 时：
-	//1 = 要发送的数据仅通过双绞线接口发出
-	//0 = 要发送的数据会环回到MAC 并通过双绞线接口发出
+	// no loopback of transmitted frames	 ��ֹ����
+	//HDLDIS��PHY ��˫�����ؽ�ֹλ
+	//��PHCON1.PDPXMD = 1 ��PHCON1.PLOOPBK = 1 ʱ��
+	//��λ�ɱ����ԡ�
+	//��PHCON1.PDPXMD = 0 ��PHCON1.PLOOPBK = 0 ʱ��
+	//1 = Ҫ���͵����ݽ�ͨ��˫���߽ӿڷ���
+	//0 = Ҫ���͵����ݻỷ�ص�MAC ��ͨ��˫���߽ӿڷ���
 	ENC28J60_PHY_Write(PHCON2,PHCON2_HDLDIS);
 	// switch to bank 0
-	//ECON1 寄存器
-	//寄存器3-1 所示为ECON1 寄存器，它用于控制
-	//ENC28J60 的主要功能。 ECON1 中包含接收使能、发
-	//送请求、DMA 控制和存储区选择位。	   
+	//ECON1 �Ĵ���
+	//�Ĵ���3-1 ��ʾΪECON1 �Ĵ����������ڿ���
+	//ENC28J60 ����Ҫ���ܡ� ECON1 �а�������ʹ�ܡ���
+	//������DMA ���ƺʹ洢��ѡ��λ��	   
 	ENC28J60_Set_Bank(ECON1);
 	// enable interrutps
-	//EIE： 以太网中断允许寄存器
-	//bit 7 INTIE： 全局INT 中断允许位
-	//1 = 允许中断事件驱动INT 引脚
-	//0 = 禁止所有INT 引脚的活动（引脚始终被驱动为高电平）
-	//bit 6 PKTIE： 接收数据包待处理中断允许位
-	//1 = 允许接收数据包待处理中断
-	//0 = 禁止接收数据包待处理中断
+	//EIE�� ��̫���ж������Ĵ���
+	//bit 7 INTIE�� ȫ��INT �ж�����λ
+	//1 = �����ж��¼�����INT ����
+	//0 = ��ֹ����INT ���ŵĻ������ʼ�ձ�����Ϊ�ߵ�ƽ��
+	//bit 6 PKTIE�� �������ݰ��������ж�����λ
+	//1 = �����������ݰ��������ж�
+	//0 = ��ֹ�������ݰ��������ж�
 	ENC28J60_Write_Op(ENC28J60_BIT_FIELD_SET,EIE,EIE_INTIE|EIE_PKTIE);
 	// enable packet reception
-	//bit 2 RXEN：接收使能位
-	//1 = 通过当前过滤器的数据包将被写入接收缓冲器
-	//0 = 忽略所有接收的数据包
+	//bit 2 RXEN������ʹ��λ
+	//1 = ͨ����ǰ�����������ݰ�����д����ջ�����
+	//0 = �������н��յ����ݰ�
 	ENC28J60_Write_Op(ENC28J60_BIT_FIELD_SET,ECON1,ECON1_RXEN);
-	if(ENC28J60_Read(MAADR5)== macaddr[0])return 0;//初始化成功
+	if(ENC28J60_Read(MAADR5)== macaddr[0])return 0;//��ʼ���ɹ�
 	else return 1; 	  
 
 }
-//读取EREVID
+//��ȡEREVID
 u8 ENC28J60_Get_EREVID(void)
 {
-	//在EREVID 内也存储了版本信息。 EREVID 是一个只读控
-	//制寄存器，包含一个5 位标识符，用来标识器件特定硅片
-	//的版本号
+	//��EREVID ��Ҳ�洢�˰汾��Ϣ�� EREVID ��һ��ֻ����
+	//�ƼĴ���������һ��5 λ��ʶ����������ʶ�����ض���Ƭ
+	//�İ汾��
 	return ENC28J60_Read(EREVID);
 }
 #include "uip.h"
-//通过ENC28J60发送数据包到网络
-//len:数据包大小
-//packet:数据包
+//ͨ��ENC28J60�������ݰ�������
+//len:���ݰ���С
+//packet:���ݰ�
 void ENC28J60_Packet_Send(u32 len,u8* packet)
 {
-	//设置发送缓冲区地址写指针入口
+	//���÷��ͻ�������ַдָ�����
 	ENC28J60_Write(EWRPTL,TXSTART_INIT&0xFF);
 	ENC28J60_Write(EWRPTH,TXSTART_INIT>>8);
-	//设置TXND指针，以对应给定的数据包大小	   
+	//����TXNDָ�룬�Զ�Ӧ���������ݰ���С	   
 	ENC28J60_Write(ETXNDL,(TXSTART_INIT+len)&0xFF);
 	ENC28J60_Write(ETXNDH,(TXSTART_INIT+len)>>8);
-	//写每包控制字节（0x00表示使用macon3的设置） 
+	//дÿ�������ֽڣ�0x00��ʾʹ��macon3�����ã� 
 	ENC28J60_Write_Op(ENC28J60_WRITE_BUF_MEM,0,0x00);
-	//复制数据包到发送缓冲区
-	//printf("len:%d\r\n",len);	//监视发送数据长度
+	//�������ݰ������ͻ�����
+	//printf("len:%d\r\n",len);	//���ӷ������ݳ���
  	ENC28J60_Write_Buf(len,packet);
- 	//发送数据到网络
+ 	//�������ݵ�����
 	ENC28J60_Write_Op(ENC28J60_BIT_FIELD_SET,ECON1,ECON1_TXRTS);
-	//复位发送逻辑的问题。参见Rev. B4 Silicon Errata point 12.
+	//��λ�����߼������⡣�μ�Rev. B4 Silicon Errata point 12.
 	if((ENC28J60_Read(EIR)&EIR_TXERIF))ENC28J60_Write_Op(ENC28J60_BIT_FIELD_CLR,ECON1,ECON1_TXRTS);
 }
-//从网络获取一个数据包内容
-//maxlen:数据包最大允许接收长度
-//packet:数据包缓存区
-//返回值:收到的数据包长度(字节)									  
+//�������ȡһ�����ݰ�����
+//maxlen:���ݰ�����������ճ���
+//packet:���ݰ�������
+//����ֵ:�յ������ݰ�����(�ֽ�)									  
 u32 ENC28J60_Packet_Receive(u32 maxlen,u8* packet)
 {
 	u32 rxstat;
 	u32 len;    													 
-	if(ENC28J60_Read(EPKTCNT)==0)return 0;  //是否收到数据包?	   
-	//设置接收缓冲器读指针
+	if(ENC28J60_Read(EPKTCNT)==0)return 0;  //�Ƿ��յ����ݰ�?	   
+	//���ý��ջ�������ָ��
 	ENC28J60_Write(ERDPTL,(NextPacketPtr));
 	ENC28J60_Write(ERDPTH,(NextPacketPtr)>>8);	   
-	// 读下一个包的指针
+	// ����һ������ָ��
 	NextPacketPtr=ENC28J60_Read_Op(ENC28J60_READ_BUF_MEM,0);
 	NextPacketPtr|=ENC28J60_Read_Op(ENC28J60_READ_BUF_MEM,0)<<8;
-	//读包的长度
+	//�����ĳ���
 	len=ENC28J60_Read_Op(ENC28J60_READ_BUF_MEM,0);
 	len|=ENC28J60_Read_Op(ENC28J60_READ_BUF_MEM,0)<<8;
- 	len-=4; //去掉CRC计数
-	//读取接收状态
+ 	len-=4; //ȥ��CRC����
+	//��ȡ����״̬
 	rxstat=ENC28J60_Read_Op(ENC28J60_READ_BUF_MEM,0);
 	rxstat|=ENC28J60_Read_Op(ENC28J60_READ_BUF_MEM,0)<<8;
-	//限制接收长度	
+	//���ƽ��ճ���	
 	if (len>maxlen-1)len=maxlen-1;	
-	//检查CRC和符号错误
-	// ERXFCON.CRCEN为默认设置,一般我们不需要检查.
-	if((rxstat&0x80)==0)len=0;//无效
-	else ENC28J60_Read_Buf(len,packet);//从接收缓冲器中复制数据包	    
-	//RX读指针移动到下一个接收到的数据包的开始位置 
-	//并释放我们刚才读出过的内存
+	//���CRC�ͷ��Ŵ���
+	// ERXFCON.CRCENΪĬ������,һ�����ǲ���Ҫ���.
+	if((rxstat&0x80)==0)len=0;//��Ч
+	else ENC28J60_Read_Buf(len,packet);//�ӽ��ջ������и������ݰ�	    
+	//RX��ָ���ƶ�����һ�����յ������ݰ��Ŀ�ʼλ�� 
+	//���ͷ����ǸղŶ��������ڴ�
 	ENC28J60_Write(ERXRDPTL,(NextPacketPtr));
 	ENC28J60_Write(ERXRDPTH,(NextPacketPtr)>>8);
-	//递减数据包计数器标志我们已经得到了这个包 
+	//�ݼ����ݰ���������־�����Ѿ��õ�������� 
  	ENC28J60_Write_Op(ENC28J60_BIT_FIELD_SET,ECON2,ECON2_PKTDEC);
 	return(len);
 }

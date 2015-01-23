@@ -4,10 +4,10 @@
 #include <string.h>
 //struct PID
 //{
-//    s16 SetPoint; // 璁惧畾鐩爣 Desired Value
-//    s16 Proportion; // 姣斾緥甯告暟 Proportional Const
-//    s16 Integral; // 绉垎甯告暟 Integral Const
-//    s16 Derivative; // 寰垎甯告暟 Derivative Const
+//    s16 SetPoint; // 设定目标 Desired Value
+//    s16 Proportion; // 比例常数 Proportional Const
+//    s16 Integral; // 积分常数 Integral Const
+//    s16 Derivative; // 微分常数 Derivative Const
 //    s32 LastError; // Error[-1]
 //    s32 PrevError; // Error[-2]
 //    s32 SumError; // Sums of Errors

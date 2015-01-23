@@ -3,16 +3,16 @@
 #define _DAC_Channel_1      //I/O PA.4
 #define _DAC_Channel_2      //I/O PA.5
 /*
-//DACçš„è½¬æ¢é€Ÿåº¦æœ€å¿«æ˜¯250Kå·¦
+//DACµÄ×ª»»ËÙ¶È×î¿ìÊÇ250K×ó
 8bit/12bit
-ç«¯å£è¦è®¾ç½®ä¸ºæ¨¡æ‹Ÿè¾“å…¥æ¨¡å¼
-ä¸€ä½†ä½¿èƒ½DACxé€šé“ä¹‹åï¼Œç›¸åº”çš„GPIOå¼•è„šï¼ˆPA4æˆ–è€…PA5ï¼‰ä¼šè‡ªåŠ¨ä¸DACçš„æ¨¡æ‹Ÿè¾“å‡ºç›¸è¿ï¼Œè®¾ç½®ä¸ºè¾“å…¥ï¼Œæ˜¯ä¸ºäº†é¿å…é¢å¤–çš„å¹²æ‰°ã€‚
+¶Ë¿ÚÒªÉèÖÃÎªÄ£ÄâÊäÈëÄ£Ê½
+Ò»µ«Ê¹ÄÜDACxÍ¨µÀÖ®ºó£¬ÏàÓ¦µÄGPIOÒı½Å£¨PA4»òÕßPA5£©»á×Ô¶¯ÓëDACµÄÄ£ÄâÊä³öÏàÁ¬£¬ÉèÖÃÎªÊäÈë£¬ÊÇÎªÁË±ÜÃâ¶îÍâµÄ¸ÉÈÅ¡£
 */
-//DAC ä»£ç 
-//ä¿®æ”¹æ—¥æœŸ:2012/9/8
-//ç‰ˆæœ¬ï¼šV1.0
+//DAC ´úÂë
+//ĞŞ¸ÄÈÕÆÚ:2012/9/8
+//°æ±¾£ºV1.0
 
-//DACé€šé“1è¾“å‡ºåˆå§‹åŒ–
+//DACÍ¨µÀ1Êä³ö³õÊ¼»¯
 void Dac1_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -20,75 +20,75 @@ void Dac1_Init(void)
     /* Check the parameters */
     assert_param(IS_DAC_CHANNEL(DAC_Channel));
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE );    //ä½¿èƒ½PORTAé€šé“æ—¶é’Ÿ
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE );      //ä½¿èƒ½DACé€šé“æ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE );    //Ê¹ÄÜPORTAÍ¨µÀÊ±ÖÓ
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE );      //Ê¹ÄÜDACÍ¨µÀÊ±ÖÓ
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;            // ç«¯å£é…ç½®
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;        //æ¨¡æ‹Ÿè¾“å…¥
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;            // ¶Ë¿ÚÅäÖÃ
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;        //Ä£ÄâÊäÈë
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-    GPIO_SetBits(GPIOA, GPIO_Pin_4)  ;                   //PX.x è¾“å‡ºé«˜
+    GPIO_SetBits(GPIOA, GPIO_Pin_4)  ;                   //PX.x Êä³ö¸ß
 
-    DAC_InitType.DAC_Trigger = DAC_Trigger_None;            //ä¸ä½¿ç”¨è§¦å‘åŠŸèƒ½ TEN1=0
-    DAC_InitType.DAC_WaveGeneration = DAC_WaveGeneration_None; //ä¸ä½¿ç”¨æ³¢å½¢å‘ç”Ÿ
-    DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0; //å±è”½ã€å¹…å€¼è®¾ç½®
-    DAC_InitType.DAC_OutputBuffer = DAC_OutputBuffer_Disable ;        //DAC1è¾“å‡ºç¼“å­˜å…³é—­ BOFF1=1
-    DAC_Init(DAC_Channel_1, &DAC_InitType);                             //åˆå§‹åŒ–DACé€šé“1
+    DAC_InitType.DAC_Trigger = DAC_Trigger_None;            //²»Ê¹ÓÃ´¥·¢¹¦ÄÜ TEN1=0
+    DAC_InitType.DAC_WaveGeneration = DAC_WaveGeneration_None; //²»Ê¹ÓÃ²¨ĞÎ·¢Éú
+    DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0; //ÆÁ±Î¡¢·ùÖµÉèÖÃ
+    DAC_InitType.DAC_OutputBuffer = DAC_OutputBuffer_Disable ;        //DAC1Êä³ö»º´æ¹Ø±Õ BOFF1=1
+    DAC_Init(DAC_Channel_1, &DAC_InitType);                             //³õÊ¼»¯DACÍ¨µÀ1
 
-    DAC_Cmd(DAC_Channel_1, ENABLE);          //ä½¿èƒ½DAC1
-    DAC_SetChannel1Data(DAC_Align_12b_R, 3000); //12ä½å³å¯¹é½æ•°æ®æ ¼å¼è®¾ç½®DACå€¼
+    DAC_Cmd(DAC_Channel_1, ENABLE);          //Ê¹ÄÜDAC1
+    DAC_SetChannel1Data(DAC_Align_12b_R, 3000); //12Î»ÓÒ¶ÔÆëÊı¾İ¸ñÊ½ÉèÖÃDACÖµ
 }
-//DACé€šé“1è¾“å‡ºåˆå§‹åŒ–
+//DACÍ¨µÀ1Êä³ö³õÊ¼»¯
 void Dac2_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     DAC_InitTypeDef DAC_InitType;
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE );    //ä½¿èƒ½PORTAé€šé“æ—¶é’Ÿ
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE );      //ä½¿èƒ½DACé€šé“æ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE );    //Ê¹ÄÜPORTAÍ¨µÀÊ±ÖÓ
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE );      //Ê¹ÄÜDACÍ¨µÀÊ±ÖÓ
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;            // ç«¯å£é…ç½®
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;  //æ¨¡æ‹Ÿè¾“å…¥
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;            // ¶Ë¿ÚÅäÖÃ
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;  //Ä£ÄâÊäÈë
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-    GPIO_SetBits(GPIOA, GPIO_Pin_5)  ;                       //PX.x è¾“å‡ºé«˜
+    GPIO_SetBits(GPIOA, GPIO_Pin_5)  ;                       //PX.x Êä³ö¸ß
 
-    DAC_InitType.DAC_Trigger = DAC_Trigger_Software;                        //ä¸ä½¿ç”¨è§¦å‘åŠŸèƒ½ TEN1=0
-    DAC_InitType.DAC_WaveGeneration = DAC_WaveGeneration_None;        //ä¸ä½¿ç”¨æ³¢å½¢å‘ç”Ÿ
-    DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0; //å±è”½ã€å¹…å€¼è®¾ç½®
-    DAC_InitType.DAC_OutputBuffer = DAC_OutputBuffer_Disable ;            //DAC1è¾“å‡ºç¼“å­˜å…³é—­ BOFF1=1
-    DAC_Init(DAC_Channel_2, &DAC_InitType);                                         //åˆå§‹åŒ–DACé€šé“1
+    DAC_InitType.DAC_Trigger = DAC_Trigger_Software;                        //²»Ê¹ÓÃ´¥·¢¹¦ÄÜ TEN1=0
+    DAC_InitType.DAC_WaveGeneration = DAC_WaveGeneration_None;        //²»Ê¹ÓÃ²¨ĞÎ·¢Éú
+    DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0; //ÆÁ±Î¡¢·ùÖµÉèÖÃ
+    DAC_InitType.DAC_OutputBuffer = DAC_OutputBuffer_Disable ;            //DAC1Êä³ö»º´æ¹Ø±Õ BOFF1=1
+    DAC_Init(DAC_Channel_2, &DAC_InitType);                                         //³õÊ¼»¯DACÍ¨µÀ1
 
-    DAC_Cmd(DAC_Channel_2, ENABLE);          //ä½¿èƒ½DAC1
-    DAC_SetChannel2Data(DAC_Align_12b_R, 0); //12ä½å³å¯¹é½æ•°æ®æ ¼å¼è®¾ç½®DACå€¼
+    DAC_Cmd(DAC_Channel_2, ENABLE);          //Ê¹ÄÜDAC1
+    DAC_SetChannel2Data(DAC_Align_12b_R, 0); //12Î»ÓÒ¶ÔÆëÊı¾İ¸ñÊ½ÉèÖÃDACÖµ
     DAC_SoftwareTriggerCmd(DAC_Channel_2, ENABLE);
 }
 
-//è®¾ç½®é€šé“1è¾“å‡ºç”µå‹
-//vol:0~3300,ä»£è¡¨0~3.3V
+//ÉèÖÃÍ¨µÀ1Êä³öµçÑ¹
+//vol:0~3300,´ú±í0~3.3V
 void Dac1_Set_Vol(u16 vol)
 {
     float temp = vol;
     temp /= 1000;
     temp = temp * 4096 / 3.3;
-    DAC_SetChannel1Data(DAC_Align_12b_R, temp); //12ä½å³å¯¹é½æ•°æ®æ ¼å¼è®¾ç½®DACå€¼
+    DAC_SetChannel1Data(DAC_Align_12b_R, temp); //12Î»ÓÒ¶ÔÆëÊı¾İ¸ñÊ½ÉèÖÃDACÖµ
 }
 void Dac2_Set_Vol(u16 vol)
 {
     float temp = vol;
     temp /= 1000;
     temp = temp * 4096 / 3.3;
-    DAC_SetChannel2Data(DAC_Align_12b_R, temp); //12ä½å³å¯¹é½æ•°æ®æ ¼å¼è®¾ç½®DACå€¼
+    DAC_SetChannel2Data(DAC_Align_12b_R, temp); //12Î»ÓÒ¶ÔÆëÊı¾İ¸ñÊ½ÉèÖÃDACÖµ
 }
 
-void DAC_voice(u8 *dac_temp)//ä½ä½åœ¨å‰
+void DAC_voice(u8 *dac_temp)//µÍÎ»ÔÚÇ°
 {
     u16 temp;
     u8 i;
     for (i = 0; i < 32; i += 2)
     {
         temp = dac_temp[i] + dac_temp[i + 1];
-        DAC_SetChannel1Data(DAC_Align_12b_R, temp); //12ä½å³å¯¹é½æ•°æ®æ ¼å¼è®¾ç½®DACå€¼
+        DAC_SetChannel1Data(DAC_Align_12b_R, temp); //12Î»ÓÒ¶ÔÆëÊı¾İ¸ñÊ½ÉèÖÃDACÖµ
     }
 }
 

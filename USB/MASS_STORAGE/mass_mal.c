@@ -12,8 +12,8 @@
 * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 *******************************************************************************/
-/*SDå¡å’ŒUSBæŽ¥å£çš„é©±åŠ¨å‡½æ•°åŠæŽ¥å£å‡½æ•°
-//2013/7/31 Uç›˜
+/*SD¿¨ºÍUSB½Ó¿ÚµÄÇý¶¯º¯Êý¼°½Ó¿Úº¯Êý
+//2013/7/31 UÅÌ
 */
 /* Includes ------------------------------------------------------------------*/
 #include "platform_config.h"
@@ -39,7 +39,7 @@ unsigned char dis_mem = 0;
 /*******************************************************************************
 * Function Name  : MAL_Init
 * Description    : Initializes the Media on the STM32
-* åŠŸèƒ½           : å‚¨å­˜ä»‹è´¨åˆå§‹åŒ–
+* ¹¦ÄÜ           : ´¢´æ½éÖÊ³õÊ¼»¯
 * Input          : None
 * Output         : None
 * Return         : None
@@ -58,13 +58,13 @@ uint16_t MAL_Init(uint8_t lun)
         Status = SD_SetDeviceMode(SD_DMA_MODE);
         if (Status == SD_OK)
         {
-            // ä»Žåœ°å€0å¼€å§‹è¯»å–512å­—èŠ‚
+            // ´ÓµØÖ·0¿ªÊ¼¶ÁÈ¡512×Ö½Ú
             Status = SD_ReadBlock(Buffer_Block_Rx, 0x00,  BlockSize);
         }
         if (Status == SD_OK)
         {
-            // è¿”å›žæˆåŠŸçš„è¯ï¼Œä¸²å£è¾“å‡ºSDå¡æµ‹è¯•æˆåŠŸä¿¡æ¯
-						DbgPrintf(" \n SD SDIO-4bitæ¨¡å¼ TF OK");
+            // ·µ»Ø³É¹¦µÄ»°£¬´®¿ÚÊä³öSD¿¨²âÊÔ³É¹¦ÐÅÏ¢
+						DbgPrintf(" \n SD SDIO-4bitÄ£Ê½ TF OK");
         }
         break;
     default:
@@ -74,12 +74,12 @@ uint16_t MAL_Init(uint8_t lun)
 }
 
 /****************************************************************************
-* å    ç§°ï¼šMAL_Write
-* åŠŸ    èƒ½ï¼šUSBå­˜å‚¨ä»‹è´¨å†™é©±åŠ¨
-* å…¥å£å‚æ•°ï¼šæ— 
-* å‡ºå£å‚æ•°ï¼šæ— 
-* è¯´    æ˜Žï¼š
-* è°ƒç”¨æ–¹æ³•ï¼šæ— 
+* Ãû    ³Æ£ºMAL_Write
+* ¹¦    ÄÜ£ºUSB´æ´¢½éÖÊÐ´Çý¶¯
+* Èë¿Ú²ÎÊý£ºÎÞ
+* ³ö¿Ú²ÎÊý£ºÎÞ
+* Ëµ    Ã÷£º
+* µ÷ÓÃ·½·¨£ºÎÞ
 ****************************************************************************/
 extern u8 SD_WriteDisk(u8* buf, u32 sector, u8 cnt);
 extern u8 SD_ReadDisk(u8* buf, u32 sector, u8 cnt);
@@ -90,7 +90,7 @@ uint16_t MAL_Write(uint8_t lun, uint32_t Memory_Offset, uint32_t* Writebuff, uin
     switch (lun)
     {
     case 0:
-        //åœ¨æŒ‡å®šåœ°å€è¿žç»­å†™å…¥æŒ‡å®šé•¿åº¦çš„æ•°æ®
+        //ÔÚÖ¸¶¨µØÖ·Á¬ÐøÐ´ÈëÖ¸¶¨³¤¶ÈµÄÊý¾Ý
         Status = SD_WriteDisk((u8*)Writebuff, Memory_Offset >> 9,  Transfer_Length >> 9);
         if ( Status != SD_OK )
             return MAL_FAIL;
@@ -102,19 +102,19 @@ uint16_t MAL_Write(uint8_t lun, uint32_t Memory_Offset, uint32_t* Writebuff, uin
 }
 
 /****************************************************************************
-* å    ç§°ï¼šuint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t *Readbuff, uint16_t Transfer_Length)
-* åŠŸ    èƒ½ï¼šUSBå­˜å‚¨ä»‹è´¨è¯»é©±åŠ¨
-* å…¥å£å‚æ•°ï¼šæ— 
-* å‡ºå£å‚æ•°ï¼šæ— 
-* è¯´    æ˜Žï¼š
-* è°ƒç”¨æ–¹æ³•ï¼šæ— 
+* Ãû    ³Æ£ºuint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t *Readbuff, uint16_t Transfer_Length)
+* ¹¦    ÄÜ£ºUSB´æ´¢½éÖÊ¶ÁÇý¶¯
+* Èë¿Ú²ÎÊý£ºÎÞ
+* ³ö¿Ú²ÎÊý£ºÎÞ
+* Ëµ    Ã÷£º
+* µ÷ÓÃ·½·¨£ºÎÞ
 ****************************************************************************/
 uint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t* Readbuff, uint16_t Transfer_Length)
 {
     switch (lun)
     {
     case 0:
-        //ä»ŽæŒ‡å®šåœ°å€è¿žç»­è¯»å‡ºæŒ‡å®šé•¿åº¦çš„æ•°æ®
+        //´ÓÖ¸¶¨µØÖ·Á¬Ðø¶Á³öÖ¸¶¨³¤¶ÈµÄÊý¾Ý
         Status = SD_ReadDisk((u8*)Readbuff, Memory_Offset >> 9,  Transfer_Length >> 9);
         if ( Status != SD_OK )
             return MAL_FAIL;
@@ -126,12 +126,12 @@ uint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t* Readbuff, uint1
 }
 
 /*******************************************************************************
-* å    ç§°ï¼šuint16_t MAL_GetStatus (uint8_t lun)
-* åŠŸ    èƒ½ï¼šèŽ·å¾—å­˜å‚¨ä»‹è´¨ä¿¡æ¯
-* å…¥å£å‚æ•°ï¼šæ— 
-* å‡ºå£å‚æ•°ï¼šæ— 
-* è¯´    æ˜Žï¼š
-* è°ƒç”¨æ–¹æ³•ï¼šæ— 
+* Ãû    ³Æ£ºuint16_t MAL_GetStatus (uint8_t lun)
+* ¹¦    ÄÜ£º»ñµÃ´æ´¢½éÖÊÐÅÏ¢
+* Èë¿Ú²ÎÊý£ºÎÞ
+* ³ö¿Ú²ÎÊý£ºÎÞ
+* Ëµ    Ã÷£º
+* µ÷ÓÃ·½·¨£ºÎÞ
 ****************************************************************************/
 //uint16_t MAL_GetStatus (uint8_t lun)
 //{
@@ -164,9 +164,9 @@ uint16_t MAL_Read(uint8_t lun, uint32_t Memory_Offset, uint32_t* Readbuff, uint1
 //                return MAL_FAIL;
 //            Mass_Memory_Size[0] = Mass_Block_Count[0] * Mass_Block_Size[0];
 //            LED1 = 0;
-//            if (dis_mem == 0)   //æ˜¾ç¤ºTFå¡çš„å®¹é‡  ç”±äºŽæ˜¯å‘¨æœŸæ€§æ›´æ–°çŠ¶æ€ï¼Œæ‰€ä»¥ï¼ŒåŠ äº†æ¡ä»¶ï¼Œåªæ˜¾ç¤ºä¸€æ¬¡å®¹é‡å€¼
+//            if (dis_mem == 0)   //ÏÔÊ¾TF¿¨µÄÈÝÁ¿  ÓÉÓÚÊÇÖÜÆÚÐÔ¸üÐÂ×´Ì¬£¬ËùÒÔ£¬¼ÓÁËÌõ¼þ£¬Ö»ÏÔÊ¾Ò»´ÎÈÝÁ¿Öµ
 //            {
-//                printf("\r\n Micro SDå¡çš„å®¹é‡æ˜¯ %d MBytes\n" ,SDCardInfo.CardCapacity);
+//                printf("\r\n Micro SD¿¨µÄÈÝÁ¿ÊÇ %d MBytes\n" ,SDCardInfo.CardCapacity);
 //                dis_mem = 1;
 //            }
 //            return MAL_OK;
@@ -181,7 +181,7 @@ u16 MAL_GetStatus (u8 lun)
     switch (lun)
     {
     case 0:
-        if (dis_mem == 0)   //æ˜¾ç¤ºTFå¡çš„å®¹é‡  ç”±äºŽæ˜¯å‘¨æœŸæ€§æ›´æ–°çŠ¶æ€ï¼Œæ‰€ä»¥ï¼ŒåŠ äº†æ¡ä»¶ï¼Œåªæ˜¾ç¤ºä¸€æ¬¡å®¹é‡å€¼
+        if (dis_mem == 0)   //ÏÔÊ¾TF¿¨µÄÈÝÁ¿  ÓÉÓÚÊÇÖÜÆÚÐÔ¸üÐÂ×´Ì¬£¬ËùÒÔ£¬¼ÓÁËÌõ¼þ£¬Ö»ÏÔÊ¾Ò»´ÎÈÝÁ¿Öµ
         {
             if (SD_Init() == SD_OK)
             {
@@ -209,9 +209,9 @@ u16 MAL_GetStatus (u8 lun)
                     return MAL_FAIL;
                 Mass_Memory_Size[0] = Mass_Block_Count[0] * Mass_Block_Size[0];
                 LED1 = 0;
-                //                    if (dis_mem == 0)   //æ˜¾ç¤ºTFå¡çš„å®¹é‡  ç”±äºŽæ˜¯å‘¨æœŸæ€§æ›´æ–°çŠ¶æ€ï¼Œæ‰€ä»¥ï¼ŒåŠ äº†æ¡ä»¶ï¼Œåªæ˜¾ç¤ºä¸€æ¬¡å®¹é‡å€¼
+                //                    if (dis_mem == 0)   //ÏÔÊ¾TF¿¨µÄÈÝÁ¿  ÓÉÓÚÊÇÖÜÆÚÐÔ¸üÐÂ×´Ì¬£¬ËùÒÔ£¬¼ÓÁËÌõ¼þ£¬Ö»ÏÔÊ¾Ò»´ÎÈÝÁ¿Öµ
                 //                    {
-                printf("\r\n Micro SDå¡çš„å®¹é‡æ˜¯ %lld MBytes\n" , SDCardInfo.CardCapacity >> 20);
+                printf("\r\n Micro SD¿¨µÄÈÝÁ¿ÊÇ %lld MBytes\n" , SDCardInfo.CardCapacity >> 20);
                 dis_mem = 1;
                 //                    }
                 return MAL_OK;

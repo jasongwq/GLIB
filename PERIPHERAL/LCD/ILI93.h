@@ -2,25 +2,25 @@
 #define __ILI93_H
 #include "sys.h"
 
-//å†™å¯„å­˜å™¨åœ°å€å‡½æ•°
-//regval:å¯„å­˜å™¨å€¼
+//Ð´¼Ä´æÆ÷µØÖ·º¯Êý
+//regval:¼Ä´æÆ÷Öµ
 #define LCD_WR_REG(regval) LCD->LCD_REG =regval
 
 
-//å†™å¯„å­˜å™¨
-//LCD_Reg:å¯„å­˜å™¨åœ°å€
-//LCD_RegValue:è¦å†™å…¥çš„æ•°æ®
-#define LCD_WriteReg LCD_WR_CMD				//å†™å…¥è¦å†™çš„å¯„å­˜å™¨åºå·
+//Ð´¼Ä´æÆ÷
+//LCD_Reg:¼Ä´æÆ÷µØÖ·
+//LCD_RegValue:ÒªÐ´ÈëµÄÊý¾Ý
+#define LCD_WriteReg LCD_WR_CMD				//Ð´ÈëÒªÐ´µÄ¼Ä´æÆ÷ÐòºÅ
 #define LCD_WR_CMD(LCD_Reg,LCD_RegValue) LCD->LCD_REG = LCD_Reg;\
-LCD->LCD_RAM = LCD_RegValue;//å†™å…¥æ•°æ®
+LCD->LCD_RAM = LCD_RegValue;//Ð´ÈëÊý¾Ý
 
-//å¼€å§‹å†™GRAM
+//¿ªÊ¼Ð´GRAM
 #define LCD_WriteRAM_Prepare() LCD->LCD_REG=lcddev.wramcmd
 
-//å†™16ä½åƒç´ æ•°æ®å‡½æ•°
-//LCDå†™GRAM
-//RGB_Code:é¢œè‰²å€¼
-//å†™LCDæ•°æ®
+//Ð´16Î»ÏñËØÊý¾Ýº¯Êý
+//LCDÐ´GRAM
+//RGB_Code:ÑÕÉ«Öµ
+//Ð´LCDÊý¾Ý
 #define LCD_WR_DATA  LCD_WR_Data
 #define LCD_WriteRAM LCD_WR_Data
 #define LCD_WR_Data(RGB_Code) LCD->LCD_RAM = RGB_Code

@@ -2,7 +2,7 @@
 #include "GPIO.h"
 #include "delay.h"
 
-//A+绾㈣壊   A-钃濊壊   B+缁胯壊  B-榛戣壊
+//A+红色   A-蓝色   B+绿色  B-黑色
 //         A     B     C     D     E     F     G     H
 
 // A       1     1     0     0     0     0     0     1

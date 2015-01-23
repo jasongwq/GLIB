@@ -1,21 +1,21 @@
-//ä¸‰ç»´ç£é˜»ä»ªä¼ æ„Ÿå™¨
+//ÈıÎ¬´Å×èÒÇ´«¸ĞÆ÷
 #include "HMC5883L.h"
 #include "stdio.h"
 
 
 tg_HMC5883L_TYPE hmc5883l;
 
-/*** ç¡¬ä»¶ ***/
+/*** Ó²¼ş ***/
 #define I2c_Write      HI2c_Write
 #define I2c_ReadBuffer HI2c_ReadBuffer
 #define I2c_Init       HI2c1_Init
-/*** ç¡¬ä»¶ ***/
+/*** Ó²¼ş ***/
 
-/*** è½¯ä»¶ ***/
+/*** Èí¼ş ***/
 //#define I2c_Write      Soft_I2c2_Write
 //#define I2c_ReadBuffer Soft_I2c2_ReadBuffer
 //#define I2c_Init       Soft_I2c2_Init
-/*** è½¯ä»¶ ***/
+/*** Èí¼ş ***/
 //#define I2c_Write      Soft_I2c1_Write
 //#define I2c_ReadBuffer Soft_I2c1_ReadBuffer
 //#define I2c_Init       Soft_I2c1_Init
@@ -25,11 +25,11 @@ void  HMC5883L_Init(void)
 {
 		I2c_Init();
     I2c_Write(HMC5883L_Addr, HMC5883L_REGA,0x14);
-    I2c_Write(HMC5883L_Addr, HMC5883L_MODE, ContinuousConversion); //è¿ç»­æµ‹é‡æ¨¡å¼
+    I2c_Write(HMC5883L_Addr, HMC5883L_MODE, ContinuousConversion); //Á¬Ğø²âÁ¿Ä£Ê½
 }
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:è¯»å–HMC5883çš„æ•°æ®
+/ º¯Êı¹¦ÄÜ:¶ÁÈ¡HMC5883µÄÊı¾İ
 ******************************************************************************/
 void HMC5883L_Read(tg_HMC5883L_TYPE *ptResult)
 {
@@ -37,7 +37,7 @@ void HMC5883L_Read(tg_HMC5883L_TYPE *ptResult)
     int32_t s32Val;
 
     I2c_Write(HMC5883L_Addr, HMC5883L_REGA, 0x14); //30Hz
-    I2c_Write(HMC5883L_Addr, HMC5883L_MODE, 0x00); //è¿ç»­æµ‹é‡æ¨¡å¼
+    I2c_Write(HMC5883L_Addr, HMC5883L_MODE, 0x00); //Á¬Ğø²âÁ¿Ä£Ê½
     delay_ms(10);
     I2c_ReadBuffer(HMC5883L_Addr, HMC5883L_HX_H, 6, tmp);
 
@@ -50,8 +50,8 @@ void HMC5883L_Read(tg_HMC5883L_TYPE *ptResult)
 }
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:å¯åŠ¨HMC5883å¼€å§‹è½¬æ¢(é€‚ç”¨äºå¯åŠ¨-ä¸­æ–­-è¯»å–æ•°æ®çš„ç¨‹åº)
-/ ä½¿ç”¨è¯´æ˜:å¯åŠ¨-ä¸­æ–­-æŸ¥è¯¢ (å¯åŠ¨)
+/ º¯Êı¹¦ÄÜ:Æô¶¯HMC5883¿ªÊ¼×ª»»(ÊÊÓÃÓÚÆô¶¯-ÖĞ¶Ï-¶ÁÈ¡Êı¾İµÄ³ÌĞò)
+/ Ê¹ÓÃËµÃ÷:Æô¶¯-ÖĞ¶Ï-²éÑ¯ (Æô¶¯)
 ******************************************************************************/
 void HMC5883L_Start(void)
 {
@@ -60,17 +60,17 @@ void HMC5883L_Start(void)
 }
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:è¯»å–HMC5883çš„æ•°æ®(é€‚ç”¨äºå¯åŠ¨-ä¸­æ–­-è¯»å–æ•°æ®çš„ç¨‹åº)
-/ ä½¿ç”¨è¯´æ˜:å¯åŠ¨-ä¸­æ–­-æŸ¥è¯¢ (æŸ¥è¯¢)
+/ º¯Êı¹¦ÄÜ:¶ÁÈ¡HMC5883µÄÊı¾İ(ÊÊÓÃÓÚÆô¶¯-ÖĞ¶Ï-¶ÁÈ¡Êı¾İµÄ³ÌĞò)
+/ Ê¹ÓÃËµÃ÷:Æô¶¯-ÖĞ¶Ï-²éÑ¯ (²éÑ¯)
 ******************************************************************************/
 void HMC5883L_MultRead(tg_HMC5883L_TYPE *ptResult)
 {
     static uint8_t tmp[6];
     int32_t s32Val;
 
-    I2c_ReadBuffer(HMC5883L_Addr, HMC5883L_HX_H, 6, tmp); //å¤šè¯»è¯»å‡ºä¼ æ„Ÿå™¨æ•°æ®
+    I2c_ReadBuffer(HMC5883L_Addr, HMC5883L_HX_H, 6, tmp); //¶à¶Á¶Á³ö´«¸ĞÆ÷Êı¾İ
 		//delay_ms(5);
-        //ä¿®æ­£æ•°æ®(æ ¹æ®xè½´ä¿®æ­£yè½´è¾“å‡º)
+        //ĞŞÕıÊı¾İ(¸ù¾İxÖáĞŞÕıyÖáÊä³ö)
         ptResult->hx  = (int16_t)((tmp[0] << 8) | tmp[1]) + HMC5883L_OFFSET_X;
         s32Val = (int16_t)((tmp[4] << 8) | tmp[5]) + HMC5883L_OFFSET_Y;
         s32Val = (s32Val * HMC5883L_GAIN_Y);
@@ -85,22 +85,22 @@ void HMC5883L_MultRead(tg_HMC5883L_TYPE *ptResult)
 }
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:HMC5883æ ¡å‡†
-/ ä½¿ç”¨è¯´æ˜:å¯åŠ¨-ä¸­æ–­-æŸ¥è¯¢ (æŸ¥è¯¢)
+/ º¯Êı¹¦ÄÜ:HMC5883Ğ£×¼
+/ Ê¹ÓÃËµÃ÷:Æô¶¯-ÖĞ¶Ï-²éÑ¯ (²éÑ¯)
 ******************************************************************************/
 void HMC5883L_Calibrate(void)
 {
-    I2c_Write(HMC5883L_Addr, HMC5883L_REGA, 0x15); //30Hz,å¯åŠ¨è‡ªæ£€æ¨¡å¼
-    I2c_Write(HMC5883L_Addr, HMC5883L_MODE, 0x01); //å•ä¸€æµ‹é‡æ¨¡å¼
+    I2c_Write(HMC5883L_Addr, HMC5883L_REGA, 0x15); //30Hz,Æô¶¯×Ô¼ìÄ£Ê½
+    I2c_Write(HMC5883L_Addr, HMC5883L_MODE, 0x01); //µ¥Ò»²âÁ¿Ä£Ê½
     delay_ms(10);
     I2c_Write(HMC5883L_Addr, HMC5883L_REGA, 0x14);
-    I2c_Write(HMC5883L_Addr, HMC5883L_MODE, 0x00); //å›åˆ°å·¥ä½œæ¨¡å¼
+    I2c_Write(HMC5883L_Addr, HMC5883L_MODE, 0x00); //»Øµ½¹¤×÷Ä£Ê½
 }
 
 
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:æ‰“å°HMCçš„ä¼ æ„Ÿå™¨æ•°æ®
+/ º¯Êı¹¦ÄÜ:´òÓ¡HMCµÄ´«¸ĞÆ÷Êı¾İ
 ******************************************************************************/
 void HMC5883L_Printf(tg_HMC5883L_TYPE *ptResult)
 {
@@ -110,17 +110,17 @@ void HMC5883L_Printf(tg_HMC5883L_TYPE *ptResult)
 		u8 tmp;
     x = ptResult->hx;
     y = ptResult->hy;
-    //æ±‚å‡ºæ–¹å‘
+    //Çó³ö·½Ïò
     if (x > 0x7fff)x -= 0xffff;
     if (y > 0x7fff)y -= 0xffff;
-    angle = atan2(y, x) * (180 / 3.14159265) + 180; //160usè®¡ç®—æ—¶é—´
-    ptResult->ha = (int16_t)(angle * 10); // å¾—åˆ°æ–¹å‘ç²¾ç¡®åˆ°0.1Â°
+    angle = atan2(y, x) * (180 / 3.14159265) + 180; //160us¼ÆËãÊ±¼ä
+    ptResult->ha = (int16_t)(angle * 10); // µÃµ½·½Ïò¾«È·µ½0.1¡ã
 //    tmp=sprintf((char *)temp,"HMC5883L:\thx: %4d,\thy: %4d,\thz: %4d,\t%4d\n\r",
 //            ptResult->hx, ptResult->hy, ptResult->hz, ptResult->ha/10);
-		/********æ ¡æ­£è¾“å‡º********/
+		/********Ğ£ÕıÊä³ö********/
     tmp=sprintf((char *)temp,"%4d %4d %4d;\r\n",
             ptResult->hx, ptResult->hy,ptResult->hz);
-		/********è§’åº¦è¾“å‡º********/
+		/********½Ç¶ÈÊä³ö********/
 		tmp+=sprintf((char *)temp+tmp,"%4d ",
             ptResult->ha);
 		

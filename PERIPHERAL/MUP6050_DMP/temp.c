@@ -1,99 +1,99 @@
 /***************************
-è‡ªå¹³è¡¡ç³»ç»Ÿ for Arduino
-by é»‘é©¬
- æ•°æ®é‡‡é›†    2012-03-21
- æ»¤æ³¢        2012-03-23
- PIDæ§åˆ¶     2012-03-27
- PIDæ•´å®š
- è¿åŠ¨æ§åˆ¶
+×ÔÆ½ºâÏµÍ³ for Arduino
+by ºÚÂí
+ Êı¾İ²É¼¯    2012-03-21
+ ÂË²¨        2012-03-23
+ PID¿ØÖÆ     2012-03-27
+ PIDÕû¶¨
+ ÔË¶¯¿ØÖÆ
 ***************************/
 
 #include <Wire.h>
 #include <Servo.h> 
 
-/************ ä¼ æ„Ÿå™¨å‚æ•° ***********/
-#define Acc 0x1D           // ADXL345åœ°å€
-#define Gyr 0x69           // L3G4200Dåœ°å€
-#define Mag 0x1E           // HMC5883Låœ°å€
-#define Gry_offset -13     // é™€èºä»ªåç§»é‡
-#define Gyr_Gain 0.07      // æ»¡é‡ç¨‹2000dpsæ—¶çµæ•åº¦(dps/digital)
+/************ ´«¸ĞÆ÷²ÎÊı ***********/
+#define Acc 0x1D           // ADXL345µØÖ·
+#define Gyr 0x69           // L3G4200DµØÖ·
+#define Mag 0x1E           // HMC5883LµØÖ·
+#define Gry_offset -13     // ÍÓÂİÒÇÆ«ÒÆÁ¿
+#define Gyr_Gain 0.07      // ÂúÁ¿³Ì2000dpsÊ±ÁéÃô¶È(dps/digital)
 #define pi 3.14159
 
-/********** äº’è¡¥æ»¤æ³¢å™¨å‚æ•° *********/
-unsigned long preTime = 0; // é‡‡æ ·æ—¶é—´
-float f_angle = 0.0;       // æ»¤æ³¢å¤„ç†åçš„è§’åº¦å€¼
+/********** »¥²¹ÂË²¨Æ÷²ÎÊı *********/
+unsigned long preTime = 0; // ²ÉÑùÊ±¼ä
+float f_angle = 0.0;       // ÂË²¨´¦ÀíºóµÄ½Ç¶ÈÖµ
 
-/*********** PIDæ§åˆ¶å™¨å‚æ•° *********/
-unsigned long lastTime;           // å‰æ¬¡æ—¶é—´
-float ITerm, lastInput;    // ç§¯åˆ†é¡¹ã€å‰æ¬¡è¾“å…¥
-float Output = 0.0;        // PIDè¾“å‡ºå€¼
+/*********** PID¿ØÖÆÆ÷²ÎÊı *********/
+unsigned long lastTime;           // Ç°´ÎÊ±¼ä
+float ITerm, lastInput;    // »ı·ÖÏî¡¢Ç°´ÎÊäÈë
+float Output = 0.0;        // PIDÊä³öÖµ
 
-/*********** é©¬è¾¾æ§åˆ¶å‚æ•° **********/
-Servo servoL;              // å®šä¹‰å·¦é©±
-Servo servoR;              // å®šä¹‰å³é©±
-# define servoL_offset 90  // å·¦é©±åç½®
-# define servoR_offset 90  // å³é©±åç½®
+/*********** Âí´ï¿ØÖÆ²ÎÊı **********/
+Servo servoL;              // ¶¨Òå×óÇı
+Servo servoR;              // ¶¨ÒåÓÒÇı
+# define servoL_offset 90  // ×óÇıÆ«ÖÃ
+# define servoR_offset 90  // ÓÒÇıÆ«ÖÃ
 
-/************ ç¨‹åºåˆå§‹åŒ– ***********/
+/************ ³ÌĞò³õÊ¼»¯ ***********/
 void setup() {
-    sensor_init();        // é…ç½®ä¼ æ„Ÿå™¨
-    Serial.begin(19200);  // å¼€å¯ä¸²å£ä»¥ä¾¿ç›‘è§†æ•°æ®
-    servoL.attach(30);    // PIN30è¾“å‡ºåˆ°å·¦é©±
-    servoR.attach(32);    // PIN32è¾“å‡ºåˆ°å³é©±
+    sensor_init();        // ÅäÖÃ´«¸ĞÆ÷
+    Serial.begin(19200);  // ¿ªÆô´®¿ÚÒÔ±ã¼àÊÓÊı¾İ
+    servoL.attach(30);    // PIN30Êä³öµ½×óÇı
+    servoR.attach(32);    // PIN32Êä³öµ½ÓÒÇı
     delay(1000);
   }
-/************** ä¸»ç¨‹åº *************/
+/************** Ö÷³ÌĞò *************/
 void loop() {
-    unsigned long now = millis();                           // å½“å‰æ—¶é—´(ms)
-    float dt = (now - preTime) / 1000.0;                    // å¾®åˆ†æ—¶é—´(s)
-    preTime = now;                                          // è®°å½•æœ¬æ¬¡æ—¶é—´(ms)
+    unsigned long now = millis();                           // µ±Ç°Ê±¼ä(ms)
+    float dt = (now - preTime) / 1000.0;                    // Î¢·ÖÊ±¼ä(s)
+    preTime = now;                                          // ¼ÇÂ¼±¾´ÎÊ±¼ä(ms)
 
-/********** è¯»å–å§¿æ€ä¼ æ„Ÿå™¨ *********/
-    float Y_Acc = gDat(Acc, 1);                             // è·å–å‘å‰çš„åŠ é€Ÿåº¦(digite)
-    float Z_Acc = gDat(Acc, 2);                             // è·å–å‘ä¸‹çš„åŠ é€Ÿåº¦(digite)
-    float angleA = atan(Y_Acc / Z_Acc) * 180 / pi;          // æ ¹æ®åŠ é€Ÿåº¦åˆ†é‡å¾—åˆ°çš„è§’åº¦(degree)
-    float omega =  Gyr_Gain * (gDat(Gyr, 0) +  Gry_offset); // å½“å‰è§’é€Ÿåº¦(degree/s)
+/********** ¶ÁÈ¡×ËÌ¬´«¸ĞÆ÷ *********/
+    float Y_Acc = gDat(Acc, 1);                             // »ñÈ¡ÏòÇ°µÄ¼ÓËÙ¶È(digite)
+    float Z_Acc = gDat(Acc, 2);                             // »ñÈ¡ÏòÏÂµÄ¼ÓËÙ¶È(digite)
+    float angleA = atan(Y_Acc / Z_Acc) * 180 / pi;          // ¸ù¾İ¼ÓËÙ¶È·ÖÁ¿µÃµ½µÄ½Ç¶È(degree)
+    float omega =  Gyr_Gain * (gDat(Gyr, 0) +  Gry_offset); // µ±Ç°½ÇËÙ¶È(degree/s)
 
-/*********** ä¸€é˜¶äº’è¡¥æ»¤æ³¢ **********/
-    float K = 0.8;                                          // å–å€¼æƒé‡
-    float A = K / (K + dt);                                 // åŠ æƒç³»æ•°
-    f_angle = A * (f_angle + omega * dt) + (1-A) * angleA;  // äº’è¡¥æ»¤æ³¢ç®—æ³•
-/************ PIDæ§åˆ¶å™¨ ***********/
-    now = millis();                                         // å½“å‰æ—¶é—´(ms)
-    float TimeCh = (now - lastTime) / 1000.0;               // é‡‡æ ·æ—¶é—´(s)
-    float Kp = 10.0, Ki = 0.0, Kd = 0.0;                    // æ¯”ä¾‹ç³»æ•°ã€ç§¯åˆ†ç³»æ•°ã€å¾®åˆ†ç³»æ•°
-    float SampleTime = 0.1;                                 // é‡‡æ ·æ—¶é—´(s)
-    float Setpoint = -3.8;                                  // è®¾å®šç›®æ ‡å€¼(degree)
-    float outMin = -80.0, outMax = +80.0;                   // è¾“å‡ºä¸Šé™ã€è¾“å‡ºä¸‹é™
-    if(TimeCh >= SampleTime) {                              // åˆ°è¾¾é¢„å®šé‡‡æ ·æ—¶é—´æ—¶
-        float Input = f_angle;                              // è¾“å…¥èµ‹å€¼
-        float error = Setpoint - Input;                     // åå·®å€¼
-        ITerm+= (Ki * error * TimeCh);                      // è®¡ç®—ç§¯åˆ†é¡¹
-        ITerm = constrain(ITerm, outMin, outMax);           // é™å®šå€¼åŸŸ
-        float DTerm = Kd * (Input - lastInput) / TimeCh;    // è®¡ç®—å¾®åˆ†é¡¹
-        Output = Kp * error + ITerm - DTerm;                // è®¡ç®—è¾“å‡ºå€¼
-        Output = constrain(Output, outMin, outMax);         // é™å®šå€¼åŸŸ
-        servoL.write(Output + servoL_offset);               // æ§åˆ¶å·¦é©±
-        servoR.write(Output + servoR_offset);               // æ§åˆ¶å³é©±
-        lastInput = Input;                                  // è®°å½•è¾“å…¥å€¼
-        lastTime = now;                                     // è®°å½•æœ¬æ¬¡æ—¶é—´
+/*********** Ò»½×»¥²¹ÂË²¨ **********/
+    float K = 0.8;                                          // È¡ÖµÈ¨ÖØ
+    float A = K / (K + dt);                                 // ¼ÓÈ¨ÏµÊı
+    f_angle = A * (f_angle + omega * dt) + (1-A) * angleA;  // »¥²¹ÂË²¨Ëã·¨
+/************ PID¿ØÖÆÆ÷ ***********/
+    now = millis();                                         // µ±Ç°Ê±¼ä(ms)
+    float TimeCh = (now - lastTime) / 1000.0;               // ²ÉÑùÊ±¼ä(s)
+    float Kp = 10.0, Ki = 0.0, Kd = 0.0;                    // ±ÈÀıÏµÊı¡¢»ı·ÖÏµÊı¡¢Î¢·ÖÏµÊı
+    float SampleTime = 0.1;                                 // ²ÉÑùÊ±¼ä(s)
+    float Setpoint = -3.8;                                  // Éè¶¨Ä¿±êÖµ(degree)
+    float outMin = -80.0, outMax = +80.0;                   // Êä³öÉÏÏŞ¡¢Êä³öÏÂÏŞ
+    if(TimeCh >= SampleTime) {                              // µ½´ïÔ¤¶¨²ÉÑùÊ±¼äÊ±
+        float Input = f_angle;                              // ÊäÈë¸³Öµ
+        float error = Setpoint - Input;                     // Æ«²îÖµ
+        ITerm+= (Ki * error * TimeCh);                      // ¼ÆËã»ı·ÖÏî
+        ITerm = constrain(ITerm, outMin, outMax);           // ÏŞ¶¨ÖµÓò
+        float DTerm = Kd * (Input - lastInput) / TimeCh;    // ¼ÆËãÎ¢·ÖÏî
+        Output = Kp * error + ITerm - DTerm;                // ¼ÆËãÊä³öÖµ
+        Output = constrain(Output, outMin, outMax);         // ÏŞ¶¨ÖµÓò
+        servoL.write(Output + servoL_offset);               // ¿ØÖÆ×óÇı
+        servoR.write(Output + servoR_offset);               // ¿ØÖÆÓÒÇı
+        lastInput = Input;                                  // ¼ÇÂ¼ÊäÈëÖµ
+        lastTime = now;                                     // ¼ÇÂ¼±¾´ÎÊ±¼ä
     }
-/************ å‚æ•°ä¸Šä¼  ***********/
-    Serial.print(now);          // è®¡ç®—æ—¶é—´
+/************ ²ÎÊıÉÏ´« ***********/
+    Serial.print(now);          // ¼ÆËãÊ±¼ä
     Serial.print(",");
-    Serial.print(f_angle, 6);   // åç¦»è§’åº¦
+    Serial.print(f_angle, 6);   // Æ«Àë½Ç¶È
     Serial.print(",");
-    Serial.print(Output, 6);    // PIDè¾“å‡ºå€¼
+    Serial.print(Output, 6);    // PIDÊä³öÖµ
     Serial.print(";");
-// æ§åˆ¶å¾®åˆ†æ—¶é—´
+// ¿ØÖÆÎ¢·ÖÊ±¼ä
     delay(10);
 }
 
 /***************************************
-ä¹è½´å§¿æ€ä¼ æ„Ÿå™¨å¯„å­˜å™¨è¯»å–å‡½æ•°
-For Arduino, by é»‘é©¬
+¾ÅÖá×ËÌ¬´«¸ĞÆ÷¼Ä´æÆ÷¶ÁÈ¡º¯Êı
+For Arduino, by ºÚÂí
 ****************************************
-        è°ƒç”¨å‚æ•°è¡¨
+        µ÷ÓÃ²ÎÊı±í
 ****************************************
   type    device      axis
                    0   1   2
@@ -122,48 +122,48 @@ Example
 
 int gDat(int device, int axis) {
     int v;
-    byte vL, vH, address;               // å­˜æ”¾byteæ•°å€¼
-    if (device == Acc) address = 0x32;  // ADXL345çš„è¯»æ•°åœ°å€
-    if (device == Gyr) address = 0xA8;  // L3G4200Dçš„è¯»æ•°åœ°å€
-    if (device == Mag) address = 0x03;  // HMC5883Lçš„è¯»æ•°åœ°å€
-    address = address + axis * 2;       // æ•°æ®åç§»-åæ ‡è½´
-    Wire.beginTransmission(device);     // å¼€å§‹ä¼ è¾“æ•°æ®
-    Wire.send(address);                 // å‘é€æŒ‡é’ˆ
-    Wire.requestFrom(device, 2);        // è¯·æ±‚2 byteæ•°æ®
-    while(Wire.available() < 2);        // æˆåŠŸè·å–å‰ç­‰å¾…
+    byte vL, vH, address;               // ´æ·ÅbyteÊıÖµ
+    if (device == Acc) address = 0x32;  // ADXL345µÄ¶ÁÊıµØÖ·
+    if (device == Gyr) address = 0xA8;  // L3G4200DµÄ¶ÁÊıµØÖ·
+    if (device == Mag) address = 0x03;  // HMC5883LµÄ¶ÁÊıµØÖ·
+    address = address + axis * 2;       // Êı¾İÆ«ÒÆ-×ø±êÖá
+    Wire.beginTransmission(device);     // ¿ªÊ¼´«ÊäÊı¾İ
+    Wire.send(address);                 // ·¢ËÍÖ¸Õë
+    Wire.requestFrom(device, 2);        // ÇëÇó2 byteÊı¾İ
+    while(Wire.available() < 2);        // ³É¹¦»ñÈ¡Ç°µÈ´ı
     vL = Wire.receive();
-    vH = Wire.receive();                // è¯»å–æ•°æ®
-    Wire.endTransmission();             // ç»“æŸä¼ è¾“
+    vH = Wire.receive();                // ¶ÁÈ¡Êı¾İ
+    Wire.endTransmission();             // ½áÊø´«Êä
     if (device == Mag) v = (vL << 8) | vH;
-    else v = (vH << 8) | vL;            // å°†byteæ•°æ®åˆå¹¶ä¸ºInt
-    return v;                           // è¿”å›è¯»ä¹¦å€¼
+    else v = (vH << 8) | vL;            // ½«byteÊı¾İºÏ²¢ÎªInt
+    return v;                           // ·µ»Ø¶ÁÊéÖµ
 }
 
 /********************************************
-é…ç½®ä¹è½´å§¿æ€ä¼ æ„Ÿå™¨
+ÅäÖÃ¾ÅÖá×ËÌ¬´«¸ĞÆ÷
 ********************************************/
 void sensor_init() {
 
-/************ é…ç½® ADXL345 ***********/
-    writeRegister(Acc, 0x2D, 0b00001000);    // æµ‹é‡æ¨¡å¼
+/************ ÅäÖÃ ADXL345 ***********/
+    writeRegister(Acc, 0x2D, 0b00001000);    // ²âÁ¿Ä£Ê½
 
-/************ é…ç½®L3G4200D ***********/
-    writeRegister(Gyr, 0x20, 0b00001111);    // è®¾ç½®ç¡çœ æ¨¡å¼ã€x, y, zè½´ä½¿èƒ½
-    writeRegister(Gyr, 0x21, 0b00000000);    // é€‰æ‹©é«˜é€šæ»¤æ³¢æ¨¡å¼å’Œé«˜é€šæˆªæ­¢é¢‘ç‡ 
-    writeRegister(Gyr, 0x22, 0b00000000);    // è®¾ç½®ä¸­æ–­æ¨¡å¼
-    writeRegister(Gyr, 0x23, 0b00110000);    // è®¾ç½®é‡ç¨‹(2000dps)ã€è‡ªæ£€çŠ¶æ€ã€SPIæ¨¡å¼
-    writeRegister(Gyr, 0x24, 0b00000000);    // FIFO & é«˜é€šæ»¤æ³¢
+/************ ÅäÖÃL3G4200D ***********/
+    writeRegister(Gyr, 0x20, 0b00001111);    // ÉèÖÃË¯ÃßÄ£Ê½¡¢x, y, zÖáÊ¹ÄÜ
+    writeRegister(Gyr, 0x21, 0b00000000);    // Ñ¡Ôñ¸ßÍ¨ÂË²¨Ä£Ê½ºÍ¸ßÍ¨½ØÖ¹ÆµÂÊ 
+    writeRegister(Gyr, 0x22, 0b00000000);    // ÉèÖÃÖĞ¶ÏÄ£Ê½
+    writeRegister(Gyr, 0x23, 0b00110000);    // ÉèÖÃÁ¿³Ì(2000dps)¡¢×Ô¼ì×´Ì¬¡¢SPIÄ£Ê½
+    writeRegister(Gyr, 0x24, 0b00000000);    // FIFO & ¸ßÍ¨ÂË²¨
 
-/************ é…ç½®HMC5883L ***********/
-    writeRegister(Mag, 0x02, 0x00);          // è¿ç»­æµ‹é‡
+/************ ÅäÖÃHMC5883L ***********/
+    writeRegister(Mag, 0x02, 0x00);          // Á¬Ğø²âÁ¿
 }
 
 /********************************************
-å¯„å­˜å™¨å†™å…¥å‡½æ•°
+¼Ä´æÆ÷Ğ´Èëº¯Êı
 ********************************************/
 void writeRegister(int device, byte address, byte val) {
-    Wire.beginTransmission(device);          // å†™å…¥çš„ä¼ æ„Ÿå™¨
-    Wire.send(address);                      // å†™å…¥åœ°å€
-    Wire.send(val);                          // å†™å…¥å€¼
-    Wire.endTransmission();                  // ç»“æŸä¼ è¾“
+    Wire.beginTransmission(device);          // Ğ´ÈëµÄ´«¸ĞÆ÷
+    Wire.send(address);                      // Ğ´ÈëµØÖ·
+    Wire.send(val);                          // Ğ´ÈëÖµ
+    Wire.endTransmission();                  // ½áÊø´«Êä
 }

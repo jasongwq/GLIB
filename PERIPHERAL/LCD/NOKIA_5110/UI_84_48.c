@@ -12,11 +12,11 @@
 #define KEY_DOWN    3
 #define KEY_SURE    4
 
-#define FUNC_AMOUNT 4 //èœå•å±‚æ•°
-#define PRINTF_SIZE 50 //èœå•å±‚æ•°
+#define FUNC_AMOUNT 4 //²Ëµ¥²ãÊı
+#define PRINTF_SIZE 50 //²Ëµ¥²ãÊı
 
 u8 key_deep = 0;
-__align(8) u8 dtbuf[PRINTF_SIZE];        //æ‰“å°ç¼“å­˜å™¨
+__align(8) u8 dtbuf[PRINTF_SIZE];        //´òÓ¡»º´æÆ÷
 u8(*last_func[FUNC_AMOUNT])(u8);
 u8(*now_func)(u8);
 u8(*temp_func)(u8);
@@ -63,43 +63,43 @@ void UI_84_48_Init(void)
     LCD_write_english_string(0, 0, "  GPS  ");
 }
 
-extern nmea_msg gpsx;      //GPSä¿¡æ¯
+extern nmea_msg gpsx;      //GPSĞÅÏ¢
 
-//æ˜¾ç¤ºGPSå®šä½ä¿¡æ¯
+//ÏÔÊ¾GPS¶¨Î»ĞÅÏ¢
 void Gps_Msg_Show(void)
 {
-    sprintf((char*)dtbuf, "L:%d.%d %1c", gpsx.longitude / 100000, gpsx.longitude % 100000, gpsx.ewhemi); //å¾—åˆ°ç»åº¦å­—ç¬¦ä¸²
+    sprintf((char*)dtbuf, "L:%d.%d %1c", gpsx.longitude / 100000, gpsx.longitude % 100000, gpsx.ewhemi); //µÃµ½¾­¶È×Ö·û´®
     LCD_write_english_string(0, 1, (char*)dtbuf);
 
-    sprintf((char*)dtbuf, "T:%d.%d %1c", gpsx.latitude / 100000, gpsx.latitude % 100000, gpsx.nshemi); //å¾—åˆ°çº¬åº¦å­—ç¬¦ä¸²
+    sprintf((char*)dtbuf, "T:%d.%d %1c", gpsx.latitude / 100000, gpsx.latitude % 100000, gpsx.nshemi); //µÃµ½Î³¶È×Ö·û´®
     LCD_write_english_string(0, 2, (char*)dtbuf);
 
-    sprintf((char*)dtbuf, "A:%d.%dm ", gpsx.altitude / 10, gpsx.altitude % 10);            //å¾—åˆ°é«˜åº¦å­—ç¬¦ä¸²
+    sprintf((char*)dtbuf, "A:%d.%dm ", gpsx.altitude / 10, gpsx.altitude % 10);            //µÃµ½¸ß¶È×Ö·û´®
     LCD_write_english_string(0, 3, (char*)dtbuf);
 
-    sprintf((char*)dtbuf, "S:%d.%dkm/h", gpsx.speed / 1000, gpsx.speed / 1000);          //å¾—åˆ°é€Ÿåº¦å­—ç¬¦ä¸²
+    sprintf((char*)dtbuf, "S:%d.%dkm/h", gpsx.speed / 1000, gpsx.speed / 1000);          //µÃµ½ËÙ¶È×Ö·û´®
     LCD_write_english_string(0, 4, (char*)dtbuf);
 
-    if (gpsx.fixmode == 3)LCD_write_english_string(0, 5, "MODE: 3D ");//å®šä½çŠ¶æ€
+    if (gpsx.fixmode == 3)LCD_write_english_string(0, 5, "MODE: 3D ");//¶¨Î»×´Ì¬
     else if (gpsx.fixmode == 2)LCD_write_english_string(0, 5, "MODE: 2D ");
     else LCD_write_english_string(0, 5, "MODE: Fail ");
-    //USART_OUT(USART1, "\r\nçŠ¶æ€:%d\r\n", gpsx.fixmode); //å‘é€æ¥æ”¶åˆ°çš„æ•°æ®åˆ°ä¸²å£1
+    //USART_OUT(USART1, "\r\n×´Ì¬:%d\r\n", gpsx.fixmode); //·¢ËÍ½ÓÊÕµ½µÄÊı¾İµ½´®¿Ú1
 }
 
 void Gps_Msg_Show_Time(void)
 {
-    sprintf((char*)dtbuf, "Valid  :%02d", gpsx.posslnum);         //ç”¨äºå®šä½çš„å«æ˜Ÿæ•°
+    sprintf((char*)dtbuf, "Valid  :%02d", gpsx.posslnum);         //ÓÃÓÚ¶¨Î»µÄÎÀĞÇÊı
     LCD_write_english_string(0, 1, (char*)dtbuf);
-    sprintf((char*)dtbuf, "Visible:%02d", gpsx.svnum % 100);      //å¯è§å«æ˜Ÿæ•°
+    sprintf((char*)dtbuf, "Visible:%02d", gpsx.svnum % 100);      //¿É¼ûÎÀĞÇÊı
     LCD_write_english_string(0, 2, (char*)dtbuf);
-    sprintf((char*)dtbuf, "DATA:%02d/%02d/%02d", gpsx.utc.year % 100, gpsx.utc.month, gpsx.utc.date); //æ˜¾ç¤ºUTCæ—¥æœŸ
+    sprintf((char*)dtbuf, "DATA:%02d/%02d/%02d", gpsx.utc.year % 100, gpsx.utc.month, gpsx.utc.date); //ÏÔÊ¾UTCÈÕÆÚ
     LCD_write_english_string(0, 3, (char*)dtbuf);
-    sprintf((char*)dtbuf, "TIME:%02d:%02d:%02d", gpsx.utc.hour + 8, gpsx.utc.min, gpsx.utc.sec); //æ˜¾ç¤ºUTCæ—¶é—´
+    sprintf((char*)dtbuf, "TIME:%02d:%02d:%02d", gpsx.utc.hour + 8, gpsx.utc.min, gpsx.utc.sec); //ÏÔÊ¾UTCÊ±¼ä
     LCD_write_english_string(0, 4, (char*)dtbuf);
 }
 #define UI_MENU_NUM 4
 
-u8 UI_TIME(u8 key)//GPSæ—¶é—´
+u8 UI_TIME(u8 key)//GPSÊ±¼ä
 {
     NOKIA_5110_LCD_Clear();
     key_deep = 1;
@@ -107,7 +107,7 @@ u8 UI_TIME(u8 key)//GPSæ—¶é—´
     Gps_Msg_Show_Time();
     return 0;
 }
-u8 UI_COORD(u8 key)//GPSä¿¡æ¯
+u8 UI_COORD(u8 key)//GPSĞÅÏ¢
 {
     NOKIA_5110_LCD_Clear();
     key_deep = 1;
@@ -131,7 +131,7 @@ u8 USB_SET(u8 key)
 {
     return 0;
 }
-u8 Brightness(u8 key)//è°ƒæ•´ èƒŒå…‰äº®åº¦
+u8 Brightness(u8 key)//µ÷Õû ±³¹âÁÁ¶È
 {
     static u16 light = 200;
     if (key == KEY_DOWN && light < 889)light += 10;
@@ -146,7 +146,7 @@ u8 Timeout(u8 key)
 {
     return 0;
 }
-u8 contrast(u8 key)//èƒŒå…‰å¯¹æ¯”åº¦
+u8 contrast(u8 key)//±³¹â¶Ô±È¶È
 {
     static u16 Contrast = 4 ;
     if (key == KEY_DOWN && Contrast < 5)Contrast++;
@@ -199,13 +199,13 @@ u8 SYS_SET(u8 key)
 }
 typedef struct
 {
-    u8 light;//äº®åº¦
-    u8 Contrast;//å¯¹æ¯”åº¦
+    u8 light;//ÁÁ¶È
+    u8 Contrast;//¶Ô±È¶È
 } LCD_CONFIG;
 typedef struct
 {
-    u8 rate;//GPSæ›´æ–°é¢‘ç‡
-    u8 tp;//GPSæ—¶é’Ÿè„‰å†²è¾“å‡º
+    u8 rate;//GPS¸üĞÂÆµÂÊ
+    u8 tp;//GPSÊ±ÖÓÂö³åÊä³ö
 } GPS_CONFIG;
 GPS_CONFIG gps_config;
 
@@ -247,8 +247,8 @@ u8 GPS_TP(u8 key)
     return 1;
 }
 
-//é…ç½®UBLOX NEO-6çš„æ›´æ–°é€Ÿç‡
-//é…ç½®UBLOX NEO-6çš„æ—¶é’Ÿè„‰å†²è¾“å‡º
+//ÅäÖÃUBLOX NEO-6µÄ¸üĞÂËÙÂÊ
+//ÅäÖÃUBLOX NEO-6µÄÊ±ÖÓÂö³åÊä³ö
 u8 GPS_SET(u8 key)
 {
 #undef UI_MENU_NUM_
@@ -384,7 +384,7 @@ void fan270 (unsigned char* tem, unsigned char* Dir_Image)
         }
     }
 }
-void fan_180 (unsigned char* tem, unsigned char* Dir_Image)//å·¦å³é¢ å€’
+void fan_180 (unsigned char* tem, unsigned char* Dir_Image)//×óÓÒµßµ¹
 {
     u8 i, i1;
     for (i = 0; i < 16; i++)
@@ -410,14 +410,14 @@ u8 HMC5883L(u8 key)
     NOKIA_5110_LCD_Clear();
     key_deep = 1;
     LCD_write_english_string(6, 0, "--HMC5883L-");
-    //è®¡ç®—æ–¹å‘
+    //¼ÆËã·½Ïò
     x = hmc5883l.hx;
     y = hmc5883l.hy;
-    //æ±‚å‡ºæ–¹å‘
+    //Çó³ö·½Ïò
     if (x > 0x7fff)x -= 0xffff;
     if (y > 0x7fff)y -= 0xffff;
-    angle = atan2(y, x) * (180 / 3.14159265) + 180; //160usè®¡ç®—æ—¶é—´
-    hmc5883l.ha = (int16_t)(angle * 10); // å¾—åˆ°æ–¹å‘ç²¾ç¡®åˆ°0.1Â°
+    angle = atan2(y, x) * (180 / 3.14159265) + 180; //160us¼ÆËãÊ±¼ä
+    hmc5883l.ha = (int16_t)(angle * 10); // µÃµ½·½Ïò¾«È·µ½0.1¡ã
 
     sprintf((char*)dtbuf, "%3d.%1d", hmc5883l.ha / 10, hmc5883l.ha % 10);
     LCD_write_english_string(32,4,"DIR:");

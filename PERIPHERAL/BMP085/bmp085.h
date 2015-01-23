@@ -5,8 +5,7 @@
 #endif
 #include <math.h>
 #include "G32_I2c.h"
-#include "USART.h"
-
+#include "usr_usart.h"
 #define BMP085_PRESSURE_45  0x34 //delay_ms(4.5)
 #define BMP085_PRESSURE_75  0x74 //delay_ms(7.5)
 #define BMP085_PRESSURE_135 0xb4 //delay_ms(13.5)
@@ -17,12 +16,12 @@
 
 
 /*---------------------*
-*    å™¨ä»¶I2Cåœ°å€å®šä¹‰   * 
+*    Æ÷¼şI2CµØÖ·¶¨Òå   * 
 *----------------------*/
-#define BMP085_Addr         0xee            //æ°”å‹ä¼ æ„Ÿå™¨å™¨ä»¶åœ°å€
+#define BMP085_Addr         0xee            //ÆøÑ¹´«¸ĞÆ÷Æ÷¼şµØÖ·
 
 /*---------------------* 
-*   BMP085 æ•°æ®ç±»å‹    * 
+*   BMP085 Êı¾İÀàĞÍ    * 
 *----------------------*/
 typedef struct
 {
@@ -32,17 +31,17 @@ typedef struct
 }tg_BMP085_TYPE;
 
 /*---------------------* 
-*   BMP085 å‚æ•°        * 
+*   BMP085 ²ÎÊı        * 
 *----------------------*/
-#define P0_PRESSURE 101325.0f    //æ ‡å‡†æµ·æ‹”pa
+#define P0_PRESSURE 101325.0f    //±ê×¼º£°Îpa
 
 
 
 extern void BMP085_Init(void);
-extern void BMP085_Read(tg_BMP085_TYPE * ptResult);         //æ™®é€šå®Œæ•´çš„æµ‹é‡æ¸©åº¦æ°”å‹(æœ‰è‡³å°‘10msæ—¶åºå»¶æ—¶)
-//æ ¡å‡†ä¼ æ„Ÿå™¨
-extern void BMP085_Calibrate(void);                         //ä¸»è¦æ ¡å‡†æ°”å‹å¯¹åº”é«˜åº¦ä¿¡æ¯
-//æ‰“å°ä¼ æ„Ÿå™¨æ•°æ®
+extern void BMP085_Read(tg_BMP085_TYPE * ptResult);         //ÆÕÍ¨ÍêÕûµÄ²âÁ¿ÎÂ¶ÈÆøÑ¹(ÓĞÖÁÉÙ10msÊ±ĞòÑÓÊ±)
+//Ğ£×¼´«¸ĞÆ÷
+extern void BMP085_Calibrate(void);                         //Ö÷ÒªĞ£×¼ÆøÑ¹¶ÔÓ¦¸ß¶ÈĞÅÏ¢
+//´òÓ¡´«¸ĞÆ÷Êı¾İ
 extern void BMP085_Printf(tg_BMP085_TYPE * ptResult);
 extern void Calculate(int32_t inUt, int32_t inUp, tg_BMP085_TYPE *ptOut);
 extern int32_t bmp085ReadTemp(void);

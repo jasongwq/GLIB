@@ -101,25 +101,25 @@ const u8 MASS_StringVendor[MASS_SIZ_STRING_VENDOR] =
 {
 	MASS_SIZ_STRING_VENDOR, /* Size of manufaturer string */
 	0x03,           /* bDescriptorType = String descriptor */
-	/* Manufacturer: "Е╧©Е╥·Ф≤÷Г©╪Г■╣Е╜░Г╖▒Ф┼─Ф°┴И≥░Е┘╛Е▐╦" */
-	0X7F,0X5E,//Е╧©
-	0XDE,0X5D,//Е╥·
-	0X1F,0X66,//Ф≤÷
-	0XFC,0X7F,//Г©╪
-	0X35,0X75,//Г■╣
-	0X50,0X5B,//Е╜░
-	0XD1,0X79,//Г╖▒
-	0X62,0X80,//Ф┼─
-	0X09,0X67,//Ф°┴
-	0X50,0X96,//И≥░
-	0X6C,0X51,//Е┘╛
-	0XF8,0X53,//Е▐╦	  
+	/* Manufacturer: "╧ЦжщпгрМ╣Гвс©ф╪╪споч╧╚к╬" */
+	0X7F,0X5E,//╧Ц
+	0XDE,0X5D,//жщ
+	0X1F,0X66,//пг
+	0XFC,0X7F,//рМ
+	0X35,0X75,//╣Г
+	0X50,0X5B,//вс
+	0XD1,0X79,//©ф
+	0X62,0X80,//╪╪
+	0X09,0X67,//сп
+	0X50,0X96,//оч
+	0X6C,0X51,//╧╚
+	0XF8,0X53,//к╬	  
 };
 const u8 MASS_StringProduct[MASS_SIZ_STRING_PRODUCT] =
   {
     MASS_SIZ_STRING_PRODUCT,
     0x03,
-    /* Product name: "ALIENTEK SDЕ█║Х╞╩Е█║Е≥╗" */
+    /* Product name: "ALIENTEK SD©╗╤а©╗фВ" */
     'A', 0, 'L', 0, 'I', 0, 'E', 0, 'N', 0, 'T', 0, 'E', 0, 'K', 0, ' ', 0, 'S', 0,
 	'D', 0,0X61,0X53,0XFB,0X8B,0X61,0X53,0X68,0X56
   };

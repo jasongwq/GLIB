@@ -4,7 +4,7 @@
        extern "C" {
 #endif
 #include "sys.h"
-/*æœ€å¤§ 256
+/*×î´ó 256
 unsigned char
  */
 #define MAXTASKS 8
@@ -20,8 +20,8 @@ extern volatile unsigned int timers_loop[MAX_LOOPTASKS];
 #define LoopX(tickets); return tickets;}
 
 #define RunTask(TaskName,TaskID) do { if (timers[TaskID]==0) timers[TaskID]=TaskName(); }  while(0);
-#define RunTaskA(TaskName,TaskID) { if (timers[TaskID]==0) {timers[TaskID]=TaskName(); continue;} }   //å‰é¢çš„ä»»åŠ¡ä¼˜å…ˆä¿è¯æ‰§è¡Œ
-#define RunLoop(TaskName,TaskID) { if (timers[TaskID]==0) {timers[TaskID]=timers_loop[TaskID];timers_loop[TaskID]=TaskName(); continue;} }   //å‰é¢çš„ä»»åŠ¡ä¼˜å…ˆä¿è¯æ‰§è¡Œ
+#define RunTaskA(TaskName,TaskID) { if (timers[TaskID]==0) {timers[TaskID]=TaskName(); continue;} }   //Ç°ÃæµÄÈÎÎñÓÅÏÈ±£Ö¤Ö´ĞĞ
+#define RunLoop(TaskName,TaskID) { if (timers[TaskID]==0) {timers[TaskID]=timers_loop[TaskID];timers_loop[TaskID]=TaskName(); continue;} }   //Ç°ÃæµÄÈÎÎñÓÅÏÈ±£Ö¤Ö´ĞĞ
 
 
 #define UpdateTimers() {char i; for(i=MAXTASKS;i>0 ;i--){if((timers[i-1]!=0)&&(timers[i-1]!=0xffffffff)) timers[i-1]--;}}
@@ -30,20 +30,20 @@ extern volatile unsigned int timers_loop[MAX_LOOPTASKS];
 #define CallSub(SubTaskName) do {unsigned char currdt; _lc=(__LINE__+((__LINE__%256)==0))%256; return 0; case (__LINE__+((__LINE__%256)==0))%256:  currdt=SubTaskName(); if(currdt!=255) return currdt;} while(0);
 
 #define SEM unsigned int
-//åˆå§‹åŒ–ä¿¡å·é‡
+//³õÊ¼»¯ĞÅºÅÁ¿
 #define InitSem(sem) sem=0;
-//ç­‰å¾…ä¿¡å·é‡
+//µÈ´ıĞÅºÅÁ¿
 #define WaitSem(sem) do{ sem=1; WaitX(0); if (sem>0) return 1;} while(0);
-//ç­‰å¾…ä¿¡å·é‡æˆ–å®šæ—¶å™¨æº¢å‡ºï¼Œ å®šæ—¶å™¨tickets æœ€å¤§ä¸º0xFFFE
+//µÈ´ıĞÅºÅÁ¿»ò¶¨Ê±Æ÷Òç³ö£¬ ¶¨Ê±Æ÷tickets ×î´óÎª0xFFFE
 #define WaitSemX(sem,tickets)  do { sem=tickets+1; WaitX(0); if(sem>1){ sem--;  return 1;} } while(0);
-//å‘é€ä¿¡å·é‡
+//·¢ËÍĞÅºÅÁ¿
 #define SendSem(sem)  do {sem=0;} while(0);
 
 
-/*****å°å°è°ƒåº¦å™¨ç»“æŸ*******************************************************/
+/*****Ğ¡Ğ¡µ÷¶ÈÆ÷½áÊø*******************************************************/
 
 #define OS_CRITICAL_METHOD
-//æ¯ç§’é’Ÿ å¤šå°‘æ¬¡
+//Ã¿ÃëÖÓ ¶àÉÙ´Î
 #define OS_TICKS_PER_SEC 1000
 #ifdef __cplusplus
         }

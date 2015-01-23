@@ -1,16 +1,16 @@
 #ifndef _HMC5883L_H_
 #define _HMC5883L_H_
 #include <math.h>
-#include "USART.h"
+#include "usr_usart.h"
 #include "G32_I2c.h"
 #include "G32_HI2c.h"
 /*---------------------*
-*    å™¨ä»¶I2Cåœ°å€å®šä¹‰   *
+*    Æ÷¼şI2CµØÖ·¶¨Òå   *
 *----------------------*/
-#define HMC5883L_Addr       0x3C            //ç£åœºä¼ æ„Ÿå™¨å™¨ä»¶åœ°å€ é»˜è®¤ï¼ˆå‡ºå‚ï¼‰ HMC5883LL  7ä½ä»æœºåœ°å€ä¸º0x3Cçš„å†™å…¥æ“ä½œï¼Œæˆ–0x3Dçš„è¯»å‡ºæ“ä½œã€‚  
+#define HMC5883L_Addr       0x3C            //´Å³¡´«¸ĞÆ÷Æ÷¼şµØÖ· Ä¬ÈÏ£¨³ö³§£© HMC5883LL  7Î»´Ó»úµØÖ·Îª0x3CµÄĞ´Èë²Ù×÷£¬»ò0x3DµÄ¶Á³ö²Ù×÷¡£  
 
-/***************************** HMC5883L å®å®šä¹‰ *********************************/
-/*  HMC5883Lå†…éƒ¨å¯„å­˜å™¨  */
+/***************************** HMC5883L ºê¶¨Òå *********************************/
+/*  HMC5883LÄÚ²¿¼Ä´æÆ÷  */
 #define HMC5883L_REGA   0x00
 #define HMC5883L_REGB   0x01
 #define HMC5883L_MODE   0x02
@@ -21,7 +21,7 @@
 #define HMC5883L_HY_H   0x07
 #define HMC5883L_HY_L   0x08
 #define HMC5883L_STATE  0x09
-#define HMC5883L_IRA    0x0a    //è¯»åºåˆ—å·ä½¿ç”¨çš„å¯„å­˜å™¨
+#define HMC5883L_IRA    0x0a    //¶ÁĞòÁĞºÅÊ¹ÓÃµÄ¼Ä´æÆ÷
 #define HMC5883L_IRB    0x0b
 #define HMC5883L_IRC    0x0c
 
@@ -50,7 +50,7 @@
 #define DataOutputRate_15HZ   0x04
 #define DataOutputRate_30HZ   0x05
 #define DataOutputRate_75HZ   0x06
-/*   HMC5883 æ•°æ®ç±»å‹   */
+/*   HMC5883 Êı¾İÀàĞÍ   */
 typedef struct
 {
     int16_t  hx;
@@ -60,20 +60,20 @@ typedef struct
 } tg_HMC5883L_TYPE;
 extern tg_HMC5883L_TYPE hmc5883l;
 
-/*   HMC5883 æ ¡æ­£å‚æ•°   */
-// æ¼‚ç§»ç³»æ•°ã€‚å•ä½ï¼š1å•ä½åœ°ç£åœºå¼ºåº¦
+/*   HMC5883 Ğ£Õı²ÎÊı   */
+// Æ¯ÒÆÏµÊı¡£µ¥Î»£º1µ¥Î»µØ´Å³¡Ç¿¶È
 #define HMC5883L_OFFSET_X  (-26)
 #define HMC5883L_OFFSET_Y  (133)
 
-//æ¯”ä¾‹å› å­
+//±ÈÀıÒò×Ó
 //#define HMC5883L_GAIN_X     1f
 //#define HMC5883L_GAIN_Y   1.04034582
-#define HMC5883L_GAIN_Y     0.9450     //å®é™…1.04034582,è¿™é‡Œä¾¿äºæ•´é™¤ 
+#define HMC5883L_GAIN_Y     0.9450     //Êµ¼Ê1.04034582,ÕâÀï±ãÓÚÕû³ı 
 
 extern void HMC5883L_Init(void);
-extern void HMC5883L_Read(tg_HMC5883L_TYPE* ptResult);      //æ™®é€šå®Œæ•´æµ‹é‡(æœ‰è‡³å°‘20msæ—¶åºå»¶æ—¶)
-extern void HMC5883L_Start(void);                           //å¯åŠ¨-ä¸­æ–­-è¯»å– (å¯åŠ¨)æœ‰10mså»¶æ—¶
-extern void HMC5883L_MultRead(tg_HMC5883L_TYPE* ptResult);  //å¯åŠ¨-ä¸­æ–­-è¯»å– (è¯»å–)
+extern void HMC5883L_Read(tg_HMC5883L_TYPE* ptResult);      //ÆÕÍ¨ÍêÕû²âÁ¿(ÓĞÖÁÉÙ20msÊ±ĞòÑÓÊ±)
+extern void HMC5883L_Start(void);                           //Æô¶¯-ÖĞ¶Ï-¶ÁÈ¡ (Æô¶¯)ÓĞ10msÑÓÊ±
+extern void HMC5883L_MultRead(tg_HMC5883L_TYPE* ptResult);  //Æô¶¯-ÖĞ¶Ï-¶ÁÈ¡ (¶ÁÈ¡)
 extern void HMC5883L_Calibrate(void);
 extern void HMC5883L_Printf(tg_HMC5883L_TYPE* ptResult);
 

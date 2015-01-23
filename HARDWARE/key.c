@@ -1,43 +1,43 @@
 #include "key.h"
 #include "delay.h"
 //////////////////////////////////////////////////////////////////////////////////
-//æŒ‰é”®é©±åŠ¨ä»£ç 
+//°´¼üÇı¶¯´úÂë
 //////////////////////////////////////////////////////////////////////////////////
 
-//æŒ‰é”®åˆå§‹åŒ–å‡½æ•°
-void KEY_Init(void) //IOåˆå§‹åŒ–
+//°´¼ü³õÊ¼»¯º¯Êı
+void KEY_Init(void) //IO³õÊ¼»¯
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-    //åˆå§‹åŒ–KEY0-->GPIOA.13,KEY1-->GPIOA.15  ä¸Šæ‹‰è¾“å…¥
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE); //ä½¿èƒ½PORTA,PORTEæ—¶é’Ÿ
+    //³õÊ¼»¯KEY0-->GPIOA.13,KEY1-->GPIOA.15  ÉÏÀ­ÊäÈë
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE); //Ê¹ÄÜPORTA,PORTEÊ±ÖÓ
 
     GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_5 | GPIO_Pin_2 | GPIO_Pin_3; //PE2~4
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //è®¾ç½®æˆä¸Šæ‹‰è¾“å…¥
-    GPIO_Init(GPIOC, &GPIO_InitStructure);//åˆå§‹åŒ–GPIOE2,3,4
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //ÉèÖÃ³ÉÉÏÀ­ÊäÈë
+    GPIO_Init(GPIOC, &GPIO_InitStructure);//³õÊ¼»¯GPIOE2,3,4
 }
-//æŒ‰é”®å¤„ç†å‡½æ•°
-//è¿”å›æŒ‰é”®å€¼
-//mode:0,ä¸æ”¯æŒè¿ç»­æŒ‰;1,æ”¯æŒè¿ç»­æŒ‰;
-//0ï¼Œæ²¡æœ‰ä»»ä½•æŒ‰é”®æŒ‰ä¸‹
-//1ï¼ŒKEY0æŒ‰ä¸‹
-//2ï¼ŒKEY1æŒ‰ä¸‹
-//3ï¼ŒKEY2æŒ‰ä¸‹
-//4ï¼ŒKEY3æŒ‰ä¸‹ WK_UP
-//æ³¨æ„æ­¤å‡½æ•°æœ‰å“åº”ä¼˜å…ˆçº§,KEY0>KEY1>KEY2>KEY3!!
+//°´¼ü´¦Àíº¯Êı
+//·µ»Ø°´¼üÖµ
+//mode:0,²»Ö§³ÖÁ¬Ğø°´;1,Ö§³ÖÁ¬Ğø°´;
+//0£¬Ã»ÓĞÈÎºÎ°´¼ü°´ÏÂ
+//1£¬KEY0°´ÏÂ
+//2£¬KEY1°´ÏÂ
+//3£¬KEY2°´ÏÂ
+//4£¬KEY3°´ÏÂ WK_UP
+//×¢Òâ´Ëº¯ÊıÓĞÏìÓ¦ÓÅÏÈ¼¶,KEY0>KEY1>KEY2>KEY3!!
 u8 KEY_Scan(u8 mode)
 {
-    static u8 key_up = 1; //æŒ‰é”®æŒ‰æ¾å¼€æ ‡å¿—
-    if (mode)key_up = 1; //æ”¯æŒè¿æŒ‰
+    static u8 key_up = 1; //°´¼ü°´ËÉ¿ª±êÖ¾
+    if (mode)key_up = 1; //Ö§³ÖÁ¬°´
     if (key_up && (KEY3 == 0 || KEY1 == 0 || KEY2 == 0))
     {
-        delay_ms(10);//å»æŠ–åŠ¨
+        delay_ms(10);//È¥¶¶¶¯
         key_up = 0;
         if (KEY1 == 0)return 1;
         else if (KEY2 == 0)return 2;
         else if (KEY3 == 0)return 3;
     }
     else if (KEY3 == 1 && KEY1 == 1 && KEY2 == 1)key_up = 1;
-    return 0;// æ— æŒ‰é”®æŒ‰ä¸‹
+    return 0;// ÎŞ°´¼ü°´ÏÂ
 }
 
 

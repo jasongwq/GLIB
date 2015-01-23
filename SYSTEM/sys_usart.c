@@ -1,26 +1,23 @@
 #include "sys_usart.h"
 #include <stdarg.h>
-#include "some.h"
-static uint8_t Sys_Putchar(USART_TypeDef *USARTx, unsigned char DataToSend);
-
 #include "stdio.h"
 int Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
 {
     char sprintf_buf[0xff];
-    __va_list ap;//å®šä¹‰ä¸€ä¸ªva_listç±»åž‹çš„å˜é‡ï¼Œç”¨æ¥å‚¨å­˜å•ä¸ªå‚æ•°
-    va_start(ap, Data);//ä½¿argsæŒ‡å‘å¯å˜å‚æ•°çš„ç¬¬ä¸€ä¸ªå‚æ•°
+    __va_list ap;//¶¨ÒåÒ»¸öva_listÀàÐÍµÄ±äÁ¿£¬ÓÃÀ´´¢´æµ¥¸ö²ÎÊý
+    va_start(ap, Data);//Ê¹argsÖ¸Ïò¿É±ä²ÎÊýµÄµÚÒ»¸ö²ÎÊý
     int num = vsprintf(sprintf_buf, Data, ap);
     va_end(ap);
     Sys_sPrintf(USARTx, (u8 *)sprintf_buf, num);
     return num;
 }
-
+#if 0
 /******************************************************
-        æ•´å½¢æ•°æ®è½¬å­—ç¬¦ä¸²å‡½æ•°
+        ÕûÐÎÊý¾Ý×ª×Ö·û´®º¯Êý
         char *itoa(int value, char *string, int radix)
-        radix=10 æ ‡ç¤ºæ˜¯10è¿›åˆ¶  éžåè¿›åˆ¶ï¼Œè½¬æ¢ç»“æžœä¸º0;
-        ä¾‹ï¼šd=-379;
-        æ‰§è¡Œ  itoa(d, buf, 10); åŽ
+        radix=10 ±êÊ¾ÊÇ10½øÖÆ  ·ÇÊ®½øÖÆ£¬×ª»»½á¹ûÎª0;
+        Àý£ºd=-379;
+        Ö´ÐÐ  itoa(d, buf, 10); ºó
         buf="-379"
 **********************************************************/
 char *itoa(int value, char *string, int radix)
@@ -63,18 +60,18 @@ char *itoa(int value, char *string, int radix)
     return string;
 } /* NCL_Itoa */
 /****************************************************************************
-* å    ç§°ï¼švoid USART_OUT(USART_TypeDef* USARTx, uint8_t *Data,...)
-* åŠŸ    èƒ½ï¼šæ ¼å¼åŒ–ä¸²å£è¾“å‡ºå‡½æ•°
-* å…¥å£å‚æ•°ï¼šUSARTx:  æŒ‡å®šä¸²å£
-            Dataï¼š   å‘é€æ•°ç»„
-            ...:     ä¸å®šå‚æ•°
-* å‡ºå£å‚æ•°ï¼šæ— 
-* è¯´    æ˜Žï¼šæ ¼å¼åŒ–ä¸²å£è¾“å‡ºå‡½æ•°
-      "\r"  å›žè½¦ç¬¦      USART_OUT(USARTx, "abcdefg\r")
-            "\n"    æ¢è¡Œç¬¦      USART_OUT(USARTx, "abcdefg\r\n")
-            "%s"    å­—ç¬¦ä¸²      USART_OUT(USARTx, "å­—ç¬¦ä¸²æ˜¯ï¼š%s","abcdefg")
-            "%d"    åè¿›åˆ¶      USART_OUT(USARTx, "a=%d",10)
-* è°ƒç”¨æ–¹æ³•ï¼šæ— 
+* Ãû    ³Æ£ºvoid USART_OUT(USART_TypeDef* USARTx, uint8_t *Data,...)
+* ¹¦    ÄÜ£º¸ñÊ½»¯´®¿ÚÊä³öº¯Êý
+* Èë¿Ú²ÎÊý£ºUSARTx:  Ö¸¶¨´®¿Ú
+            Data£º   ·¢ËÍÊý×é
+            ...:     ²»¶¨²ÎÊý
+* ³ö¿Ú²ÎÊý£ºÎÞ
+* Ëµ    Ã÷£º¸ñÊ½»¯´®¿ÚÊä³öº¯Êý
+      "\r"  »Ø³µ·û      USART_OUT(USARTx, "abcdefg\r")
+            "\n"    »»ÐÐ·û      USART_OUT(USARTx, "abcdefg\r\n")
+            "%s"    ×Ö·û´®      USART_OUT(USARTx, "×Ö·û´®ÊÇ£º%s","abcdefg")
+            "%d"    Ê®½øÖÆ      USART_OUT(USARTx, "a=%d",10)
+* µ÷ÓÃ·½·¨£ºÎÞ
 ****************************************************************************/
 void vSys_Printf(USART_TypeDef *USARTx, char *Data, ...)
 {
@@ -83,16 +80,16 @@ void vSys_Printf(USART_TypeDef *USARTx, char *Data, ...)
     char buf[16];
     va_list ap;
     va_start(ap, Data);
-    while (*Data != 0)                                        //åˆ¤æ–­æ˜¯å¦åˆ°è¾¾å­—ç¬¦ä¸²ç»“æŸç¬¦
+    while (*Data != 0)                                        //ÅÐ¶ÏÊÇ·ñµ½´ï×Ö·û´®½áÊø·û
     {
         if (*Data == 0x5c)                                    //'\'
             switch (*++Data)
             {
-            case 'r':                                     //å›žè½¦ç¬¦
+            case 'r':                                     //»Ø³µ·û
                 Sys_Putchar(USARTx, 0x0d);
                 Data++;
                 break;
-            case 'n':                                     //æ¢è¡Œç¬¦
+            case 'n':                                     //»»ÐÐ·û
                 Sys_Putchar(USARTx, 0x0a);
                 Data++;
                 break;
@@ -103,7 +100,7 @@ void vSys_Printf(USART_TypeDef *USARTx, char *Data, ...)
         else if (*Data == '%')
             switch (*++Data)
             {
-            case 's':                                         //å­—ç¬¦ä¸²
+            case 's':                                         //×Ö·û´®
                 s = va_arg(ap, const char *);
                 for ( ; *s; s++)
                 {
@@ -112,7 +109,7 @@ void vSys_Printf(USART_TypeDef *USARTx, char *Data, ...)
                 }
                 Data++;
                 break;
-            case 'd':                                         //åè¿›åˆ¶
+            case 'd':                                         //Ê®½øÖÆ
                 d = va_arg(ap, int);
                 itoa(d, buf, 10);
                 for (s = buf; *s; s++)
@@ -130,16 +127,13 @@ void vSys_Printf(USART_TypeDef *USARTx, char *Data, ...)
         //while (USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET);
     }
 }
-
-static u8 TxBuffer[3][0xff];//å‘é€ç¼“å­˜
-static u8 TxCount[3] = {0};//å‘é€å°¾
-//int RC_flag_ok=0;
-//u8 RC_data_cnt=0;
-//u8* p_RxBuffer;
+#endif
+u8 TxBuffer[EN_USART_ + EN_USART2_ + EN_USART3_][0xff]; //·¢ËÍ»º´æ
+u8 TxCount [EN_USART_ + EN_USART2_ + EN_USART3_] = {0}; //·¢ËÍÎ²
 
 void SYS_UART_IQR(USART_TypeDef *USARTx)
 {
-    static u8 TxCounter[3] = {0};//å½“å‰å‘é€
+    static u8 TxCounter[3] = {0};//µ±Ç°·¢ËÍ
     static u8 RxBuffer[50];
 
     static u8 RxState = 0;
@@ -147,27 +141,27 @@ void SYS_UART_IQR(USART_TypeDef *USARTx)
     {
         USARTx->SR;
     }
-    //å‘é€ä¸­æ–­
+    //·¢ËÍÖÐ¶Ï
     if ((USARTx->SR & (1 << 7)) && (USARTx->CR1 & USART_CR1_TXEIE)) //if(USART_GetITStatus(USARTx,USART_IT_TXE)!=RESET)
     {
         int USARTn;
         if (USARTx == USART1)
         {
-            USARTn = 0;
+            USARTn = EN_USART_ - 1;
         }
         else if (USARTx == USART2)
         {
-            USARTn = 1;
+            USARTn = EN_USART_ + EN_USART2_ - 1;
         }
         else if (USARTx == USART3)
         {
-            USARTn = 2;
+            USARTn = EN_USART_ + EN_USART2_ + EN_USART3_ - 1;
         }
-        USARTx->DR = TxBuffer[USARTn][TxCounter[USARTn]++]; //å†™DRæ¸…é™¤ä¸­æ–­æ ‡å¿—
+        USARTx->DR = TxBuffer[USARTn][TxCounter[USARTn]++]; //Ð´DRÇå³ýÖÐ¶Ï±êÖ¾
         if (TxCounter[USARTn] == TxCount[USARTn])
-            USARTx->CR1 &= ~USART_CR1_TXEIE;        //å…³é—­TXEä¸­æ–­//USART_ITConfig(USARTx,USART_IT_TXE,DISABLE);
+            USARTx->CR1 &= ~USART_CR1_TXEIE;        //¹Ø±ÕTXEÖÐ¶Ï//USART_ITConfig(USARTx,USART_IT_TXE,DISABLE);
     }
-    //æŽ¥æ”¶ä¸­æ–­ (æŽ¥æ”¶å¯„å­˜å™¨éžç©º)
+    //½ÓÊÕÖÐ¶Ï (½ÓÊÕ¼Ä´æÆ÷·Ç¿Õ)
     if (USARTx->SR & (1 << 5)) //if(USART_GetITStatus(USARTx, USART_IT_RXNE) != RESET)
     {
         u8 com_data = USARTx->DR;
@@ -203,37 +197,31 @@ void SYS_UART_IQR(USART_TypeDef *USARTx)
         }
         else if (RxState == 5)
         {
+            extern void Data_Receive_Anl(u8 * data_buf, u8 num);
             RxState = 0;
             RxBuffer[4 + _data_cnt] = com_data;
-            //                      RC_flag_ok=1;
             Data_Receive_Anl(RxBuffer, _data_cnt + 5);
-            //                      p_RxBuffer=RxBuffer;
-            //                      RC_data_cnt=_data_cnt;
         }
         else
             RxState = 0;
     }
-
-    //Sys_Printf(USART2,"2");
-    // some(USARTx);
-
 }
-/**************************å®žçŽ°å‡½æ•°********************************************
+/**************************ÊµÏÖº¯Êý********************************************
 *******************************************************************************/
-static uint8_t Sys_Putchar(USART_TypeDef *USARTx, unsigned char DataToSend)
+uint8_t Sys_Putchar(USART_TypeDef *USARTx, unsigned char DataToSend)
 {
     int USARTn;
     if (USARTx == USART1)
     {
-        USARTn = 0;
+        USARTn = EN_USART_ - 1;
     }
     else if (USARTx == USART2)
     {
-        USARTn = 1;
+        USARTn = EN_USART_ + EN_USART2_ - 1;
     }
     else if (USARTx == USART3)
     {
-        USARTn = 2;
+        USARTn = EN_USART_ + EN_USART2_ + EN_USART3_ - 1;
     }
     TxBuffer[USARTn][TxCount[USARTn]++] = DataToSend;
     USART_ITConfig(USARTx, USART_IT_TXE, ENABLE);
@@ -244,19 +232,40 @@ uint8_t *Sys_sPrintf(USART_TypeDef *USARTx, unsigned char *DataToSend, unsigned 
     int USARTn;
     if (USARTx == USART1)
     {
-        USARTn = 0;
+        USARTn = EN_USART_ - 1;
+#if EN_USART1_DMA_T
+        TxCount[USARTn] = 0;
+#endif
+        for (int i = 0; i < num; i++)
+            TxBuffer[USARTn][TxCount[USARTn]++] = *(DataToSend + i);
+#if EN_USART1_IQR_T
+        USART_ITConfig(USARTx, USART_IT_TXE, ENABLE);
+#endif
     }
     else if (USARTx == USART2)
     {
-        USARTn = 1;
+        USARTn = EN_USART_ + EN_USART2_ - 1;
+#if EN_USART2_DMA_T
+        TxCount[USARTn] = 0;
+#endif
+        for (int i = 0; i < num; i++)
+            TxBuffer[USARTn][TxCount[USARTn]++] = *(DataToSend + i);
+#if EN_USART2_IQR_T
+        USART_ITConfig(USARTx, USART_IT_TXE, ENABLE);
+#endif
     }
     else if (USARTx == USART3)
     {
-        USARTn = 2;
+        USARTn = EN_USART_ + EN_USART2_ + EN_USART3_ - 1;
+#if EN_USART3_DMA_T
+        TxCount[USARTn] = 0;
+#endif
+        for (int i = 0; i < num; i++)
+            TxBuffer[USARTn][TxCount[USARTn]++] = *(DataToSend + i);
+#if EN_USART3_IQR_T
+        USART_ITConfig(USARTx, USART_IT_TXE, ENABLE);
+#endif
     }
-    for (int i = 0; i < num; i++)
-        TxBuffer[USARTn][TxCount[USARTn]++] = *(DataToSend + i);
-    USART_ITConfig(USARTx, USART_IT_TXE, ENABLE);
     return DataToSend;
 }
 

@@ -14,24 +14,24 @@ SPI2_SCK  |  PB13 |       |
 SPI2_MISO |  PB14 |       |
 SPI2_MOSI |  PB15 |       |
 **************************/
-/*********(äº’è”å‹)********|
+/*********(»¥ÁªĞÍ)********|
 SPI3_NSS  |  PA15 |  PA4  |
 SPI3_SCK  |  PB3  |  PC10 |
 SPI3_MISO |  PB3  |  PC11 |
 SPI3_MOSI |  PB3  |  PC12 |
-*********(äº’è”å‹)*********/
+*********(»¥ÁªĞÍ)*********/
 //2013/7/24
 /*************************/
 //////////////////////////////////////////////////////////////////////////////////
 
 
-void SPI1_Init(void);            //åˆå§‹åŒ–SPIxå£
-void SPI1_SetSpeed(u8 SpeedSet); //è®¾ç½®SPIxé€Ÿåº¦
-u8   SPI1_ReadWriteByte(u8 TxData);//SPIxæ€»çº¿è¯»å†™ä¸€ä¸ªå­—èŠ‚
+void SPI1_Init(void);            //³õÊ¼»¯SPIx¿Ú
+void SPI1_SetSpeed(u8 SpeedSet); //ÉèÖÃSPIxËÙ¶È
+u8   SPI1_ReadWriteByte(u8 TxData);//SPIx×ÜÏß¶ÁĞ´Ò»¸ö×Ö½Ú
 
-void SPI2_Init(void);            //åˆå§‹åŒ–SPIxå£
-void SPI2_SetSpeed(u8 SpeedSet); //è®¾ç½®SPIxé€Ÿåº¦
-u8   SPI2_ReadWriteByte(u8 TxData);//SPIxæ€»çº¿è¯»å†™ä¸€ä¸ªå­—èŠ‚
+void SPI2_Init(void);            //³õÊ¼»¯SPIx¿Ú
+void SPI2_SetSpeed(u8 SpeedSet); //ÉèÖÃSPIxËÙ¶È
+u8   SPI2_ReadWriteByte(u8 TxData);//SPIx×ÜÏß¶ÁĞ´Ò»¸ö×Ö½Ú
 
 #endif
 

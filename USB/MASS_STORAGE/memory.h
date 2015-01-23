@@ -32,12 +32,12 @@ void Write_Memory (u8 lun, u32 Memory_Offset, u32 Transfer_Length);
 void Read_Memory (u8 lun, u32 Memory_Offset, u32 Transfer_Length);
 #endif 
 
-////////////////////////////è‡ªå·±å®šä¹‰çš„ä¸€ä¸ªæ ‡è®°USBçŠ¶æ€çš„å¯„å­˜å™¨///////////////////
-//bit0:è¡¨ç¤ºç”µè„‘æ­£åœ¨å‘SDå¡å†™å…¥æ•°æ®
-//bit1:è¡¨ç¤ºç”µè„‘æ­£ä»ŽSDå¡è¯»å‡ºæ•°æ®
-//bit2:SDå¡å†™æ•°æ®é”™è¯¯æ ‡å¿—ä½
-//bit3:SDå¡è¯»æ•°æ®é”™è¯¯æ ‡å¿—ä½
-//bit4:1,è¡¨ç¤ºç”µè„‘æœ‰è½®è¯¢æ“ä½œ(è¡¨æ˜Žè¿žæŽ¥è¿˜ä¿æŒç€) 
+////////////////////////////×Ô¼º¶¨ÒåµÄÒ»¸ö±ê¼ÇUSB×´Ì¬µÄ¼Ä´æÆ÷///////////////////
+//bit0:±íÊ¾µçÄÔÕýÔÚÏòSD¿¨Ð´ÈëÊý¾Ý
+//bit1:±íÊ¾µçÄÔÕý´ÓSD¿¨¶Á³öÊý¾Ý
+//bit2:SD¿¨Ð´Êý¾Ý´íÎó±êÖ¾Î»
+//bit3:SD¿¨¶ÁÊý¾Ý´íÎó±êÖ¾Î»
+//bit4:1,±íÊ¾µçÄÔÓÐÂÖÑ¯²Ù×÷(±íÃ÷Á¬½Ó»¹±£³Ö×Å) 
 extern u8 USB_STATUS_REG;
 
 

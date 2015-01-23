@@ -15,10 +15,10 @@
 #include "malloc.h"
 #endif
 /* Definitions of physical drive number for each media */
-#define SD_CARD  0  //SDå¡,å·æ ‡ä¸º0
+#define SD_CARD  0  //SD¿¨,¾í±êÎª0
 
 /*-----------------------------------------------------------------------*/
-/* Inidialize a Drive    //åˆå§‹åŒ–ç£ç›˜                                    */
+/* Inidialize a Drive    //³õÊ¼»¯´ÅÅÌ                                    */
 /*-----------------------------------------------------------------------*/
 
 DSTATUS disk_initialize (
@@ -42,7 +42,7 @@ DSTATUS disk_initialize (
 
 
 /*-----------------------------------------------------------------------*/
-/* Get Disk Status  //è·å¾—ç£ç›˜çŠ¶æ€                                       */
+/* Get Disk Status  //»ñµÃ´ÅÅÌ×´Ì¬                                       */
 /*-----------------------------------------------------------------------*/
 
 DSTATUS disk_status (
@@ -68,11 +68,11 @@ DSTATUS disk_status (
 
 /*-----------------------------------------------------------------------
 Read Sector(s)
-è¯»æ‰‡åŒº
-drv:ç£ç›˜ç¼–å·0~9
-buff:æ•°æ®æ¥æ”¶ç¼“å†²é¦–åœ°å€
-sector:æ‰‡åŒºåœ°å€
-count:éœ€è¦è¯»å–çš„æ‰‡åŒºæ•°                                                    
+¶ÁÉÈÇø
+drv:´ÅÅÌ±àºÅ0~9
+buff:Êı¾İ½ÓÊÕ»º³åÊ×µØÖ·
+sector:ÉÈÇøµØÖ·
+count:ĞèÒª¶ÁÈ¡µÄÉÈÇøÊı                                                    
 -----------------------------------------------------------------------*/
 
 DRESULT disk_read (
@@ -84,7 +84,7 @@ DRESULT disk_read (
 {
     DRESULT res;
     int result;
-    if (!count)return RES_PARERR;//countä¸èƒ½ç­‰äº0ï¼Œå¦åˆ™è¿”å›å‚æ•°é”™è¯¯
+    if (!count)return RES_PARERR;//count²»ÄÜµÈÓÚ0£¬·ñÔò·µ»Ø²ÎÊı´íÎó
     switch (pdrv)
     {
     case SD_CARD :
@@ -118,11 +118,11 @@ DRESULT disk_read (
 
 /*-----------------------------------------------------------------------*/
 /* Write Sector(s)
- //å†™æ‰‡åŒº
- //drv:ç£ç›˜ç¼–å·0~9
- //buff:å‘é€æ•°æ®é¦–åœ°å€
- //sector:æ‰‡åŒºåœ°å€
- //count:éœ€è¦å†™å…¥çš„æ‰‡åŒºæ•°                                                       */
+ //Ğ´ÉÈÇø
+ //drv:´ÅÅÌ±àºÅ0~9
+ //buff:·¢ËÍÊı¾İÊ×µØÖ·
+ //sector:ÉÈÇøµØÖ·
+ //count:ĞèÒªĞ´ÈëµÄÉÈÇøÊı                                                       */
 /*-----------------------------------------------------------------------*/
 
 #if _USE_WRITE
@@ -135,9 +135,9 @@ DRESULT disk_write (
 {
     DRESULT res;
     int result;
-    u8 retry = 0X1F;    //å†™å…¥å¤±è´¥çš„æ—¶å€™,é‡è¯•æ¬¡æ•°
+    u8 retry = 0X1F;    //Ğ´ÈëÊ§°ÜµÄÊ±ºò,ÖØÊÔ´ÎÊı
 
-    if (!count)return RES_PARERR;//countä¸èƒ½ç­‰äº0ï¼Œå¦åˆ™è¿”å›å‚æ•°é”™è¯¯
+    if (!count)return RES_PARERR;//count²»ÄÜµÈÓÚ0£¬·ñÔò·µ»Ø²ÎÊı´íÎó
     switch (pdrv)
     {
     case SD_CARD :
@@ -180,10 +180,10 @@ DRESULT disk_write (
 
 /*-----------------------------------------------------------------------*/
 /* Miscellaneous Functions
-//å…¶ä»–è¡¨å‚æ•°çš„è·å¾—
- //drv:ç£ç›˜ç¼–å·0~9
- //ctrl:æ§åˆ¶ä»£ç 
- //buff:å‘é€/æ¥æ”¶ç¼“å†²åŒºæŒ‡é’ˆ                                               */
+//ÆäËû±í²ÎÊıµÄ»ñµÃ
+ //drv:´ÅÅÌ±àºÅ0~9
+ //ctrl:¿ØÖÆ´úÂë
+ //buff:·¢ËÍ/½ÓÊÕ»º³åÇøÖ¸Õë                                               */
 /*-----------------------------------------------------------------------*/
 
 #if _USE_IOCTL
@@ -229,7 +229,7 @@ DRESULT disk_ioctl (
 }
 #endif
 
-//è·å¾—æ—¶é—´
+//»ñµÃÊ±¼ä
 //User defined function to give a current time to fatfs module      */
 //31-25: Year(0-127 org.1980), 24-21: Month(1-12), 20-16: Day(1-31) */
 //15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2) */
@@ -239,12 +239,12 @@ DWORD get_fattime (void)
 }
 #ifdef SYS_MEMMALLOC_ENABLE_
 
-//åŠ¨æ€åˆ†é…å†…å­˜
+//¶¯Ì¬·ÖÅäÄÚ´æ
 void *ff_memalloc (UINT size)
 {
     return (void *)mymalloc(SRAMIN, size);
 }
-//é‡Šæ”¾å†…å­˜
+//ÊÍ·ÅÄÚ´æ
 void ff_memfree (void *mf)
 {
     myfree(SRAMIN, mf);

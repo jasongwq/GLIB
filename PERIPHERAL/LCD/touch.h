@@ -2,9 +2,9 @@
 #define __TOUCH_H__
 #include "sys.h"
 //////////////////////////////////////////////////////////////////////////////////
-//è§¦æ‘¸å±é©±åŠ¨ï¼ˆæ”¯æŒADS7843/7846/UH7843/7846/XPT2046/TSC2046ç­‰ï¼‰ ä»£ç 
+//´¥ÃþÆÁÇý¶¯£¨Ö§³ÖADS7843/7846/UH7843/7846/XPT2046/TSC2046µÈ£© ´úÂë
 //////////////////////////////////////////////////////////////////////////////////
-// //ä¸Žè§¦æ‘¸å±èŠ¯ç‰‡è¿žæŽ¥å¼•è„š
+// //Óë´¥ÃþÆÁÐ¾Æ¬Á¬½ÓÒý½Å
 // #define PEN     PBin (4)//PBin(6)        //PF10 INT
 // #define DOUT    PBin (6)//PAin(6)      //PF8  MISO
 // #define TDIN    PBout(7)//PAout(7)    //PF9  MOSI
@@ -26,45 +26,45 @@
 //                                    )
 
 
-#define TP_PRES_DOWN 0x80  //è§¦å±è¢«æŒ‰ä¸‹      
-#define TP_CATH_PRES 0x40  //æœ‰æŒ‰é”®æŒ‰ä¸‹äº†      
-//è§¦æ‘¸å±æŽ§åˆ¶å™¨
+#define TP_PRES_DOWN 0x80  //´¥ÆÁ±»°´ÏÂ      
+#define TP_CATH_PRES 0x40  //ÓÐ°´¼ü°´ÏÂÁË      
+//´¥ÃþÆÁ¿ØÖÆÆ÷
 typedef struct
 {
-    u8 (*init)(void);           //åˆå§‹åŒ–è§¦æ‘¸å±æŽ§åˆ¶å™¨
-    u8 (*scan)(u8);             //æ‰«æè§¦æ‘¸å±.0,å±å¹•æ‰«æ;1,ç‰©ç†åæ ‡;
-    void (*adjust)(void);       //è§¦æ‘¸å±æ ¡å‡†
-    u16 x0;                     //åŽŸå§‹åæ ‡(ç¬¬ä¸€æ¬¡æŒ‰ä¸‹æ—¶çš„åæ ‡)
+    u8 (*init)(void);           //³õÊ¼»¯´¥ÃþÆÁ¿ØÖÆÆ÷
+    u8 (*scan)(u8);             //É¨Ãè´¥ÃþÆÁ.0,ÆÁÄ»É¨Ãè;1,ÎïÀí×ø±ê;
+    void (*adjust)(void);       //´¥ÃþÆÁÐ£×¼
+    u16 x0;                     //Ô­Ê¼×ø±ê(µÚÒ»´Î°´ÏÂÊ±µÄ×ø±ê)
     u16 y0;
-    u16 x;                      //å½“å‰åæ ‡(æ­¤æ¬¡æ‰«ææ—¶,è§¦å±çš„åæ ‡)
+    u16 x;                      //µ±Ç°×ø±ê(´Ë´ÎÉ¨ÃèÊ±,´¥ÆÁµÄ×ø±ê)
     u16 y;
-    u8  sta;                    //ç¬”çš„çŠ¶æ€
-    //b7:æŒ‰ä¸‹1/æ¾å¼€0;
-    //b6:0,æ²¡æœ‰æŒ‰é”®æŒ‰ä¸‹;1,æœ‰æŒ‰é”®æŒ‰ä¸‹.
-    ////////////////////////è§¦æ‘¸å±æ ¡å‡†å‚æ•°/////////////////////////
+    u8  sta;                    //±ÊµÄ×´Ì¬
+    //b7:°´ÏÂ1/ËÉ¿ª0;
+    //b6:0,Ã»ÓÐ°´¼ü°´ÏÂ;1,ÓÐ°´¼ü°´ÏÂ.
+    ////////////////////////´¥ÃþÆÁÐ£×¼²ÎÊý/////////////////////////
     float xfac;
     float yfac;
     short xoff;
     short yoff;
-    //æ–°å¢žçš„å‚æ•°,å½“è§¦æ‘¸å±çš„å·¦å³ä¸Šä¸‹å®Œå…¨é¢ å€’æ—¶éœ€è¦ç”¨åˆ°.
-    //touchtype=0çš„æ—¶å€™,é€‚åˆå·¦å³ä¸ºXåæ ‡,ä¸Šä¸‹ä¸ºYåæ ‡çš„TP.
-    //touchtype=1çš„æ—¶å€™,é€‚åˆå·¦å³ä¸ºYåæ ‡,ä¸Šä¸‹ä¸ºXåæ ‡çš„TP.
+    //ÐÂÔöµÄ²ÎÊý,µ±´¥ÃþÆÁµÄ×óÓÒÉÏÏÂÍêÈ«µßµ¹Ê±ÐèÒªÓÃµ½.
+    //touchtype=0µÄÊ±ºò,ÊÊºÏ×óÓÒÎªX×ø±ê,ÉÏÏÂÎªY×ø±êµÄTP.
+    //touchtype=1µÄÊ±ºò,ÊÊºÏ×óÓÒÎªY×ø±ê,ÉÏÏÂÎªX×ø±êµÄTP.
     u8 touchtype;
 } _m_tp_dev;
 
-extern _m_tp_dev tp_dev;        //è§¦å±æŽ§åˆ¶å™¨åœ¨touch.cé‡Œé¢å®šä¹‰
+extern _m_tp_dev tp_dev;        //´¥ÆÁ¿ØÖÆÆ÷ÔÚtouch.cÀïÃæ¶¨Òå
 
-u16 TP_Read_XOY(u8 xy);                         //å¸¦æ»¤æ³¢çš„åæ ‡è¯»å–(X/Y)
-u8 TP_Read_XY(u16 *x, u16 *y);                  //åŒæ–¹å‘è¯»å–(X+Y)
-u8 TP_Read_XY2(u16 *x, u16 *y);                 //å¸¦åŠ å¼ºæ»¤æ³¢çš„åŒæ–¹å‘åæ ‡è¯»å–
-//void TP_Drow_Touch_Point(u16 x, u16 y, u16 color); //ç”»ä¸€ä¸ªåæ ‡æ ¡å‡†ç‚¹
-void TP_Draw_Big_Point(u16 x, u16 y, u16 color); //ç”»ä¸€ä¸ªå¤§ç‚¹
-u8 TP_Scan(u8 tp);                              //æ‰«æ
-//void TP_Save_Adjdata(void);                     //ä¿å­˜æ ¡å‡†å‚æ•°
-//u8 TP_Get_Adjdata(void);                        //è¯»å–æ ¡å‡†å‚æ•°
-void TP_Adjust(void);                           //è§¦æ‘¸å±æ ¡å‡†
-u8 TP_Init(void);                               //åˆå§‹åŒ–
-void TP_Adj_Info_Show(u16 x0, u16 y0, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u16 fac); //æ˜¾ç¤ºæ ¡å‡†ä¿¡æ¯
+u16 TP_Read_XOY(u8 xy);                         //´øÂË²¨µÄ×ø±ê¶ÁÈ¡(X/Y)
+u8 TP_Read_XY(u16 *x, u16 *y);                  //Ë«·½Ïò¶ÁÈ¡(X+Y)
+u8 TP_Read_XY2(u16 *x, u16 *y);                 //´ø¼ÓÇ¿ÂË²¨µÄË«·½Ïò×ø±ê¶ÁÈ¡
+//void TP_Drow_Touch_Point(u16 x, u16 y, u16 color); //»­Ò»¸ö×ø±êÐ£×¼µã
+void TP_Draw_Big_Point(u16 x, u16 y, u16 color); //»­Ò»¸ö´óµã
+u8 TP_Scan(u8 tp);                              //É¨Ãè
+//void TP_Save_Adjdata(void);                     //±£´æÐ£×¼²ÎÊý
+//u8 TP_Get_Adjdata(void);                        //¶ÁÈ¡Ð£×¼²ÎÊý
+void TP_Adjust(void);                           //´¥ÃþÆÁÐ£×¼
+u8 TP_Init(void);                               //³õÊ¼»¯
+void TP_Adj_Info_Show(u16 x0, u16 y0, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u16 fac); //ÏÔÊ¾Ð£×¼ÐÅÏ¢
 #endif
 
 

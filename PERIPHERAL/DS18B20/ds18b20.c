@@ -2,32 +2,32 @@
 #include "delay.h"
 #include "stm32_config.h"
 //////////////////////////////////////////////////////////////////////////////////
-//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
-//ALIENTEKæˆ˜èˆ°STM32å¼€å‘æ¿
-//DS18B20é©±åŠ¨ä»£ç 
-//æ­£ç‚¹åŸå­@ALIENTEK
-//æŠ€æœ¯è®ºå›:www.openedv.com
-//ä¿®æ”¹æ—¥æœŸ:2012/9/12
-//ç‰ˆæœ¬ï¼šV1.0
-//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
-//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2009-2019
+//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
+//ALIENTEKÕ½½¢STM32¿ª·¢°å
+//DS18B20Çı¶¯´úÂë
+//ÕıµãÔ­×Ó@ALIENTEK
+//¼¼ÊõÂÛÌ³:www.openedv.com
+//ĞŞ¸ÄÈÕÆÚ:2012/9/12
+//°æ±¾£ºV1.0
+//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
+//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2009-2019
 //All rights reserved
 //////////////////////////////////////////////////////////////////////////////////
 #include "gpio.h"
 
 
-//å¤ä½DS18B20
+//¸´Î»DS18B20
 void DS18B20_Rst(void)
 {
     DS18B20_IO_OUT(); //SET PA0 OUTPUT
-    DS18B20_DQ_OUT = 0; //æ‹‰ä½DQ
-    delay_us(750);    //æ‹‰ä½750us
+    DS18B20_DQ_OUT = 0; //À­µÍDQ
+    delay_us(750);    //À­µÍ750us
     DS18B20_DQ_OUT = 1; //DQ=1
     delay_us(15);     //15US
 }
-//ç­‰å¾…DS18B20çš„å›åº”
-//è¿”å›1:æœªæ£€æµ‹åˆ°DS18B20çš„å­˜åœ¨
-//è¿”å›0:å­˜åœ¨
+//µÈ´ıDS18B20µÄ»ØÓ¦
+//·µ»Ø1:Î´¼ì²âµ½DS18B20µÄ´æÔÚ
+//·µ»Ø0:´æÔÚ
 u8 DS18B20_Check(void)
 {
     u8 retry = 0;
@@ -47,8 +47,8 @@ u8 DS18B20_Check(void)
     if (retry >= 240)return 1;
     return 0;
 }
-//ä»DS18B20è¯»å–ä¸€ä¸ªä½
-//è¿”å›å€¼ï¼š1/0
+//´ÓDS18B20¶ÁÈ¡Ò»¸öÎ»
+//·µ»ØÖµ£º1/0
 u8 DS18B20_Read_Bit(void)            // read one bit
 {
     u8 data;
@@ -63,8 +63,8 @@ u8 DS18B20_Read_Bit(void)            // read one bit
     delay_us(50);
     return data;
 }
-//ä»DS18B20è¯»å–ä¸€ä¸ªå­—èŠ‚
-//è¿”å›å€¼ï¼šè¯»åˆ°çš„æ•°æ®
+//´ÓDS18B20¶ÁÈ¡Ò»¸ö×Ö½Ú
+//·µ»ØÖµ£º¶Áµ½µÄÊı¾İ
 u8 DS18B20_Read_Byte(void)    // read one byte
 {
     u8 i, j, dat;
@@ -76,8 +76,8 @@ u8 DS18B20_Read_Byte(void)    // read one byte
     }
     return dat;
 }
-//å†™ä¸€ä¸ªå­—èŠ‚åˆ°DS18B20
-//datï¼šè¦å†™å…¥çš„å­—èŠ‚
+//Ğ´Ò»¸ö×Ö½Úµ½DS18B20
+//dat£ºÒªĞ´ÈëµÄ×Ö½Ú
 void DS18B20_Write_Byte(u8 dat)
 {
     u8 j;
@@ -103,7 +103,7 @@ void DS18B20_Write_Byte(u8 dat)
         }
     }
 }
-//å¼€å§‹æ¸©åº¦è½¬æ¢
+//¿ªÊ¼ÎÂ¶È×ª»»
 void DS18B20_Start(void)// ds1820 start convert
 {
     DS18B20_Rst();
@@ -111,28 +111,28 @@ void DS18B20_Start(void)// ds1820 start convert
     DS18B20_Write_Byte(0xcc);// skip rom
     DS18B20_Write_Byte(0x44);// convert
 }
-//åˆå§‹åŒ–DS18B20çš„IOå£ DQ åŒæ—¶æ£€æµ‹DSçš„å­˜åœ¨
-//è¿”å›1:ä¸å­˜åœ¨
-//è¿”å›0:å­˜åœ¨
+//³õÊ¼»¯DS18B20µÄIO¿Ú DQ Í¬Ê±¼ì²âDSµÄ´æÔÚ
+//·µ»Ø1:²»´æÔÚ
+//·µ»Ø0:´æÔÚ
 u8 DS18B20_Init(void)
 {
     GPIO_InitTypeDef  GPIO_InitStructure;
 
-    RCC_APB2PeriphClockCmd(RCC_DS18B20, ENABLE);    //ä½¿èƒ½PORTGå£æ—¶é’Ÿ
-    GPIO_InitStructure.GPIO_Pin   = LCD_DS18B20_Pin;  //PORTG.11 æ¨æŒ½è¾“å‡º
+    RCC_APB2PeriphClockCmd(RCC_DS18B20, ENABLE);    //Ê¹ÄÜPORTG¿ÚÊ±ÖÓ
+    GPIO_InitStructure.GPIO_Pin   = LCD_DS18B20_Pin;  //PORTG.11 ÍÆÍìÊä³ö
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(LCD_DS18B20_GPIO, &GPIO_InitStructure);
 
-    GPIO_SetBits(LCD_DS18B20_GPIO, LCD_DS18B20_Pin);   //è¾“å‡º1
+    GPIO_SetBits(LCD_DS18B20_GPIO, LCD_DS18B20_Pin);   //Êä³ö1
 
     DS18B20_Rst();
 
     return DS18B20_Check();
 }
-//ä»ds18b20å¾—åˆ°æ¸©åº¦å€¼
-//ç²¾åº¦ï¼š0.1C
-//è¿”å›å€¼ï¼šæ¸©åº¦å€¼ ï¼ˆ-550~1250ï¼‰
+//´Óds18b20µÃµ½ÎÂ¶ÈÖµ
+//¾«¶È£º0.1C
+//·µ»ØÖµ£ºÎÂ¶ÈÖµ £¨-550~1250£©
 short DS18B20_Get_Temp(void)
 {
     u8 temp;
@@ -150,14 +150,14 @@ short DS18B20_Get_Temp(void)
     {
         TH = ~TH;
         TL = ~TL;
-        temp = 0; //æ¸©åº¦ä¸ºè´Ÿ
+        temp = 0; //ÎÂ¶ÈÎª¸º
     }
-    else temp = 1; //æ¸©åº¦ä¸ºæ­£
-    tem = TH; //è·å¾—é«˜å…«ä½
+    else temp = 1; //ÎÂ¶ÈÎªÕı
+    tem = TH; //»ñµÃ¸ß°ËÎ»
     tem <<= 8;
-    tem += TL; //è·å¾—åº•å…«ä½
-    tem = (float)tem * 0.625; //è½¬æ¢
-    if (temp)return tem; //è¿”å›æ¸©åº¦å€¼
+    tem += TL; //»ñµÃµ×°ËÎ»
+    tem = (float)tem * 0.625; //×ª»»
+    if (temp)return tem; //·µ»ØÎÂ¶ÈÖµ
     else return -tem;
 }
 

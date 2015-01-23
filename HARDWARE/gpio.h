@@ -7,15 +7,15 @@
 #define PU 1//
 #define PD 0//
 
-#define AIN 0         //æ¨¡æ‹Ÿè¾“å…¥
-#define IN_FLOATING 4 //æµ®ç©ºè¾“å…¥
-#define IPD 8         //ä¸‹æ‹‰è¾“å…¥
-#define IPU 8         //ä¸Šæ‹‰è¾“å…¥
+#define AIN 0         //Ä£ÄâÊäÈë
+#define IN_FLOATING 4 //¸¡¿ÕÊäÈë
+#define IPD 8         //ÏÂÀ­ÊäÈë
+#define IPU 8         //ÉÏÀ­ÊäÈë
 
-#define Out_PP 3      //æŽ¨æŒ½è¾“å‡º
-#define Out_OD 7      //å¼€æ¼è¾“å‡º
-#define AF_PP 0xF     //å¤ç”¨å¼€æ¼è¾“å‡º
-#define AF_OD 0xB     //å¤ç”¨æŽ¨æŒ½è¾“å‡º
+#define Out_PP 3      //ÍÆÍìÊä³ö
+#define Out_OD 7      //¿ªÂ©Êä³ö
+#define AF_PP 0xF     //¸´ÓÃ¿ªÂ©Êä³ö
+#define AF_OD 0xB     //¸´ÓÃÍÆÍìÊä³ö
 //
 //
 
@@ -268,7 +268,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define PG15_In  GPIOG_Init(15,IPU,PU);
 
 
-//å¿«é€ŸIO
+//¿ìËÙIO
 #define Set_A0   GPIOA->BSRR=1<<0 ;
 #define Set_A1   GPIOA->BSRR=1<<1 ;
 #define Set_A2   GPIOA->BSRR=1<<2;
@@ -526,7 +526,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Clr_G(n) GPIOG->BRR=1<<n;
 
 ////////////////////////////////////////////
-//å¿«é€Ÿ è¯»IO
+//¿ìËÙ ¶ÁIO
 #define A0       ((GPIOA->IDR&(1<<0))?1:0)
 #define A1       ((GPIOA->IDR&(1<<1))?1:0)
 #define A2       ((GPIOA->IDR&(1<<2))?1:0)

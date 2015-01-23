@@ -1,60 +1,58 @@
 #include "gps_driver.h"
-#include "led.h"
-#include "delay.h"
-#include "usart.h"
+#include "usr_usart.h"
 #include "stdio.h"
 #include "stdarg.h"
 #include "string.h"
 #include "math.h"
 //////////////////////////////////////////////////////////////////////////////////
 
-//ä»bufé‡Œé¢å¾—åˆ°ç¬¬cxä¸ªé€—å·æ‰€åœ¨çš„ä½ç½®
-//è¿”å›å€¼:0~0XFE,ä»£è¡¨é€—å·æ‰€åœ¨ä½ç½®çš„åç§».
-//       0XFF,ä»£è¡¨ä¸å­˜åœ¨ç¬¬cxä¸ªé€—å·
-u8 NMEA_Comma_Pos(u8* buf, u8 cx)
+//´ÓbufÀïÃæµÃµ½µÚcx¸ö¶ººÅËùÔÚµÄÎ»ÖÃ
+//·µ»ØÖµ:0~0XFE,´ú±í¶ººÅËùÔÚÎ»ÖÃµÄÆ«ÒÆ.
+//       0XFF,´ú±í²»´æÔÚµÚcx¸ö¶ººÅ
+u8 NMEA_Comma_Pos(u8 *buf, u8 cx)
 {
-    u8* p = buf;
+    u8 *p = buf;
     while (cx)
     {
-        if (*buf == '*' || *buf < ' ' || *buf > 'z')return 0XFF; //é‡åˆ°'*'æˆ–è€…éæ³•å­—ç¬¦,åˆ™ä¸å­˜åœ¨ç¬¬cxä¸ªé€—å·
+        if (*buf == '*' || *buf < ' ' || *buf > 'z')return 0XFF; //Óöµ½'*'»òÕß·Ç·¨×Ö·û,Ôò²»´æÔÚµÚcx¸ö¶ººÅ
         if (*buf == ',')cx--;
         buf++;
     }
     return buf - p;
 }
-//m^nå‡½æ•°
-//è¿”å›å€¼:m^næ¬¡æ–¹.
+//m^nº¯Êı
+//·µ»ØÖµ:m^n´Î·½.
 u32 NMEA_Pow(u8 m, u8 n)
 {
     u32 result = 1;
     while (n--)result *= m;
     return result;
 }
-//strè½¬æ¢ä¸ºæ•°å­—,ä»¥','æˆ–è€…'*'ç»“æŸ
-//buf:æ•°å­—å­˜å‚¨åŒº
-//dx:å°æ•°ç‚¹ä½æ•°,è¿”å›ç»™è°ƒç”¨å‡½æ•°
-//è¿”å›å€¼:è½¬æ¢åçš„æ•°å€¼
-int NMEA_Str2num(u8* buf, u8* dx)
+//str×ª»»ÎªÊı×Ö,ÒÔ','»òÕß'*'½áÊø
+//buf:Êı×Ö´æ´¢Çø
+//dx:Ğ¡ÊıµãÎ»Êı,·µ»Ø¸øµ÷ÓÃº¯Êı
+//·µ»ØÖµ:×ª»»ºóµÄÊıÖµ
+int NMEA_Str2num(u8 *buf, u8 *dx)
 {
-    u8* p = buf;
+    u8 *p = buf;
     u32 ires = 0, fres = 0;
     u8 ilen = 0, flen = 0, i;
     u8 mask = 0;
     int res;
-    while (1) //å¾—åˆ°æ•´æ•°å’Œå°æ•°çš„é•¿åº¦
+    while (1) //µÃµ½ÕûÊıºÍĞ¡ÊıµÄ³¤¶È
     {
         if (*p == '-')
         {
-            mask |= 0X02;    //æ˜¯è´Ÿæ•°
+            mask |= 0X02;    //ÊÇ¸ºÊı
             p++;
         }
-        if (*p == ',' || (*p == '*'))break; //é‡åˆ°ç»“æŸäº†
+        if (*p == ',' || (*p == '*'))break; //Óöµ½½áÊøÁË
         if (*p == '.')
         {
-            mask |= 0X01;    //é‡åˆ°å°æ•°ç‚¹äº†
+            mask |= 0X01;    //Óöµ½Ğ¡ÊıµãÁË
             p++;
         }
-        else if (*p > '9' || (*p < '0')) //æœ‰éæ³•å­—ç¬¦
+        else if (*p > '9' || (*p < '0')) //ÓĞ·Ç·¨×Ö·û
         {
             ilen = 0;
             flen = 0;
@@ -64,14 +62,14 @@ int NMEA_Str2num(u8* buf, u8* dx)
         else ilen++;
         p++;
     }
-    if (mask & 0X02)buf++; //å»æ‰è´Ÿå·
-    for (i = 0; i < ilen; i++) //å¾—åˆ°æ•´æ•°éƒ¨åˆ†æ•°æ®
+    if (mask & 0X02)buf++; //È¥µô¸ººÅ
+    for (i = 0; i < ilen; i++) //µÃµ½ÕûÊı²¿·ÖÊı¾İ
     {
         ires += NMEA_Pow(10, ilen - 1 - i) * (buf[i] - '0');
     }
-    if (flen > 5)flen = 5; //æœ€å¤šå–5ä½å°æ•°
-    *dx = flen;         //å°æ•°ç‚¹ä½æ•°
-    for (i = 0; i < flen; i++) //å¾—åˆ°å°æ•°éƒ¨åˆ†æ•°æ®
+    if (flen > 5)flen = 5; //×î¶àÈ¡5Î»Ğ¡Êı
+    *dx = flen;         //Ğ¡ÊıµãÎ»Êı
+    for (i = 0; i < flen; i++) //µÃµ½Ğ¡Êı²¿·ÖÊı¾İ
     {
         fres += NMEA_Pow(10, flen - 1 - i) * (buf[ilen + 1 + i] - '0');
     }
@@ -79,182 +77,182 @@ int NMEA_Str2num(u8* buf, u8* dx)
     if (mask & 0X02)res = -res;
     return res;
 }
-//åˆ†æGPGSVä¿¡æ¯
-//gpsx:nmeaä¿¡æ¯ç»“æ„ä½“
-//buf:æ¥æ”¶åˆ°çš„GPSæ•°æ®ç¼“å†²åŒºé¦–åœ°å€
-void NMEA_GPGSV_Analysis(nmea_msg* gpsx, u8* buf)
+//·ÖÎöGPGSVĞÅÏ¢
+//gpsx:nmeaĞÅÏ¢½á¹¹Ìå
+//buf:½ÓÊÕµ½µÄGPSÊı¾İ»º³åÇøÊ×µØÖ·
+void NMEA_GPGSV_Analysis(nmea_msg *gpsx, u8 *buf)
 {
-    u8* p, *p1, dx;
+    u8 *p, *p1, dx;
     u8 len, i, j, slx = 0;
     u8 posx;
     p = buf;
-    p1 = (u8*)strstr((const char*)p, "$GPGSV");
-    len = p1[7] - '0';                          //å¾—åˆ°GPGSVçš„æ¡æ•°
-    posx = NMEA_Comma_Pos(p1, 3);               //å¾—åˆ°å¯è§å«æ˜Ÿæ€»æ•°
+    p1 = (u8 *)strstr((const char *)p, "$GPGSV");
+    len = p1[7] - '0';                          //µÃµ½GPGSVµÄÌõÊı
+    posx = NMEA_Comma_Pos(p1, 3);               //µÃµ½¿É¼ûÎÀĞÇ×ÜÊı
     if (posx != 0XFF)gpsx->svnum = NMEA_Str2num(p1 + posx, &dx);
     for (i = 0; i < len; i++)
     {
-        p1 = (u8*)strstr((const char*)p, "$GPGSV");
+        p1 = (u8 *)strstr((const char *)p, "$GPGSV");
         for (j = 0; j < 4; j++)
         {
             posx = NMEA_Comma_Pos(p1, 4 + j * 4);
-            if (posx != 0XFF)gpsx->slmsg[slx].num = NMEA_Str2num(p1 + posx, &dx); //å¾—åˆ°å«æ˜Ÿç¼–å·
+            if (posx != 0XFF)gpsx->slmsg[slx].num = NMEA_Str2num(p1 + posx, &dx); //µÃµ½ÎÀĞÇ±àºÅ
             else break;
             posx = NMEA_Comma_Pos(p1, 5 + j * 4);
-            if (posx != 0XFF)gpsx->slmsg[slx].eledeg = NMEA_Str2num(p1 + posx, &dx); //å¾—åˆ°å«æ˜Ÿä»°è§’
+            if (posx != 0XFF)gpsx->slmsg[slx].eledeg = NMEA_Str2num(p1 + posx, &dx); //µÃµ½ÎÀĞÇÑö½Ç
             else break;
             posx = NMEA_Comma_Pos(p1, 6 + j * 4);
-            if (posx != 0XFF)gpsx->slmsg[slx].azideg = NMEA_Str2num(p1 + posx, &dx); //å¾—åˆ°å«æ˜Ÿæ–¹ä½è§’
+            if (posx != 0XFF)gpsx->slmsg[slx].azideg = NMEA_Str2num(p1 + posx, &dx); //µÃµ½ÎÀĞÇ·½Î»½Ç
             else break;
             posx = NMEA_Comma_Pos(p1, 7 + j * 4);
-            if (posx != 0XFF)gpsx->slmsg[slx].sn = NMEA_Str2num(p1 + posx, &dx); //å¾—åˆ°å«æ˜Ÿä¿¡å™ªæ¯”
+            if (posx != 0XFF)gpsx->slmsg[slx].sn = NMEA_Str2num(p1 + posx, &dx); //µÃµ½ÎÀĞÇĞÅÔë±È
             else break;
             slx++;
         }
-        p = p1 + 1; //åˆ‡æ¢åˆ°ä¸‹ä¸€ä¸ªGPGSVä¿¡æ¯
+        p = p1 + 1; //ÇĞ»»µ½ÏÂÒ»¸öGPGSVĞÅÏ¢
     }
 }
 
-//åˆ†æGPGGAä¿¡æ¯
-//gpsx:nmeaä¿¡æ¯ç»“æ„ä½“
-//buf:æ¥æ”¶åˆ°çš„GPSæ•°æ®ç¼“å†²åŒºé¦–åœ°å€
-void NMEA_GPGGA_Analysis(nmea_msg* gpsx, u8* buf)
+//·ÖÎöGPGGAĞÅÏ¢
+//gpsx:nmeaĞÅÏ¢½á¹¹Ìå
+//buf:½ÓÊÕµ½µÄGPSÊı¾İ»º³åÇøÊ×µØÖ·
+void NMEA_GPGGA_Analysis(nmea_msg *gpsx, u8 *buf)
 {
-    u8* p1, dx;
+    u8 *p1, dx;
     u8 posx;
-    p1 = (u8*)strstr((const char*)buf, "$GPGGA");
-    posx = NMEA_Comma_Pos(p1, 6);                           //å¾—åˆ°GPSçŠ¶æ€
+    p1 = (u8 *)strstr((const char *)buf, "$GPGGA");
+    posx = NMEA_Comma_Pos(p1, 6);                           //µÃµ½GPS×´Ì¬
     if (posx != 0XFF)gpsx->gpssta = NMEA_Str2num(p1 + posx, &dx);
-    posx = NMEA_Comma_Pos(p1, 7);                           //å¾—åˆ°ç”¨äºå®šä½çš„å«æ˜Ÿæ•°
+    posx = NMEA_Comma_Pos(p1, 7);                           //µÃµ½ÓÃÓÚ¶¨Î»µÄÎÀĞÇÊı
     if (posx != 0XFF)gpsx->posslnum = NMEA_Str2num(p1 + posx, &dx);
-    posx = NMEA_Comma_Pos(p1, 9);                           //å¾—åˆ°æµ·æ‹”é«˜åº¦
+    posx = NMEA_Comma_Pos(p1, 9);                           //µÃµ½º£°Î¸ß¶È
     if (posx != 0XFF)gpsx->altitude = NMEA_Str2num(p1 + posx, &dx);
 }
 
-//åˆ†æGPGSAä¿¡æ¯
-//gpsx:nmeaä¿¡æ¯ç»“æ„ä½“
-//buf:æ¥æ”¶åˆ°çš„GPSæ•°æ®ç¼“å†²åŒºé¦–åœ°å€
-void NMEA_GPGSA_Analysis(nmea_msg* gpsx, u8* buf)
+//·ÖÎöGPGSAĞÅÏ¢
+//gpsx:nmeaĞÅÏ¢½á¹¹Ìå
+//buf:½ÓÊÕµ½µÄGPSÊı¾İ»º³åÇøÊ×µØÖ·
+void NMEA_GPGSA_Analysis(nmea_msg *gpsx, u8 *buf)
 {
-    u8* p1, dx;
+    u8 *p1, dx;
     u8 posx;
     u8 i;
-    p1 = (u8*)strstr((const char*)buf, "$GPGSA");
-    posx = NMEA_Comma_Pos(p1, 2);                           //å¾—åˆ°å®šä½ç±»å‹
+    p1 = (u8 *)strstr((const char *)buf, "$GPGSA");
+    posx = NMEA_Comma_Pos(p1, 2);                           //µÃµ½¶¨Î»ÀàĞÍ
     if (posx != 0XFF)gpsx->fixmode = NMEA_Str2num(p1 + posx, &dx);
-    for (i = 0; i < 12; i++)                                //å¾—åˆ°å®šä½å«æ˜Ÿç¼–å·
+    for (i = 0; i < 12; i++)                                //µÃµ½¶¨Î»ÎÀĞÇ±àºÅ
     {
         posx = NMEA_Comma_Pos(p1, 3 + i);
         if (posx != 0XFF)gpsx->possl[i] = NMEA_Str2num(p1 + posx, &dx);
         else break;
     }
-    posx = NMEA_Comma_Pos(p1, 15);                          //å¾—åˆ°PDOPä½ç½®ç²¾åº¦å› å­
+    posx = NMEA_Comma_Pos(p1, 15);                          //µÃµ½PDOPÎ»ÖÃ¾«¶ÈÒò×Ó
     if (posx != 0XFF)gpsx->pdop = NMEA_Str2num(p1 + posx, &dx);
-    posx = NMEA_Comma_Pos(p1, 16);                          //å¾—åˆ°HDOPä½ç½®ç²¾åº¦å› å­
+    posx = NMEA_Comma_Pos(p1, 16);                          //µÃµ½HDOPÎ»ÖÃ¾«¶ÈÒò×Ó
     if (posx != 0XFF)gpsx->hdop = NMEA_Str2num(p1 + posx, &dx);
-    posx = NMEA_Comma_Pos(p1, 17);                          //å¾—åˆ°VDOPä½ç½®ç²¾åº¦å› å­
+    posx = NMEA_Comma_Pos(p1, 17);                          //µÃµ½VDOPÎ»ÖÃ¾«¶ÈÒò×Ó
     if (posx != 0XFF)gpsx->vdop = NMEA_Str2num(p1 + posx, &dx);
 }
-//åˆ†æGPRMCä¿¡æ¯
-//gpsx:nmeaä¿¡æ¯ç»“æ„ä½“
-//buf:æ¥æ”¶åˆ°çš„GPSæ•°æ®ç¼“å†²åŒºé¦–åœ°å€
-void NMEA_GPRMC_Analysis(nmea_msg* gpsx, u8* buf)
+//·ÖÎöGPRMCĞÅÏ¢
+//gpsx:nmeaĞÅÏ¢½á¹¹Ìå
+//buf:½ÓÊÕµ½µÄGPSÊı¾İ»º³åÇøÊ×µØÖ·
+void NMEA_GPRMC_Analysis(nmea_msg *gpsx, u8 *buf)
 {
-    u8* p1, dx;
+    u8 *p1, dx;
     u8 posx;
     u32 temp;
     float rs;
-    p1 = (u8*)strstr((const char*)buf, "$GPRMC");
-    posx = NMEA_Comma_Pos(p1, 1);                           //å¾—åˆ°UTCæ—¶é—´
+    p1 = (u8 *)strstr((const char *)buf, "$GPRMC");
+    posx = NMEA_Comma_Pos(p1, 1);                           //µÃµ½UTCÊ±¼ä
     if (posx != 0XFF)
     {
-        temp = NMEA_Str2num(p1 + posx, &dx) / NMEA_Pow(10, dx); //å¾—åˆ°UTCæ—¶é—´,å»æ‰ms
+        temp = NMEA_Str2num(p1 + posx, &dx) / NMEA_Pow(10, dx); //µÃµ½UTCÊ±¼ä,È¥µôms
         gpsx->utc.hour = temp / 10000;
         gpsx->utc.min = (temp / 100) % 100;
         gpsx->utc.sec = temp % 100;
     }
-    posx = NMEA_Comma_Pos(p1, 3);                           //å¾—åˆ°çº¬åº¦
+    posx = NMEA_Comma_Pos(p1, 3);                           //µÃµ½Î³¶È
     if (posx != 0XFF)
     {
         temp = NMEA_Str2num(p1 + posx, &dx);
-        gpsx->latitude = temp / NMEA_Pow(10, dx + 2); //å¾—åˆ°Â°
-        rs = temp % NMEA_Pow(10, dx + 2);       //å¾—åˆ°'
-        gpsx->latitude = gpsx->latitude * NMEA_Pow(10, 5) + (rs * NMEA_Pow(10, 5 - dx)) / 60; //è½¬æ¢ä¸ºÂ°
+        gpsx->latitude = temp / NMEA_Pow(10, dx + 2); //µÃµ½¡ã
+        rs = temp % NMEA_Pow(10, dx + 2);       //µÃµ½'
+        gpsx->latitude = gpsx->latitude * NMEA_Pow(10, 5) + (rs * NMEA_Pow(10, 5 - dx)) / 60; //×ª»»Îª¡ã
     }
-    posx = NMEA_Comma_Pos(p1, 4);                           //å—çº¬è¿˜æ˜¯åŒ—çº¬
+    posx = NMEA_Comma_Pos(p1, 4);                           //ÄÏÎ³»¹ÊÇ±±Î³
     if (posx != 0XFF)gpsx->nshemi = *(p1 + posx);
-    posx = NMEA_Comma_Pos(p1, 5);                           //å¾—åˆ°ç»åº¦
+    posx = NMEA_Comma_Pos(p1, 5);                           //µÃµ½¾­¶È
     if (posx != 0XFF)
     {
         temp = NMEA_Str2num(p1 + posx, &dx);
-        gpsx->longitude = temp / NMEA_Pow(10, dx + 2); //å¾—åˆ°Â°
-        rs = temp % NMEA_Pow(10, dx + 2);       //å¾—åˆ°'
-        gpsx->longitude = gpsx->longitude * NMEA_Pow(10, 5) + (rs * NMEA_Pow(10, 5 - dx)) / 60; //è½¬æ¢ä¸ºÂ°
+        gpsx->longitude = temp / NMEA_Pow(10, dx + 2); //µÃµ½¡ã
+        rs = temp % NMEA_Pow(10, dx + 2);       //µÃµ½'
+        gpsx->longitude = gpsx->longitude * NMEA_Pow(10, 5) + (rs * NMEA_Pow(10, 5 - dx)) / 60; //×ª»»Îª¡ã
     }
-    posx = NMEA_Comma_Pos(p1, 6);                           //ä¸œç»è¿˜æ˜¯è¥¿ç»
+    posx = NMEA_Comma_Pos(p1, 6);                           //¶«¾­»¹ÊÇÎ÷¾­
     if (posx != 0XFF)gpsx->ewhemi = *(p1 + posx);
-    posx = NMEA_Comma_Pos(p1, 9);                           //å¾—åˆ°UTCæ—¥æœŸ
+    posx = NMEA_Comma_Pos(p1, 9);                           //µÃµ½UTCÈÕÆÚ
     if (posx != 0XFF)
     {
-        temp = NMEA_Str2num(p1 + posx, &dx);                //å¾—åˆ°UTCæ—¥æœŸ
+        temp = NMEA_Str2num(p1 + posx, &dx);                //µÃµ½UTCÈÕÆÚ
         gpsx->utc.date = temp / 10000;
         gpsx->utc.month = (temp / 100) % 100;
         gpsx->utc.year = 2000 + temp % 100;
     }
 }
 
-//åˆ†æGPVTGä¿¡æ¯
-//gpsx:nmeaä¿¡æ¯ç»“æ„ä½“
-//buf:æ¥æ”¶åˆ°çš„GPSæ•°æ®ç¼“å†²åŒºé¦–åœ°å€
-void NMEA_GPVTG_Analysis(nmea_msg* gpsx, u8* buf)
+//·ÖÎöGPVTGĞÅÏ¢
+//gpsx:nmeaĞÅÏ¢½á¹¹Ìå
+//buf:½ÓÊÕµ½µÄGPSÊı¾İ»º³åÇøÊ×µØÖ·
+void NMEA_GPVTG_Analysis(nmea_msg *gpsx, u8 *buf)
 {
-    u8* p1, dx;
+    u8 *p1, dx;
     u8 posx;
-    p1 = (u8*)strstr((const char*)buf, "$GPVTG");
-    posx = NMEA_Comma_Pos(p1, 7);                           //å¾—åˆ°åœ°é¢é€Ÿç‡
+    p1 = (u8 *)strstr((const char *)buf, "$GPVTG");
+    posx = NMEA_Comma_Pos(p1, 7);                           //µÃµ½µØÃæËÙÂÊ
     if (posx != 0XFF)
     {
         gpsx->speed = NMEA_Str2num(p1 + posx, &dx);
-        if (dx < 3)gpsx->speed *= NMEA_Pow(10, 3 - dx);     //ç¡®ä¿æ‰©å¤§1000å€
+        if (dx < 3)gpsx->speed *= NMEA_Pow(10, 3 - dx);     //È·±£À©´ó1000±¶
     }
 }
 
-//æå–NMEA-0183ä¿¡æ¯
-//gpsx:nmeaä¿¡æ¯ç»“æ„ä½“
-//buf:æ¥æ”¶åˆ°çš„GPSæ•°æ®ç¼“å†²åŒºé¦–åœ°å€
-u8 GPS_Analysis(nmea_msg* gpsx, u8* buf)
+//ÌáÈ¡NMEA-0183ĞÅÏ¢
+//gpsx:nmeaĞÅÏ¢½á¹¹Ìå
+//buf:½ÓÊÕµ½µÄGPSÊı¾İ»º³åÇøÊ×µØÖ·
+u8 GPS_Analysis(nmea_msg *gpsx, u8 *buf)
 {
     u8 i;
     char word[6];
     for (i = 0; i < 5; i++)
-        word[i] = buf[i+1];
+        word[i] = buf[i + 1];
     word[i] = 0;
     if (!strcmp(word, "GPRMC"))
-        NMEA_GPRMC_Analysis(gpsx, buf); //GPRMCè§£æ
+        NMEA_GPRMC_Analysis(gpsx, buf); //GPRMC½âÎö
     else if (!strcmp(word, "GPGGA"))
-        NMEA_GPGGA_Analysis(gpsx, buf); //GPGGAè§£æ
+        NMEA_GPGGA_Analysis(gpsx, buf); //GPGGA½âÎö
     else if (!strcmp(word, "GPGSV"))
-        NMEA_GPGSV_Analysis(gpsx, buf); //GPGSVè§£æ
+        NMEA_GPGSV_Analysis(gpsx, buf); //GPGSV½âÎö
     else if (!strcmp(word, "GPGSA"))
-        NMEA_GPGSA_Analysis(gpsx, buf); //GPGSAè§£æ
+        NMEA_GPGSA_Analysis(gpsx, buf); //GPGSA½âÎö
     else if (!strcmp(word, "GPVTG"))
-        NMEA_GPVTG_Analysis(gpsx, buf); //GPVTGè§£æ
+        NMEA_GPVTG_Analysis(gpsx, buf); //GPVTG½âÎö
     else
         return 0;
     return 1;
 
-    //    NMEA_GPGSV_Analysis(gpsx, buf); //GPGSVè§£æ
-    //    NMEA_GPGGA_Analysis(gpsx, buf); //GPGGAè§£æ
-    //    NMEA_GPGSA_Analysis(gpsx, buf); //GPGSAè§£æ
-    //    NMEA_GPRMC_Analysis(gpsx, buf); //GPRMCè§£æ
-    //    NMEA_GPVTG_Analysis(gpsx, buf); //GPVTGè§£æ
+    //    NMEA_GPGSV_Analysis(gpsx, buf); //GPGSV½âÎö
+    //    NMEA_GPGGA_Analysis(gpsx, buf); //GPGGA½âÎö
+    //    NMEA_GPGSA_Analysis(gpsx, buf); //GPGSA½âÎö
+    //    NMEA_GPRMC_Analysis(gpsx, buf); //GPRMC½âÎö
+    //    NMEA_GPVTG_Analysis(gpsx, buf); //GPVTG½âÎö
 }
 
-//GPSæ ¡éªŒå’Œè®¡ç®—
-//buf:æ•°æ®ç¼“å­˜åŒºé¦–åœ°å€
-//len:æ•°æ®é•¿åº¦
-//cka,ckb:ä¸¤ä¸ªæ ¡éªŒç»“æœ.
-void Ublox_CheckSum(u8* buf, u16 len, u8* cka, u8* ckb)
+//GPSĞ£ÑéºÍ¼ÆËã
+//buf:Êı¾İ»º´æÇøÊ×µØÖ·
+//len:Êı¾İ³¤¶È
+//cka,ckb:Á½¸öĞ£Ñé½á¹û.
+void Ublox_CheckSum(u8 *buf, u16 len, u8 *cka, u8 *ckb)
 {
     u16 i;
     *cka = 0; *ckb = 0;
@@ -265,44 +263,46 @@ void Ublox_CheckSum(u8* buf, u16 len, u8* cka, u8* ckb)
     }
 }
 
-//é…ç½®UBLOX NEO-6çš„æ—¶é’Ÿè„‰å†²è¾“å‡º
-//interval:è„‰å†²é—´éš”
-//length:è„‰å†²å®½åº¦
-//status:è„‰å†²é…ç½®:1,é«˜ç”µå¹³æœ‰æ•ˆ;0,å…³é—­;-1,ä½ç”µå¹³æœ‰æ•ˆ.
+//ÅäÖÃUBLOX NEO-6µÄÊ±ÖÓÂö³åÊä³ö
+//interval:Âö³å¼ä¸ô
+//length:Âö³å¿í¶È
+//status:Âö³åÅäÖÃ:1,¸ßµçÆ½ÓĞĞ§;0,¹Ø±Õ;-1,µÍµçÆ½ÓĞĞ§.
 void Ublox_Cfg_Tp(u32 interval, u32 length, signed char status)
 {
-    _ublox_cfg_tp* cfg_tp = (_ublox_cfg_tp*)USART_TX_BUF;
+    u8 USART_TX_BUF[0xff];
+    _ublox_cfg_tp *cfg_tp = (_ublox_cfg_tp *)USART_TX_BUF;
     cfg_tp->header = 0X62B5;    //cfg header
     cfg_tp->id = 0X0706;        //cfg tp id
-    cfg_tp->dlength = 20;       //æ•°æ®åŒºé•¿åº¦ä¸º20ä¸ªå­—èŠ‚.
-    cfg_tp->interval = interval;//è„‰å†²é—´éš”,us
-    cfg_tp->length = length;    //è„‰å†²å®½åº¦,us
-    cfg_tp->status = status;    //æ—¶é’Ÿè„‰å†²é…ç½®
-    cfg_tp->timeref = 0;        //å‚è€ƒUTC æ—¶é—´
-    cfg_tp->flags = 0;          //flagsä¸º0
-    cfg_tp->reserved = 0;       //ä¿ç•™ä½ä¸º0
-    cfg_tp->antdelay = 820;     //å¤©çº¿å»¶æ—¶ä¸º820ns
-    cfg_tp->rfdelay = 0;        //RFå»¶æ—¶ä¸º0ns
-    cfg_tp->userdelay = 0;      //ç”¨æˆ·å»¶æ—¶ä¸º0ns
-    Ublox_CheckSum((u8*)(&cfg_tp->id), sizeof(_ublox_cfg_tp) - 4, &cfg_tp->cka, &cfg_tp->ckb);
-    //while (DMA1_Channel7->CNDTR != 0); //ç­‰å¾…é€šé“7ä¼ è¾“å®Œæˆ
-    //UART_DMA_Enable(DMA1_Channel7, sizeof(_ublox_cfg_tp));  //é€šè¿‡dmaå‘é€å‡ºå»
+    cfg_tp->dlength = 20;       //Êı¾İÇø³¤¶ÈÎª20¸ö×Ö½Ú.
+    cfg_tp->interval = interval;//Âö³å¼ä¸ô,us
+    cfg_tp->length = length;    //Âö³å¿í¶È,us
+    cfg_tp->status = status;    //Ê±ÖÓÂö³åÅäÖÃ
+    cfg_tp->timeref = 0;        //²Î¿¼UTC Ê±¼ä
+    cfg_tp->flags = 0;          //flagsÎª0
+    cfg_tp->reserved = 0;       //±£ÁôÎ»Îª0
+    cfg_tp->antdelay = 820;     //ÌìÏßÑÓÊ±Îª820ns
+    cfg_tp->rfdelay = 0;        //RFÑÓÊ±Îª0ns
+    cfg_tp->userdelay = 0;      //ÓÃ»§ÑÓÊ±Îª0ns
+    Ublox_CheckSum((u8 *)(&cfg_tp->id), sizeof(_ublox_cfg_tp) - 4, &cfg_tp->cka, &cfg_tp->ckb);
+    Sys_sPrintf(GPS_USART, USART_TX_BUF, sizeof(_ublox_cfg_tp));
+    USART_DMA_Enable(GPS_USART, sizeof(_ublox_cfg_tp));  //Í¨¹ıdma·¢ËÍ³öÈ¥
 }
 
-//é…ç½®UBLOX NEO-6çš„æ›´æ–°é€Ÿç‡
-//measrate:æµ‹é‡æ—¶é—´é—´éš”ï¼Œå•ä½ä¸ºmsï¼Œæœ€å°‘ä¸èƒ½å°äº200msï¼ˆ5Hzï¼‰
-//reftime:å‚è€ƒæ—¶é—´ï¼Œ0=UTC Timeï¼›1=GPS Timeï¼ˆä¸€èˆ¬è®¾ç½®ä¸º1ï¼‰
+//ÅäÖÃUBLOX NEO-6µÄ¸üĞÂËÙÂÊ
+//measrate:²âÁ¿Ê±¼ä¼ä¸ô£¬µ¥Î»Îªms£¬×îÉÙ²»ÄÜĞ¡ÓÚ200ms£¨5Hz£©
+//reftime:²Î¿¼Ê±¼ä£¬0=UTC Time£»1=GPS Time£¨Ò»°ãÉèÖÃÎª1£©
 void Ublox_Cfg_Rate(u16 measrate, u8 reftime)
 {
-    _ublox_cfg_rate* cfg_rate = (_ublox_cfg_rate*)USART_TX_BUF;
-    if (measrate < 200)return;  //å°äº200msï¼Œç›´æ¥é€€å‡º
+    u8 USART_TX_BUF[0xff];
+    _ublox_cfg_rate *cfg_rate = (_ublox_cfg_rate *)USART_TX_BUF;
+    if (measrate < 200)return;  //Ğ¡ÓÚ200ms£¬Ö±½ÓÍË³ö
     cfg_rate->header = 0X62B5;  //cfg header
     cfg_rate->id = 0X0806;      //cfg rate id
-    cfg_rate->dlength = 6;      //æ•°æ®åŒºé•¿åº¦ä¸º6ä¸ªå­—èŠ‚.
-    cfg_rate->measrate = measrate; //è„‰å†²é—´éš”,us
-    cfg_rate->navrate = 1;      //å¯¼èˆªé€Ÿç‡ï¼ˆå‘¨æœŸï¼‰ï¼Œå›ºå®šä¸º1
-    cfg_rate->timeref = reftime; //å‚è€ƒæ—¶é—´ä¸ºGPSæ—¶é—´
-    Ublox_CheckSum((u8*)(&cfg_rate->id), sizeof(_ublox_cfg_rate) - 4, &cfg_rate->cka, &cfg_rate->ckb);
-    //while (DMA1_Channel7->CNDTR != 0); //ç­‰å¾…é€šé“7ä¼ è¾“å®Œæˆ
-    //UART_DMA_Enable(DMA1_Channel7, sizeof(_ublox_cfg_rate)); //é€šè¿‡dmaå‘é€å‡ºå»
+    cfg_rate->dlength = 6;      //Êı¾İÇø³¤¶ÈÎª6¸ö×Ö½Ú.
+    cfg_rate->measrate = measrate; //Âö³å¼ä¸ô,us
+    cfg_rate->navrate = 1;      //µ¼º½ËÙÂÊ£¨ÖÜÆÚ£©£¬¹Ì¶¨Îª1
+    cfg_rate->timeref = reftime; //²Î¿¼Ê±¼äÎªGPSÊ±¼ä
+    Ublox_CheckSum((u8 *)(&cfg_rate->id), sizeof(_ublox_cfg_rate) - 4, &cfg_rate->cka, &cfg_rate->ckb);
+    Sys_sPrintf(GPS_USART, USART_TX_BUF, sizeof(_ublox_cfg_tp));
+    USART_DMA_Enable(GPS_USART, sizeof(_ublox_cfg_rate)); //Í¨¹ıdma·¢ËÍ³öÈ¥
 }

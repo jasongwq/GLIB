@@ -1,31 +1,31 @@
 #include "G32_Nrf24l01.h"
 
-uint8_t NRF24L01_RXDATA[RX_PLOAD_WIDTH];//nrf24l01æ¥æ”¶åˆ°çš„æ•°æ®
-uint8_t NRF24L01_TXDATA[RX_PLOAD_WIDTH];//nrf24l01éœ€è¦å‘é€çš„æ•°æ®
-uint8_t NRF24L01_TXDATA_RC[RX_PLOAD_WIDTH];//nrf24l01éœ€è¦å‘é€çš„æ•°æ®
-u8  TX_ADDRESS[TX_ADR_WIDTH] = {0xE1, 0xE2, 0xE3, 0x44, 0xE5}; //æœ¬åœ°åœ°å€
-u8  RX_ADDRESS[RX_ADR_WIDTH] = {0xE1, 0xE2, 0xE3, 0x44, 0xE5}; //æ¥æ”¶åœ°å€
+uint8_t NRF24L01_RXDATA[RX_PLOAD_WIDTH];//nrf24l01½ÓÊÕµ½µÄÊı¾İ
+uint8_t NRF24L01_TXDATA[RX_PLOAD_WIDTH];//nrf24l01ĞèÒª·¢ËÍµÄÊı¾İ
+uint8_t NRF24L01_TXDATA_RC[RX_PLOAD_WIDTH];//nrf24l01ĞèÒª·¢ËÍµÄÊı¾İ
+u8  TX_ADDRESS[TX_ADR_WIDTH] = {0xE1, 0xE2, 0xE3, 0x44, 0xE5}; //±¾µØµØÖ·
+u8  RX_ADDRESS[RX_ADR_WIDTH] = {0xE1, 0xE2, 0xE3, 0x44, 0xE5}; //½ÓÊÕµØÖ·
 //////////////////////////////////////////////////////////////////////////////////
-//å¤–éƒ¨ä¸­æ–­xæœåŠ¡ç¨‹åº
+//Íâ²¿ÖĞ¶Ïx·şÎñ³ÌĞò
 void EXTIX_Init(void)
 {
     EXTI_InitTypeDef EXTI_InitStructure;
     NVIC_InitTypeDef NVIC_InitStructure;
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //ä½¿èƒ½å¤ç”¨åŠŸèƒ½æ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //Ê¹ÄÜ¸´ÓÃ¹¦ÄÜÊ±ÖÓ
 
-    //GPIOX.x ä¸­æ–­çº¿ä»¥åŠä¸­æ–­åˆå§‹åŒ–é…ç½®   ä¸‹é™æ²¿è§¦å‘
+    //GPIOX.x ÖĞ¶ÏÏßÒÔ¼°ÖĞ¶Ï³õÊ¼»¯ÅäÖÃ   ÏÂ½µÑØ´¥·¢
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource7);
 
     EXTI_InitStructure.EXTI_Line = EXTI_Line7;  
     EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-    EXTI_Init(&EXTI_InitStructure);     				//æ ¹æ®EXTI_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾EXTIå¯„å­˜å™¨
+    EXTI_Init(&EXTI_InitStructure);     				//¸ù¾İEXTI_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèEXTI¼Ä´æÆ÷
 	
-    NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;            //ä½¿èƒ½æ‰€åœ¨çš„å¤–éƒ¨ä¸­æ–­é€šé“
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;//æŠ¢å ä¼˜å…ˆçº§2ï¼Œ
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x02;       //å­ä¼˜å…ˆçº§2
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;             //ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
+    NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;            //Ê¹ÄÜËùÔÚµÄÍâ²¿ÖĞ¶ÏÍ¨µÀ
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;//ÇÀÕ¼ÓÅÏÈ¼¶2£¬
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x02;       //×ÓÓÅÏÈ¼¶2
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;             //Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
     NVIC_Init(&NVIC_InitStructure);
 }
 
@@ -33,7 +33,7 @@ void EXTIX_Init(void)
 //void EXTI0_IRQHandler(void)
 //{
 //    Nrf_Check_Event_IQR();
-//    EXTI_ClearITPendingBit(EXTI_Line0); //æ¸…é™¤LINE0ä¸Šçš„ä¸­æ–­æ ‡å¿—ä½
+//    EXTI_ClearITPendingBit(EXTI_Line0); //Çå³ıLINE0ÉÏµÄÖĞ¶Ï±êÖ¾Î»
 //}
 
 #ifdef NRF24L01_SPI1
@@ -46,40 +46,40 @@ void Nrf_Spi1_Init(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
 
-    /*é…ç½® SPI_NRF_SPIçš„ SCK,MISO,MOSIå¼•è„šï¼ŒGPIOA^5,GPIOA^6,GPIOA^7 */
+    /*ÅäÖÃ SPI_NRF_SPIµÄ SCK,MISO,MOSIÒı½Å£¬GPIOA^5,GPIOA^6,GPIOA^7 */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //å¤ç”¨åŠŸèƒ½
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //¸´ÓÃ¹¦ÄÜ
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    /*é…ç½®SPI_NRF_SPIçš„CEå¼•è„š*/
+    /*ÅäÖÃSPI_NRF_SPIµÄCEÒı½Å*/
     RCC_APB2PeriphClockCmd(NRF24l01_CE_RCC, ENABLE);
     GPIO_InitStructure.GPIO_Pin = NRF24l01_CE_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(NRF24l01_CE_GPIO, &GPIO_InitStructure);
-		/*é…ç½®SPI_NRF_SPIçš„ CSN å¼•è„š*/
+		/*ÅäÖÃSPI_NRF_SPIµÄ CSN Òı½Å*/
     RCC_APB2PeriphClockCmd(NRF24l01_CSN_RCC, ENABLE);
     GPIO_InitStructure.GPIO_Pin = NRF24l01_CSN_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(NRF24l01_CSN_GPIO, &GPIO_InitStructure);
-    /*é…ç½®SPI_NRF_SPIçš„IRQå¼•è„š*/
+    /*ÅäÖÃSPI_NRF_SPIµÄIRQÒı½Å*/
     RCC_APB2PeriphClockCmd(NRF24l01_IQR_RCC, ENABLE);
     GPIO_InitStructure.GPIO_Pin = NRF24l01_IQR_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU ; //ä¸Šæ‹‰è¾“å…¥
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU ; //ÉÏÀ­ÊäÈë
     GPIO_Init(NRF24l01_IQR_GPIO, &GPIO_InitStructure);
 
     SPI_CSN_H();
-    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; //åŒçº¿å…¨åŒå·¥
-    SPI_InitStructure.SPI_Mode = SPI_Mode_Master; 		//ä¸»æ¨¡å¼
-    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b; //æ•°æ®å¤§å°8ä½
-    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low; 			//æ—¶é’Ÿææ€§ï¼Œç©ºé—²æ—¶ä¸ºä½
-    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	 	//ç¬¬1ä¸ªè¾¹æ²¿æœ‰æ•ˆï¼Œä¸Šå‡æ²¿ä¸ºé‡‡æ ·æ—¶åˆ»
-    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; 			//NSSä¿¡å·ç”±è½¯ä»¶äº§ç”Ÿ
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8; //8åˆ†é¢‘ï¼Œ9MHz
-    SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB; 	//é«˜ä½åœ¨å‰
+    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; //Ë«ÏßÈ«Ë«¹¤
+    SPI_InitStructure.SPI_Mode = SPI_Mode_Master; 		//Ö÷Ä£Ê½
+    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b; //Êı¾İ´óĞ¡8Î»
+    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low; 			//Ê±ÖÓ¼«ĞÔ£¬¿ÕÏĞÊ±ÎªµÍ
+    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	 	//µÚ1¸ö±ßÑØÓĞĞ§£¬ÉÏÉıÑØÎª²ÉÑùÊ±¿Ì
+    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; 			//NSSĞÅºÅÓÉÈí¼ş²úÉú
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8; //8·ÖÆµ£¬9MHz
+    SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB; 	//¸ßÎ»ÔÚÇ°
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI1, &SPI_InitStructure);
     /* Enable SPI1 */
@@ -96,41 +96,41 @@ void Nrf_Spi2_Init(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
 
-    /*é…ç½® SPI_NRF_SPIçš„ SCK,MISO,MOSIå¼•è„šï¼ŒGPIOB^13,GPIOB^14,GPIOB^15 */
+    /*ÅäÖÃ SPI_NRF_SPIµÄ SCK,MISO,MOSIÒı½Å£¬GPIOB^13,GPIOB^14,GPIOB^15 */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //å¤ç”¨åŠŸèƒ½
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //¸´ÓÃ¹¦ÄÜ
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-    /*é…ç½®SPI_NRF_SPIçš„CEå¼•è„š*/
+    /*ÅäÖÃSPI_NRF_SPIµÄCEÒı½Å*/
     RCC_APB2PeriphClockCmd(NRF24l01_CE_RCC, ENABLE);
     GPIO_InitStructure.GPIO_Pin = NRF24l01_CE_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(NRF24l01_CE_GPIO, &GPIO_InitStructure);
-		/*é…ç½®SPI_NRF_SPIçš„ CSN å¼•è„š:*/
+		/*ÅäÖÃSPI_NRF_SPIµÄ CSN Òı½Å:*/
     RCC_APB2PeriphClockCmd(NRF24l01_CSN_RCC, ENABLE);
     GPIO_InitStructure.GPIO_Pin = NRF24l01_CSN_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(NRF24l01_CSN_GPIO, &GPIO_InitStructure);
-    /*é…ç½®SPI_NRF_SPIçš„IRQå¼•è„šï¼Œ*/
+    /*ÅäÖÃSPI_NRF_SPIµÄIRQÒı½Å£¬*/
     RCC_APB2PeriphClockCmd(NRF24l01_IQR_RCC, ENABLE);
     GPIO_InitStructure.GPIO_Pin = NRF24l01_IQR_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU ; //ä¸Šæ‹‰è¾“å…¥
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU ; //ÉÏÀ­ÊäÈë
     GPIO_Init(NRF24l01_IQR_GPIO, &GPIO_InitStructure);
 
     SPI_CSN_H();
 
-    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; //åŒçº¿å…¨åŒå·¥
-    SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//ä¸»æ¨¡å¼
-    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;	//æ•°æ®å¤§å°8ä½
-    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;			//æ—¶é’Ÿææ€§ï¼Œç©ºé—²æ—¶ä¸ºä½
-    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge; 		//ç¬¬1ä¸ªè¾¹æ²¿æœ‰æ•ˆï¼Œä¸Šå‡æ²¿ä¸ºé‡‡æ ·æ—¶åˆ»
-    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; 			//NSSä¿¡å·ç”±è½¯ä»¶äº§ç”Ÿ
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8; //8åˆ†é¢‘ï¼Œ9MHz
-    SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB; 	//é«˜ä½åœ¨å‰
+    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; //Ë«ÏßÈ«Ë«¹¤
+    SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//Ö÷Ä£Ê½
+    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;	//Êı¾İ´óĞ¡8Î»
+    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;			//Ê±ÖÓ¼«ĞÔ£¬¿ÕÏĞÊ±ÎªµÍ
+    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge; 		//µÚ1¸ö±ßÑØÓĞĞ§£¬ÉÏÉıÑØÎª²ÉÑùÊ±¿Ì
+    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; 			//NSSĞÅºÅÓÉÈí¼ş²úÉú
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8; //8·ÖÆµ£¬9MHz
+    SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB; 	//¸ßÎ»ÔÚÇ°
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI2, &SPI_InitStructure);
     /* Enable SPI2 */
@@ -167,110 +167,110 @@ u8 Spi_RW(u8 TxData)
 #endif
 /*
 *****************************************************************
-* å†™å¯„å­˜å™¨
+* Ğ´¼Ä´æÆ÷
 *****************************************************************
 */
 uint8_t NRF_Write_Reg(uint8_t reg, uint8_t value)
 {
     uint8_t status;
-    SPI_CSN_L();                /* é€‰é€šå™¨ä»¶ */
-    status = Spi_RW(reg);       /* å†™å¯„å­˜å™¨åœ°å€ */
-    Spi_RW(value);              /* å†™æ•°æ® */
-    SPI_CSN_H();                /* ç¦æ­¢è¯¥å™¨ä»¶ */
+    SPI_CSN_L();                /* Ñ¡Í¨Æ÷¼ş */
+    status = Spi_RW(reg);       /* Ğ´¼Ä´æÆ÷µØÖ· */
+    Spi_RW(value);              /* Ğ´Êı¾İ */
+    SPI_CSN_H();                /* ½ûÖ¹¸ÃÆ÷¼ş */
     return    status;
 }
 /*
 *****************************************************************
-* è¯»å¯„å­˜å™¨
+* ¶Á¼Ä´æÆ÷
 *****************************************************************
 */
 uint8_t NRF_Read_Reg(uint8_t reg)
 {
     uint8_t reg_val;
-    SPI_CSN_L();              /* é€‰é€šå™¨ä»¶ */
-    Spi_RW(reg);              /* å†™å¯„å­˜å™¨åœ°å€ */
-    reg_val = Spi_RW(0);      /* è¯»å–è¯¥å¯„å­˜å™¨è¿”å›æ•°æ® */
-    SPI_CSN_H();              /* ç¦æ­¢è¯¥å™¨ä»¶ */
+    SPI_CSN_L();              /* Ñ¡Í¨Æ÷¼ş */
+    Spi_RW(reg);              /* Ğ´¼Ä´æÆ÷µØÖ· */
+    reg_val = Spi_RW(0);      /* ¶ÁÈ¡¸Ã¼Ä´æÆ÷·µ»ØÊı¾İ */
+    SPI_CSN_H();              /* ½ûÖ¹¸ÃÆ÷¼ş */
     return  reg_val;
 }
 /*
 *****************************************************************
-* å†™ç¼“å†²åŒº
+* Ğ´»º³åÇø
 *****************************************************************
 */
 uint8_t NRF_Write_Buf(uint8_t reg, uint8_t* pBuf, uint8_t uchars)
 {
     uint8_t i;
     uint8_t status;
-    SPI_CSN_L();            /* é€‰é€šå™¨ä»¶ */
-    status = Spi_RW(reg);   /* å†™å¯„å­˜å™¨åœ°å€ */
+    SPI_CSN_L();            /* Ñ¡Í¨Æ÷¼ş */
+    status = Spi_RW(reg);   /* Ğ´¼Ä´æÆ÷µØÖ· */
     for (i = 0; i < uchars; i++)
     {
-        Spi_RW(pBuf[i]);    /* å†™æ•°æ® */
+        Spi_RW(pBuf[i]);    /* Ğ´Êı¾İ */
     }
-    SPI_CSN_H();            /* ç¦æ­¢è¯¥å™¨ä»¶ */
+    SPI_CSN_H();            /* ½ûÖ¹¸ÃÆ÷¼ş */
     return  status;
 }
 /*
 *****************************************************************
-* è¯»ç¼“å†²åŒº
+* ¶Á»º³åÇø
 *****************************************************************
 */
 uint8_t NRF_Read_Buf(uint8_t reg, uint8_t* pBuf, uint8_t uchars)
 {
     uint8_t i;
     uint8_t status;
-    SPI_CSN_L();            /* é€‰é€šå™¨ä»¶ */
-    status = Spi_RW(reg);   /* å†™å¯„å­˜å™¨åœ°å€ */
+    SPI_CSN_L();            /* Ñ¡Í¨Æ÷¼ş */
+    status = Spi_RW(reg);   /* Ğ´¼Ä´æÆ÷µØÖ· */
     for (i = 0; i < uchars; i++)
     {
-        pBuf[i] = Spi_RW(0); /* è¯»å–è¿”å›æ•°æ® */
+        pBuf[i] = Spi_RW(0); /* ¶ÁÈ¡·µ»ØÊı¾İ */
     }
-    SPI_CSN_H();             /* ç¦æ­¢è¯¥å™¨ä»¶ */
+    SPI_CSN_H();             /* ½ûÖ¹¸ÃÆ÷¼ş */
     return  status;
 }
 /*
 *****************************************************************
-* å†™æ•°æ®åŒ…
+* Ğ´Êı¾İ°ü
 *****************************************************************
 */
 void NRF_TxPacket(uint8_t* tx_buf, uint8_t len)
 {
-    SPI_CE_L();      //StandBy Iæ¨¡å¼
-    NRF_Write_Buf(NRF_WRITE_REG + RX_ADDR_P0, TX_ADDRESS, TX_ADR_WIDTH); // è£…è½½æ¥æ”¶ç«¯åœ°å€
-    NRF_Write_Buf(WR_TX_PLOAD, tx_buf, len);             // è£…è½½æ•°æ®
-    SPI_CE_H();      //ç½®é«˜CEï¼Œæ¿€å‘æ•°æ®å‘é€
+    SPI_CE_L();      //StandBy IÄ£Ê½
+    NRF_Write_Buf(NRF_WRITE_REG + RX_ADDR_P0, TX_ADDRESS, TX_ADR_WIDTH); // ×°ÔØ½ÓÊÕ¶ËµØÖ·
+    NRF_Write_Buf(WR_TX_PLOAD, tx_buf, len);             // ×°ÔØÊı¾İ
+    SPI_CE_H();      //ÖÃ¸ßCE£¬¼¤·¢Êı¾İ·¢ËÍ
 }
 void NRF_TxPacket_AP(uint8_t* tx_buf, uint8_t len)
 {
-    SPI_CE_L();      //StandBy Iæ¨¡å¼
-    NRF_Write_Buf(0xa8, tx_buf, len);            // è£…è½½æ•°æ®
-    SPI_CE_H();      //ç½®é«˜CE
+    SPI_CE_L();      //StandBy IÄ£Ê½
+    NRF_Write_Buf(0xa8, tx_buf, len);            // ×°ÔØÊı¾İ
+    SPI_CE_H();      //ÖÃ¸ßCE
 }
 u8 Nrf24l01_Check(void)
 {
     u8 buf1[5];
     u8 i;
-    /*å†™å…¥5ä¸ªå­—èŠ‚çš„åœ°å€. */
+    /*Ğ´Èë5¸ö×Ö½ÚµÄµØÖ·. */
     NRF_Write_Buf(NRF_WRITE_REG + TX_ADDR, TX_ADDRESS, 5);
-    /*è¯»å‡ºå†™å…¥çš„åœ°å€ */
+    /*¶Á³öĞ´ÈëµÄµØÖ· */
     NRF_Read_Buf(TX_ADDR, buf1, 5);
-    /*æ¯”è¾ƒ*/
+    /*±È½Ï*/
     for (i = 0; i < 5; i++)
     {
         if (buf1[i] != TX_ADDRESS[i])
             break;
     }
     if (i == 5)
-        return SUCCESS ; //MCUä¸NRFæˆåŠŸè¿æ¥
+        return SUCCESS ; //MCUÓëNRF³É¹¦Á¬½Ó
     else
-        return ERROR ; //MCUä¸NRFä¸æ­£å¸¸è¿æ¥
+        return ERROR ; //MCUÓëNRF²»Õı³£Á¬½Ó
 }
 //MODEL_TX2,40
 /*
-24L01åˆå§‹åŒ–
-modelï¼š24L01 æ¨¡å¼
-chï¼š   é€šé“
+24L01³õÊ¼»¯
+model£º24L01 Ä£Ê½
+ch£º   Í¨µÀ
 */
 void Nrf24l01_Init(u8 model, u8 ch)
 {
@@ -284,30 +284,30 @@ void Nrf24l01_Init(u8 model, u8 ch)
 #endif
 		EXTIX_Init();
     SPI_CE_L();
-    NRF_Write_Buf(NRF_WRITE_REG + RX_ADDR_P0, RX_ADDRESS, RX_ADR_WIDTH);//å†™RXèŠ‚ç‚¹åœ°å€
-    NRF_Write_Buf(NRF_WRITE_REG + TX_ADDR, TX_ADDRESS, TX_ADR_WIDTH);   //å†™TXèŠ‚ç‚¹åœ°å€
-    NRF_Write_Reg(NRF_WRITE_REG + EN_AA, 0x01);     					//ä½¿èƒ½é€šé“0çš„è‡ªåŠ¨åº”ç­”
-    NRF_Write_Reg(NRF_WRITE_REG + EN_RXADDR, 0x01); 					//ä½¿èƒ½é€šé“0çš„æ¥æ”¶åœ°å€
-    NRF_Write_Reg(NRF_WRITE_REG + SETUP_RETR, 0x1a);					//è®¾ç½®è‡ªåŠ¨é‡å‘é—´éš”æ—¶é—´:500us;æœ€å¤§è‡ªåŠ¨é‡å‘æ¬¡æ•°:10æ¬¡
-    NRF_Write_Reg(NRF_WRITE_REG + RF_CH, ch);       					//è®¾ç½®RFé€šé“ä¸ºCHANAL
-    NRF_Write_Reg(NRF_WRITE_REG + RF_SETUP, 0x0f);  					//è®¾ç½®TXå‘å°„å‚æ•°,0dbå¢ç›Š,2Mbps,ä½å™ªå£°å¢ç›Šå¼€å¯
-    //NRF_Write_Reg(NRF_WRITE_REG+RF_SETUP,0x07);   					//è®¾ç½®TXå‘å°„å‚æ•°,0dbå¢ç›Š,1Mbps,ä½å™ªå£°å¢ç›Šå¼€å¯
+    NRF_Write_Buf(NRF_WRITE_REG + RX_ADDR_P0, RX_ADDRESS, RX_ADR_WIDTH);//Ğ´RX½ÚµãµØÖ·
+    NRF_Write_Buf(NRF_WRITE_REG + TX_ADDR, TX_ADDRESS, TX_ADR_WIDTH);   //Ğ´TX½ÚµãµØÖ·
+    NRF_Write_Reg(NRF_WRITE_REG + EN_AA, 0x01);     					//Ê¹ÄÜÍ¨µÀ0µÄ×Ô¶¯Ó¦´ğ
+    NRF_Write_Reg(NRF_WRITE_REG + EN_RXADDR, 0x01); 					//Ê¹ÄÜÍ¨µÀ0µÄ½ÓÊÕµØÖ·
+    NRF_Write_Reg(NRF_WRITE_REG + SETUP_RETR, 0x1a);					//ÉèÖÃ×Ô¶¯ÖØ·¢¼ä¸ôÊ±¼ä:500us;×î´ó×Ô¶¯ÖØ·¢´ÎÊı:10´Î
+    NRF_Write_Reg(NRF_WRITE_REG + RF_CH, ch);       					//ÉèÖÃRFÍ¨µÀÎªCHANAL
+    NRF_Write_Reg(NRF_WRITE_REG + RF_SETUP, 0x0f);  					//ÉèÖÃTX·¢Éä²ÎÊı,0dbÔöÒæ,2Mbps,µÍÔëÉùÔöÒæ¿ªÆô
+    //NRF_Write_Reg(NRF_WRITE_REG+RF_SETUP,0x07);   					//ÉèÖÃTX·¢Éä²ÎÊı,0dbÔöÒæ,1Mbps,µÍÔëÉùÔöÒæ¿ªÆô
     /////////////////////////////////////////////////////////
     if (model == 1)             //RX
     {
-        NRF_Write_Reg(NRF_WRITE_REG + RX_PW_P0, RX_PLOAD_WIDTH);                            //é€‰æ‹©é€šé“0çš„æœ‰æ•ˆæ•°æ®å®½åº¦
-        NRF_Write_Reg(NRF_WRITE_REG + CONFIG, 0x0f);         // IRQæ”¶å‘å®Œæˆä¸­æ–­å¼€å¯,16ä½CRC,ä¸»æ¥æ”¶
+        NRF_Write_Reg(NRF_WRITE_REG + RX_PW_P0, RX_PLOAD_WIDTH);                            //Ñ¡ÔñÍ¨µÀ0µÄÓĞĞ§Êı¾İ¿í¶È
+        NRF_Write_Reg(NRF_WRITE_REG + CONFIG, 0x0f);         // IRQÊÕ·¢Íê³ÉÖĞ¶Ï¿ªÆô,16Î»CRC,Ö÷½ÓÊÕ
     }
     else if (model == 2)    //TX
     {
-        NRF_Write_Reg(NRF_WRITE_REG + RX_PW_P0, RX_PLOAD_WIDTH);                            //é€‰æ‹©é€šé“0çš„æœ‰æ•ˆæ•°æ®å®½åº¦
-        NRF_Write_Reg(NRF_WRITE_REG + CONFIG, 0x0e);         // IRQæ”¶å‘å®Œæˆä¸­æ–­å¼€å¯,16ä½CRC,ä¸»å‘é€
+        NRF_Write_Reg(NRF_WRITE_REG + RX_PW_P0, RX_PLOAD_WIDTH);                            //Ñ¡ÔñÍ¨µÀ0µÄÓĞĞ§Êı¾İ¿í¶È
+        NRF_Write_Reg(NRF_WRITE_REG + CONFIG, 0x0e);         // IRQÊÕ·¢Íê³ÉÖĞ¶Ï¿ªÆô,16Î»CRC,Ö÷·¢ËÍ
     }
     else if (model == 3)    //RX2
     {
         NRF_Write_Reg(FLUSH_TX, 0xff);
         NRF_Write_Reg(FLUSH_RX, 0xff);
-        NRF_Write_Reg(NRF_WRITE_REG + CONFIG, 0x0f);         // IRQæ”¶å‘å®Œæˆä¸­æ–­å¼€å¯,16ä½CRC,ä¸»æ¥æ”¶
+        NRF_Write_Reg(NRF_WRITE_REG + CONFIG, 0x0f);         // IRQÊÕ·¢Íê³ÉÖĞ¶Ï¿ªÆô,16Î»CRC,Ö÷½ÓÊÕ
 
         Spi_RW(0x50);
         Spi_RW(0x73);
@@ -316,7 +316,7 @@ void Nrf24l01_Init(u8 model, u8 ch)
     }
     else if (model == 4)    //TX2
     {
-        NRF_Write_Reg(NRF_WRITE_REG + CONFIG, 0x0e);         // IRQæ”¶å‘å®Œæˆä¸­æ–­å¼€å¯,16ä½CRC,ä¸»å‘é€
+        NRF_Write_Reg(NRF_WRITE_REG + CONFIG, 0x0e);         // IRQÊÕ·¢Íê³ÉÖĞ¶Ï¿ªÆô,16Î»CRC,Ö÷·¢ËÍ
         NRF_Write_Reg(FLUSH_TX, 0xff);
         NRF_Write_Reg(FLUSH_RX, 0xff);
 

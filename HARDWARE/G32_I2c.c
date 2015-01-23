@@ -11,7 +11,7 @@ Soft_I2cx1_SCL     |   PB6   |  PB8                  |
 Soft_I2cx1_SDA     |   PB7   |  PB9                  |
 *****************************************************/
 /*
-è½¯ä»¶æ¨¡æ‹ŸI2cx
+Èí¼þÄ£ÄâI2cx
 2014/7/8
 2013/7/19
 */
@@ -48,12 +48,12 @@ Soft_I2cx1_SDA     |   PB7   |  PB9                  |
 void Soft_I2cx_Init(void)
 {
     GPIO_InitTypeDef Soft_I2cx_GPIO;
-    RCC_APB2PeriphClockCmd(RCC_Soft_I2cx_SCL, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(RCC_Soft_I2cx_SCL, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
     Soft_I2cx_GPIO.GPIO_Pin = Soft_I2cx_SCL_PIN;
     Soft_I2cx_GPIO.GPIO_Speed = GPIO_Speed_10MHz;
     Soft_I2cx_GPIO.GPIO_Mode = GPIO_Mode_Out_OD;
     GPIO_Init(Soft_I2cx_SCL_GPIO, &Soft_I2cx_GPIO);
-    RCC_APB2PeriphClockCmd(RCC_Soft_I2cx_SDA, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(RCC_Soft_I2cx_SDA, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
     Soft_I2cx_GPIO.GPIO_Pin = Soft_I2cx_SDA_PIN;
     Soft_I2cx_GPIO.GPIO_Speed = GPIO_Speed_2MHz;
     Soft_I2cx_GPIO.GPIO_Mode = GPIO_Mode_Out_OD;
@@ -169,13 +169,13 @@ static u8 Soft_I2cx_ReceiveBety(void)
     return byte;
 }
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:å•å­—èŠ‚å†™å…¥
-/ è¾“å…¥å‚æ•°:
-/   @arg SlaveAddress   ä»Žå™¨ä»¶åœ°å€
-/   @arg REG_Address    å¯„å­˜å™¨åœ°å€
-/   @arg data       æ¬²å†™å…¥çš„å­—èŠ‚æ•°æ®
-/ è¾“å‡ºå‚æ•°: è¯»å‡ºçš„å­—èŠ‚æ•°æ®
-/ ä½¿ç”¨è¯´æ˜Ž:è¿™æ—¶ä¸€ä¸ªå®Œæ•´çš„å•å­—èŠ‚è¯»å–å‡½æ•°
+/ º¯Êý¹¦ÄÜ:µ¥×Ö½ÚÐ´Èë
+/ ÊäÈë²ÎÊý:
+/   @arg SlaveAddress   ´ÓÆ÷¼þµØÖ·
+/   @arg REG_Address    ¼Ä´æÆ÷µØÖ·
+/   @arg data       ÓûÐ´ÈëµÄ×Ö½ÚÊý¾Ý
+/ Êä³ö²ÎÊý: ¶Á³öµÄ×Ö½ÚÊý¾Ý
+/ Ê¹ÓÃËµÃ÷:ÕâÊ±Ò»¸öÍêÕûµÄµ¥×Ö½Ú¶ÁÈ¡º¯Êý
 ******************************************************************************/
 bool Soft_I2cx_Write(u8 SlaveAddress, u8 REG_Address, u8 data)
 {
@@ -227,7 +227,7 @@ uint8_t Soft_I2cx_Read(u8 addr, u8 reg)
 {
     uint8_t REG_data;
     if (!Soft_I2cx_Start())return false;
-    Soft_I2cx_SendBety(addr); //Soft_I2cx_SendByte(((REG_Address & 0x0700) >>7) | REG_Address & 0xFFFE);//Ã‰Ã¨Ã–ÃƒÂ¸ÃŸÃ†Ã°ÃŠÂ¼ÂµÃ˜Ã–Â·+Ã†Ã·Â¼Ã¾ÂµÃ˜Ã–Â·
+    Soft_I2cx_SendBety(addr); //Soft_I2cx_SendByte(((REG_Address & 0x0700) >>7) | REG_Address & 0xFFFE);//'E¨¨"O~A,ssAEd^E 1/4 uO"O¡¤+AE¡Â 1/4 thuO"O¡¤
     if (!Soft_I2cx_WaitAck())
     {
         Soft_I2cx_Stop();
@@ -380,12 +380,12 @@ int8_t i2cread(uint8_t addr, uint8_t reg, uint8_t len, uint8_t *data)
 //void Soft_I2cx_Init(void)
 //{
 //    GPIO_InitTypeDef Soft_I2cx_GPIO;
-//    RCC_APB2PeriphClockCmd(RCC_Soft_I2cx_SCL, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
+//    RCC_APB2PeriphClockCmd(RCC_Soft_I2cx_SCL, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
 //    Soft_I2cx_GPIO.GPIO_Pin = Soft_I2cx_SCL_PIN;
 //    Soft_I2cx_GPIO.GPIO_Speed = GPIO_Speed_10MHz;
 //    Soft_I2cx_GPIO.GPIO_Mode = GPIO_Mode_Out_OD;
 //    GPIO_Init(Soft_I2cx_SCL_GPIO, &Soft_I2cx_GPIO);
-//    RCC_APB2PeriphClockCmd(RCC_Soft_I2cx_SDA, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
+//    RCC_APB2PeriphClockCmd(RCC_Soft_I2cx_SDA, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
 //    Soft_I2cx_GPIO.GPIO_Pin = Soft_I2cx_SDA_PIN;
 //    Soft_I2cx_GPIO.GPIO_Speed = GPIO_Speed_2MHz;
 //    Soft_I2cx_GPIO.GPIO_Mode = GPIO_Mode_Out_OD;
@@ -501,13 +501,13 @@ int8_t i2cread(uint8_t addr, uint8_t reg, uint8_t len, uint8_t *data)
 //    return byte;
 //}
 ///******************************************************************************
-/// å‡½æ•°åŠŸèƒ½:å•å­—èŠ‚å†™å…¥
-/// è¾“å…¥å‚æ•°:
-///   @arg SlaveAddress   ä»Žå™¨ä»¶åœ°å€
-///   @arg REG_Address    å¯„å­˜å™¨åœ°å€
-///   @arg data       æ¬²å†™å…¥çš„å­—èŠ‚æ•°æ®
-/// è¾“å‡ºå‚æ•°: è¯»å‡ºçš„å­—èŠ‚æ•°æ®
-/// ä½¿ç”¨è¯´æ˜Ž:è¿™æ—¶ä¸€ä¸ªå®Œæ•´çš„å•å­—èŠ‚è¯»å–å‡½æ•°
+/// º¯Êý¹¦ÄÜ:µ¥×Ö½ÚÐ´Èë
+/// ÊäÈë²ÎÊý:
+///   @arg SlaveAddress   ´ÓÆ÷¼þµØÖ·
+///   @arg REG_Address    ¼Ä´æÆ÷µØÖ·
+///   @arg data       ÓûÐ´ÈëµÄ×Ö½ÚÊý¾Ý
+/// Êä³ö²ÎÊý: ¶Á³öµÄ×Ö½ÚÊý¾Ý
+/// Ê¹ÓÃËµÃ÷:ÕâÊ±Ò»¸öÍêÕûµÄµ¥×Ö½Ú¶ÁÈ¡º¯Êý
 //******************************************************************************/
 //bool Soft_I2cx_Write(u8 SlaveAddress, u8 REG_Address, u8 data)
 //{
@@ -559,7 +559,7 @@ int8_t i2cread(uint8_t addr, uint8_t reg, uint8_t len, uint8_t *data)
 //{
 //    uint8_t REG_data;
 //    if (!Soft_I2cx_Start())return false;
-//    Soft_I2cx_SendBety(addr); //Soft_I2cx_SendByte(((REG_Address & 0x0700) >>7) | REG_Address & 0xFFFE);//Ã‰Ã¨Ã–ÃƒÂ¸ÃŸÃ†Ã°ÃŠÂ¼ÂµÃ˜Ã–Â·+Ã†Ã·Â¼Ã¾ÂµÃ˜Ã–Â·
+//    Soft_I2cx_SendBety(addr); //Soft_I2cx_SendByte(((REG_Address & 0x0700) >>7) | REG_Address & 0xFFFE);//'E¨¨"O~A,ssAEd^E 1/4 uO"O¡¤+AE¡Â 1/4 thuO"O¡¤
 //    if (!Soft_I2cx_WaitAck())
 //    {
 //        Soft_I2cx_Stop();

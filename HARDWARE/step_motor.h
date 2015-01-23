@@ -2,7 +2,7 @@
 #define __STEP_MOTOR_H
 #include "sys.h"
 
-//LEDç«¯å£å®šä¹‰
+//LED¶Ë¿Ú¶¨Òå
 #define MOTOR0_0 PDout(0)// A+
 #define MOTOR0_1 PDout(1)// A- 
 #define MOTOR0_2 PDout(2)// B+

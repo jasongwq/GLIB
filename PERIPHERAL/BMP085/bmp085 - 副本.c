@@ -1,28 +1,28 @@
-//æ°”å‹è®¡ä¼ æ„Ÿå™¨
+//ÆøÑ¹¼Æ´«¸ĞÆ÷
 
 
 /******************************************************************************
-*********************************  åº” ç”¨ èµ„ æ–™ ********************************
-å•ä½:  1kpa =10hpa
-è¾“å‡º: UT:0.1è¯»,å¦‚304å³30.4åº¦
-è¾“å‡º: UP:pa,å¦‚100635å³100.635kPa
+*********************************  Ó¦ ÓÃ ×Ê ÁÏ ********************************
+µ¥Î»:  1kpa =10hpa
+Êä³ö: UT:0.1¶Á,Èç304¼´30.4¶È
+Êä³ö: UP:pa,Èç100635¼´100.635kPa
 ******************************************************************************/
 #include "./bmp085.h"
 #include <stdio.h>
 
-/*** è½¯ä»¶ ***/
+/*** Èí¼ş ***/
 #define I2c_Write      Soft_I2c1_Write
 #define I2c_ReadBuffer Soft_I2c1_ReadBuffer
 #define I2c_Init       Soft_I2c1_Init
-/*** è½¯ä»¶ ***/
+/*** Èí¼ş ***/
 
-/****************************** è‡ªå®šä¹‰å‚æ•°é…ç½® *******************************/
-#define   OSS 0  // BMP085ä½¿ç”¨
-/******************************** æ•° æ® å£° æ˜ ********************************/
+/****************************** ×Ô¶¨Òå²ÎÊıÅäÖÃ *******************************/
+#define   OSS 0  // BMP085Ê¹ÓÃ
+/******************************** Êı ¾İ Éù Ã÷ ********************************/
 
 tg_BMP085_TYPE   bmp085;
 
-//***BMP085ä½¿ç”¨
+//***BMP085Ê¹ÓÃ
 short ac1;
 short ac2;
 short ac3;
@@ -38,21 +38,21 @@ short md;
 float ref_Altitude;
 
 /*---------------------*
-*       å†…éƒ¨è‡ªç”¨       *
+*       ÄÚ²¿×ÔÓÃ       *
 *----------------------*/
 float BMP085_GetAltitude(int32_t up);
 
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:åˆå§‹åŒ–BMP085
+/ º¯Êı¹¦ÄÜ:³õÊ¼»¯BMP085
 ******************************************************************************/
 void  BMP085_Init(void)
 {
     uint8_t tmp[22];
 
-    I2c_ReadBuffer(BMP085_Addr, 0xAA, 22, tmp); //è¯»å‡º22ä¸ªæ•°æ®
+    I2c_ReadBuffer(BMP085_Addr, 0xAA, 22, tmp); //¶Á³ö22¸öÊı¾İ
 
-    //æ•´åˆå‚æ•°ä¸ºint16_tç±»å‹
+    //ÕûºÏ²ÎÊıÎªint16_tÀàĞÍ
     ac1 = (int16_t)( (tmp[0] << 8) + tmp[1]  );
     ac2 = (int16_t)( (tmp[2] << 8) + tmp[3]  );
     ac3 = (int16_t)( (tmp[4] << 8) + tmp[5]  );
@@ -77,7 +77,7 @@ static int32_t bmp085ReadTemp(void)
     I2c_Write(BMP085_Addr, 0xF4, 0x2E);
     delay_ms(5); // max time is 4.5ms
     uint8_t tmp[2];
-    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //è¯»å‡º2ä¸ªæ•°æ®
+    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //¶Á³ö2¸öÊı¾İ
     temp_ut = (int16_t)( (tmp[0] << 8) + tmp[1]  );
     return (int32_t) temp_ut ;
 }
@@ -92,15 +92,15 @@ static int32_t bmp085ReadPressure(void)
     I2c_Write(BMP085_Addr, 0xF4, 0x34);
     delay_ms(5); // max time is 4.5ms
     uint8_t tmp[2];
-    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //è¯»å‡º2ä¸ªæ•°æ®
+    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //¶Á³ö2¸öÊı¾İ
     pressure = (int16_t)( (tmp[0] << 8) + tmp[1]  );
-    pressure &= 0x0000FFFF; //ä¸èƒ½å»æ‰ åŸå› æœªçŸ¥
+    pressure &= 0x0000FFFF; //²»ÄÜÈ¥µô Ô­ÒòÎ´Öª
     return pressure;
 }
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:æ ¹æ®utå’Œupæµ‹é‡å€¼è®¡ç®—æ¸©åº¦è¾“å‡ºå’Œæ°”å‹,ä»¥åŠæµ·æ‹”
-/ ä½¿ç”¨è¯´æ˜:350usè®¡ç®—æ—¶é—´
+/ º¯Êı¹¦ÄÜ:¸ù¾İutºÍup²âÁ¿Öµ¼ÆËãÎÂ¶ÈÊä³öºÍÆøÑ¹,ÒÔ¼°º£°Î
+/ Ê¹ÓÃËµÃ÷:350us¼ÆËãÊ±¼ä
 ******************************************************************************/
 void Calculate(int32_t inUt, int32_t inUp, tg_BMP085_TYPE *ptOut)
 {
@@ -108,13 +108,13 @@ void Calculate(int32_t inUt, int32_t inUp, tg_BMP085_TYPE *ptOut)
     uint32_t b4, b7;
     float a;
 
-    //**************** ç®—æ¸©åº¦
+    //**************** ËãÎÂ¶È
     x1 = ((int32_t)inUt - ac6) * ac5 >> 15;
     x2 = ((int32_t) mc << 11) / (x1 + md);
     b5 = x1 + x2;
     ptOut->temp = (b5 + 8) >> 4;
 
-    //**************** ç®—æ°”å‹
+    //**************** ËãÆøÑ¹
     b6 = b5 - 4000;
     x1 = (b2 * (b6 * b6 >> 12)) >> 11;
     x2 = ac2 * b6 >> 11;
@@ -132,7 +132,7 @@ void Calculate(int32_t inUt, int32_t inUp, tg_BMP085_TYPE *ptOut)
     x2 = (-7357 * p) >> 16;
     ptOut->pressure = p + ((x1 + x2 + 3791) >> 4);
 
-    //ç®—æµ·æ‹”é«˜åº¦
+    //Ëãº£°Î¸ß¶È
     a = (float)ptOut->pressure;
     a = pow(a / P0_PRESSURE, 0.190294957f);
     a = (1.0 - a) * 44330.0f;
@@ -140,19 +140,19 @@ void Calculate(int32_t inUt, int32_t inUp, tg_BMP085_TYPE *ptOut)
 }
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:è¯»å–BMP085ä¼ æ„Ÿå™¨æ•°æ®è¯»æŒ‡å®šç¼“å†²åŒº
+/ º¯Êı¹¦ÄÜ:¶ÁÈ¡BMP085´«¸ĞÆ÷Êı¾İ¶ÁÖ¸¶¨»º³åÇø
 ******************************************************************************/
 void BMP085_Read(tg_BMP085_TYPE *ptResult)
 {
     int32_t  ut, up;
-    ut = bmp085ReadTemp();      // è¯»å–æ¸©åº¦
-    up = bmp085ReadPressure();  // è¯»å–å‹å¼º
-    Calculate(ut, up, ptResult); //è®¡ç®—ç»“æœæ”¾å…¥ç»“æ„ä½“
+    ut = bmp085ReadTemp();      // ¶ÁÈ¡ÎÂ¶È
+    up = bmp085ReadPressure();  // ¶ÁÈ¡Ñ¹Ç¿
+    Calculate(ut, up, ptResult); //¼ÆËã½á¹û·ÅÈë½á¹¹Ìå
 }
 
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:æ‰“å°BMP085çš„ä¼ æ„Ÿå™¨æ•°æ®
+/ º¯Êı¹¦ÄÜ:´òÓ¡BMP085µÄ´«¸ĞÆ÷Êı¾İ
 ******************************************************************************/
 void  BMP085_Printf(tg_BMP085_TYPE *ptResult)
 {
@@ -165,7 +165,7 @@ void  BMP085_Printf(tg_BMP085_TYPE *ptResult)
 }
 
 /******************************************************************************
-/ å‡½æ•°åŠŸèƒ½:æ ¡å‡†BMP085çš„æµ·æ‹”é«˜åº¦
+/ º¯Êı¹¦ÄÜ:Ğ£×¼BMP085µÄº£°Î¸ß¶È
 ******************************************************************************/
 void BMP085_Calibrate(void)
 {
@@ -173,16 +173,16 @@ void BMP085_Calibrate(void)
     tg_BMP085_TYPE tmp_Bmp085;
 
     up = ut = 0;
-    ref_Altitude = 0;               //è¡¥å¿å½’é›¶
+    ref_Altitude = 0;               //²¹³¥¹éÁã
     for (i = 0; i < 50; i++)
     {
-        ut += bmp085ReadTemp();     // è¯»å–æ¸©åº¦
-        up += bmp085ReadPressure(); // è¯»å–å‹å¼º
+        ut += bmp085ReadTemp();     // ¶ÁÈ¡ÎÂ¶È
+        up += bmp085ReadPressure(); // ¶ÁÈ¡Ñ¹Ç¿
     }
-    ut /= 50;                        // å–æ¸©åº¦å¹³å‡å€¼
-    up /= 50;                        // å–æ°”å‹å¹³å‡å€¼
-    Calculate(ut, up, &tmp_Bmp085);     // è®¡ç®—æ¸©åº¦æ°”å‹å’Œé«˜åº¦
-    ref_Altitude = tmp_Bmp085.altitude; //å¾—åˆ°äº§è€ƒå€¼
+    ut /= 50;                        // È¡ÎÂ¶ÈÆ½¾ùÖµ
+    up /= 50;                        // È¡ÆøÑ¹Æ½¾ùÖµ
+    Calculate(ut, up, &tmp_Bmp085);     // ¼ÆËãÎÂ¶ÈÆøÑ¹ºÍ¸ß¶È
+    ref_Altitude = tmp_Bmp085.altitude; //µÃµ½²ú¿¼Öµ
 }
 
 
@@ -196,7 +196,7 @@ int16_t BMP085_temperature_get(void)
 {
     int16_t  temp_ut;
     uint8_t tmp[2];
-    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //è¯»å‡º2ä¸ªæ•°æ®
+    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //¶Á³ö2¸öÊı¾İ
     temp_ut = (int16_t)( (tmp[0] << 8) + tmp[1]  );
     return temp_ut;
 }
@@ -204,7 +204,7 @@ int16_t BMP085_pressure_get(void)
 {
 	  int32_t temp_up = 0;
     uint8_t tmp[2];
-    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //è¯»å‡º2ä¸ªæ•°æ®
+    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //¶Á³ö2¸öÊı¾İ
     temp_up = (int16_t)( (tmp[0] << 8) + tmp[1]  );
     return temp_up;
 }
@@ -216,7 +216,7 @@ void BMP085_Calculate(int16_t ut, tg_BMP085_TYPE *ptResult)
 {
     int32_t pressure = 0;
     uint8_t tmp[2];
-    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //è¯»å‡º2ä¸ªæ•°æ®
+    I2c_ReadBuffer(BMP085_Addr, 0xF6, 2, tmp); //¶Á³ö2¸öÊı¾İ
     pressure = (int16_t)( (tmp[0] << 8) + tmp[1]  );
 #define FILTERNUM 5
     static int16_t temp_pressure[FILTERNUM];
@@ -230,8 +230,8 @@ void BMP085_Calculate(int16_t ut, tg_BMP085_TYPE *ptResult)
     pressure = temp / FILTERNUM;
     filter_cnt++;
     if (filter_cnt >= FILTERNUM)filter_cnt = 0;
-    pressure &= 0x0000FFFF; //ä¸èƒ½å»æ‰ åŸå› æœªçŸ¥
-    Calculate((int32_t)ut, (int32_t)pressure, ptResult); //è®¡ç®—ç»“æœæ”¾å…¥ç»“æ„ä½“
+    pressure &= 0x0000FFFF; //²»ÄÜÈ¥µô Ô­ÒòÎ´Öª
+    Calculate((int32_t)ut, (int32_t)pressure, ptResult); //¼ÆËã½á¹û·ÅÈë½á¹¹Ìå
 }
 
 
