@@ -1,7 +1,7 @@
 #ifndef __LCD_H
 #define __LCD_H
 #ifdef __cplusplus
-       extern "C" {
+extern "C" {
 #endif
 #include "sys.h"
 #include "ili93.h"
@@ -267,12 +267,12 @@ extern s8 curve[];
 #define R192           0xC0
 #define R193           0xC1
 #define R229           0xE5	
-#endif
+
 	 
 #ifdef __cplusplus
-        }
+}
 #endif
-
+#endif
 
 
 

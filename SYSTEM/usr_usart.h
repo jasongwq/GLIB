@@ -1,7 +1,7 @@
 #ifndef __USR_USART_H_
 #define __USR_USART_H_
 #ifdef __cplusplus
-       extern "C" {
+extern "C" {
 #endif
 #include "sys.h"
 #include "sys_usart.h"

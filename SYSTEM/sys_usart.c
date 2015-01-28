@@ -6,7 +6,8 @@ int Sys_Printf(USART_TypeDef *USARTx, char *Data, ...)
     char sprintf_buf[0xff];
     __va_list ap;//定义一个va_list类型的变量，用来储存单个参数
     va_start(ap, Data);//使args指向可变参数的第一个参数
-    int num = vsprintf(sprintf_buf, Data, ap);
+    int num=0;
+		num= vsprintf(sprintf_buf, Data, ap);
     va_end(ap);
     Sys_sPrintf(USARTx, (u8 *)sprintf_buf, num);
     return num;

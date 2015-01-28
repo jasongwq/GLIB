@@ -69,14 +69,14 @@ void TP_Adjust(void);                           //触摸屏校准
 void TP_TestAdjust(void);
 u8 TP_Init(void);                               //初始化
 void TP_Adj_Info_Show(u16 x0, u16 y0, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u16 fac); //显示校准信息
-#endif
 
 
 
 #ifdef __cplusplus
-        }
+}
 #endif
 
+#endif
 
 
 

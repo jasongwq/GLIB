@@ -23,48 +23,48 @@
 //从字库中查找出字模
 //code 字符串的开始地址,GBK码
 //mat  数据存放地址 size*2 bytes大小
-void Get_HzMat(unsigned char* code, unsigned char* mat, u8 size)
-{
-    FIL fsrc;
-    FRESULT res;
-    UINT br;
-    unsigned char qh, ql;
-    unsigned char i;
-    unsigned long foffset;
-    qh = *code;
-    ql = *(++code);
-    if (qh < 0x81 || ql < 0x40 || ql == 0xff || qh == 0xff) //? ????
-    {
-        for (i = 0; i < (size * 2); i++)*mat++ = 0x00; //????
-        return; //????
-    }
-    if (ql < 0x7f)ql -= 0x40; //??!
-    else ql -= 0x41;
-    qh -= 0x81;
-    foffset = ((unsigned long)190 * qh + ql) * (size * 2); //???????????
-    if (size == 16)
-    {
-        res = f_open(&fsrc, "0:/SYSTEM/FONT/GBK16.FON", FA_OPEN_EXISTING | FA_READ);   //??????
-        if (res != FR_OK)
-        {
+ void Get_HzMat(unsigned char* code, unsigned char* mat, u8 size)
+ {
+     FIL fsrc;
+     FRESULT res;
+     UINT br;
+     unsigned char qh, ql;
+     unsigned char i;
+     unsigned long foffset;
+     qh = *code;
+     ql = *(++code);
+     if (qh < 0x81 || ql < 0x40 || ql == 0xff || qh == 0xff) //? ????
+     {
+         for (i = 0; i < (size * 2); i++)*mat++ = 0x00; //????
+         return; //????
+     }
+     if (ql < 0x7f)ql -= 0x40; //??!
+     else ql -= 0x41;
+     qh -= 0x81;
+     foffset = ((unsigned long)190 * qh + ql) * (size * 2); //???????????
+     if (size == 16)
+     {
+         res = f_open(&fsrc, "0:/SYSTEM/FONT/GBK16.FON", FA_OPEN_EXISTING | FA_READ);   //??????
+         if (res != FR_OK)
+         {
 
-        }
-        res = f_lseek(&fsrc, foffset); //?????
-        res = f_read(&fsrc, mat, 32, &br);
-        res = f_close(&fsrc); //????
-    }
-    else
-    {
-        res = f_open(&fsrc, "0:/SYSTEM/FONT/GBK12.FON", FA_OPEN_EXISTING | FA_READ);   //??????
-        if (res != FR_OK)
-        {
+         }
+         res = f_lseek(&fsrc, foffset); //?????
+         res = f_read(&fsrc, mat, 32, &br);
+         res = f_close(&fsrc); //????
+     }
+     else
+     {
+         res = f_open(&fsrc, "0:/SYSTEM/FONT/GBK12.FON", FA_OPEN_EXISTING | FA_READ);   //??????
+         if (res != FR_OK)
+         {
 
-        }
-        res = f_lseek(&fsrc, foffset); //?????
-        res = f_read(&fsrc, mat, 24, &br);
-        res = f_close(&fsrc); //????
-    }
-}
+         }
+         res = f_lseek(&fsrc, foffset); //?????
+         res = f_read(&fsrc, mat, 24, &br);
+         res = f_close(&fsrc); //????
+     }
+ }
 //void Get_HzMat(unsigned char *code,unsigned char *mat,u8 size)
 //{
 //  unsigned char qh,ql;
@@ -85,6 +85,7 @@ void Get_HzMat(unsigned char* code, unsigned char* mat, u8 size)
 //  if(size==16)SPI_Flash_Read(mat,foffset+ftinfo.f16addr,32);
 //  else SPI_Flash_Read(mat,foffset+ftinfo.f12addr,24);
 //}
+
 //显示一个指定大小的汉字
 //x,y :汉字的坐标
 //font:汉字GBK码
@@ -114,13 +115,20 @@ void Show_Font(u16 x, u16 y, u8* font, u8 size, u8 mode)
                     POINT_COLOR = tempcolor; //还原
                 }
                 temp <<= 1;
+//							  x++;
+//                if ((x - x0) == size)
+//                {
+//                    x = x0;
+//                    y++;
+//                    break;
+//                }
                 y++;
                 if ((y - y0) == size)
                 {
                     y = y0;
                     x++;
                     break;
-                }
+                }			
             }
         }
     }
@@ -151,7 +159,7 @@ void Show_Font(u16 x, u16 y, u8* font, u8 size, u8 mode)
 //str  :字符串
 //size :字体大小
 //mode:0,非叠加方式;1,叠加方式
-void Show_Str(u16 x, u16 y, u16 width, u16 height, u8* str, u8 size, u8 mode)
+void Show_Str(u16 x, u16 y, u16 width, u16 height, u8 * str, u8 size, u8 mode)
 {
     u16 x0 = x;
     u16 y0 = y;
@@ -189,7 +197,7 @@ void Show_Str(u16 x, u16 y, u16 width, u16 height, u8* str, u8 size, u8 mode)
                 x = x0;
             }
             if (y > (y0 + height - size))break; //越界返回
-            Show_Font(x, y, str, size, mode); //显示这个汉字,空心显示
+            Show_Font(x, y, (u8*)str, size, mode); //显示这个汉字,空心显示
             str += 2;
             x += size; //下一个汉字偏移
         }
@@ -203,11 +211,11 @@ void Show_Str_Mid(u16 x, u16 y, u8* str, u8 size, u8 len)
     u16 strlenth = 0;
     strlenth = strlen((const char*)str);
     strlenth *= size / 2;
-    if (strlenth > len)Show_Str(x, y, 240, 320, str, size, 1);
+    if (strlenth > len)Show_Str(x, y, 240, 320, (u8*)str, size, 1);
     else
     {
         strlenth = (len - strlenth) / 2;
-        Show_Str(strlenth + x, y, 240, 320, str, size, 1);
+        Show_Str(strlenth + x, y, 240, 320, (u8*)str, size, 1);
     }
 }
 
