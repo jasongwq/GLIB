@@ -248,8 +248,10 @@ u8 TP_Read_XY2(u16 *x, u16 *y)
 //用来校准用的
 //x,y:坐标
 //color:颜色
-static void TP_Drow_Touch_Point(u16 x, u16 y, u16 color)
+//static 
+void TP_Drow_Touch_Point(u16 x, u16 y, u16 color)
 {
+	  u16  colortemp=POINT_COLOR;
     POINT_COLOR = color;
     LCD_DrawLine(x - 12, y, x + 13, y); //横线
     LCD_DrawLine(x, y - 12, x, y + 13); //竖线
@@ -258,17 +260,20 @@ static void TP_Drow_Touch_Point(u16 x, u16 y, u16 color)
     LCD_DrawPoint(x + 1, y - 1);
     LCD_DrawPoint(x - 1, y - 1);
     Draw_Circle(x, y, 6); //画中心圈
+	POINT_COLOR=colortemp;
 }
 //画一个大点(2*2的点)
 //x,y:坐标
 //color:颜色
 void TP_Draw_Big_Point(u16 x, u16 y, u16 color)
 {
+	u16  colortemp=POINT_COLOR;
     POINT_COLOR = color;
     LCD_DrawPoint(x, y); //中心点
     LCD_DrawPoint(x + 1, y);
     LCD_DrawPoint(x, y + 1);
     LCD_DrawPoint(x + 1, y + 1);
+	POINT_COLOR=colortemp;
 }
 //////////////////////////////////////////////////////////////////////////////////
 //触摸按键扫描
