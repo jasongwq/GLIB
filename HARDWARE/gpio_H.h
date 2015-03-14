@@ -285,6 +285,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Set_A13  GPIOA->BSRR=1<<13;
 #define Set_A14  GPIOA->BSRR=1<<14;
 #define Set_A15  GPIOA->BSRR=1<<15;
+#define Set_A(n) GPIOA->BSRR=1<<n;
 
 #define Set_B0   GPIOB->BSRR=1<<0 ;
 #define Set_B1   GPIOB->BSRR=1<<1;
@@ -302,6 +303,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Set_B13  GPIOB->BSRR=1<<13;
 #define Set_B14  GPIOB->BSRR=1<<14;
 #define Set_B15  GPIOB->BSRR=1<<15;
+#define Set_B(n) GPIOB->BSRR=1<<n;
+
 
 #define Set_C0   GPIOC->BSRR=1<<0 ;
 #define Set_C1   GPIOC->BSRR=1<<1;
@@ -319,6 +322,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Set_C13  GPIOC->BSRR=1<<13;
 #define Set_C14  GPIOC->BSRR=1<<14;
 #define Set_C15  GPIOC->BSRR=1<<15;
+#define Set_C(n) GPIOC->BSRR=1<<n;
 
 #define Set_D0   GPIOD->BSRR=1<<0 ;
 #define Set_D1   GPIOD->BSRR=1<<1;
@@ -336,6 +340,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Set_D13  GPIOD->BSRR=1<<13;
 #define Set_D14  GPIOD->BSRR=1<<14;
 #define Set_D15  GPIOD->BSRR=1<<15;
+#define Set_D(n) GPIOD->BSRR=1<<n;
 
 #define Set_E0   GPIOE->BSRR=1<<0 ;
 #define Set_E1   GPIOE->BSRR=1<<1;
@@ -353,6 +358,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Set_E13  GPIOE->BSRR=1<<13;
 #define Set_E14  GPIOE->BSRR=1<<14;
 #define Set_E15  GPIOE->BSRR=1<<15;
+#define Set_E(n) GPIOE->BSRR=1<<n;
 
 #define Set_F0   GPIOF->BSRR=1<<0 ;
 #define Set_F1   GPIOF->BSRR=1<<1;
@@ -370,6 +376,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Set_F13  GPIOF->BSRR=1<<13;
 #define Set_F14  GPIOF->BSRR=1<<14;
 #define Set_F15  GPIOF->BSRR=1<<15;
+#define Set_F(n) GPIOF->BSRR=1<<n;
 
 #define Set_G0   GPIOG->BSRR=1<<0 ;
 #define Set_G1   GPIOG->BSRR=1<<1;
@@ -387,8 +394,10 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Set_G13  GPIOG->BSRR=1<<13;
 #define Set_G14  GPIOG->BSRR=1<<14;
 #define Set_G15  GPIOG->BSRR=1<<15;
+#define Set_G(n) GPIOG->BSRR=1<<n;
 
 //#define Set_GPIO()
+
 #define Clr_A0   GPIOA->BRR=1<<0;
 #define Clr_A1   GPIOA->BRR=1<<1;
 #define Clr_A2   GPIOA->BRR=1<<2;
@@ -405,6 +414,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Clr_A13  GPIOA->BRR=1<<13;
 #define Clr_A14  GPIOA->BRR=1<<14;
 #define Clr_A15  GPIOA->BRR=1<<15;
+#define Clr_A(n) GPIOA->BRR=1<<n;
 
 #define Clr_B0   GPIOB->BRR=1<<0 ;
 #define Clr_B1   GPIOB->BRR=1<<1;
@@ -422,6 +432,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Clr_B13  GPIOB->BRR=1<<13;
 #define Clr_B14  GPIOB->BRR=1<<14;
 #define Clr_B15  GPIOB->BRR=1<<15;
+#define Clr_B(n) GPIOB->BRR=1<<n;
+
 
 #define Clr_C0   GPIOC->BRR=1<<0 ;
 #define Clr_C1   GPIOC->BRR=1<<1;
@@ -439,6 +451,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Clr_C13  GPIOC->BRR=1<<13;
 #define Clr_C14  GPIOC->BRR=1<<14;
 #define Clr_C15  GPIOC->BRR=1<<15;
+#define Clr_C(n) GPIOC->BRR=1<<n;
 
 #define Clr_D0   GPIOD->BRR=1<<0 ;
 #define Clr_D1   GPIOD->BRR=1<<1;
@@ -456,6 +469,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Clr_D13  GPIOD->BRR=1<<13;
 #define Clr_D14  GPIOD->BRR=1<<14;
 #define Clr_D15  GPIOD->BRR=1<<15;
+#define Clr_D(n) GPIOD->BRR=1<<n;
 
 #define Clr_E0   GPIOE->BRR=1<<0 ;
 #define Clr_E1   GPIOE->BRR=1<<1;
@@ -473,6 +487,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Clr_E13  GPIOE->BRR=1<<13;
 #define Clr_E14  GPIOE->BRR=1<<14;
 #define Clr_E15  GPIOE->BRR=1<<15;
+#define Clr_E(n) GPIOE->BRR=1<<n;
 
 #define Clr_F0   GPIOF->BRR=1<<0 ;
 #define Clr_F1   GPIOF->BRR=1<<1;
@@ -490,6 +505,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Clr_F13  GPIOF->BRR=1<<13;
 #define Clr_F14  GPIOF->BRR=1<<14;
 #define Clr_F15  GPIOF->BRR=1<<15;
+#define Clr_F(n) GPIOF->BRR=1<<n;
 
 #define Clr_G0   GPIOG->BRR=1<<0 ;
 #define Clr_G1   GPIOG->BRR=1<<1;
@@ -507,6 +523,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define Clr_G13  GPIOG->BRR=1<<13;
 #define Clr_G14  GPIOG->BRR=1<<14;
 #define Clr_G15  GPIOG->BRR=1<<15;
+#define Clr_G(n) GPIOG->BRR=1<<n;
+
 ////////////////////////////////////////////
 //¿ìËÙ ¶ÁIO
 #define A0       ((GPIOA->IDR&(1<<0))?1:0)
@@ -525,6 +543,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define A13      ((GPIOA->IDR&(1<<13))?1:0)
 #define A14      ((GPIOA->IDR&(1<<14))?1:0)
 #define A15      ((GPIOA->IDR&(1<<15))?1:0)
+#define A(n)     ((GPIOA->IDR&(1<<n))?1:0)
+
 #define B0       ((GPIOB->IDR&(1<<0))?1:0)
 #define B1       ((GPIOB->IDR&(1<<1))?1:0)
 #define B2       ((GPIOB->IDR&(1<<2))?1:0)
@@ -541,6 +561,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define B13      ((GPIOB->IDR&(1<<13))?1:0)
 #define B14      ((GPIOB->IDR&(1<<14))?1:0)
 #define B15      ((GPIOB->IDR&(1<<15))?1:0)
+#define B(n)     ((GPIOB->IDR&(1<<n))?1:0)
+
 #define C0       ((GPIOC->IDR&(1<<0))?1:0)
 #define C1       ((GPIOC->IDR&(1<<1))?1:0)
 #define C2       ((GPIOC->IDR&(1<<2))?1:0)
@@ -557,6 +579,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define C13      ((GPIOC->IDR&(1<<13))?1:0)
 #define C14      ((GPIOC->IDR&(1<<14))?1:0)
 #define C15      ((GPIOC->IDR&(1<<15))?1:0)
+#define C(n)     ((GPIOC->IDR&(1<<n))?1:0)
+
 #define D0       ((GPIOD->IDR&(1<<0))?1:0)
 #define D1       ((GPIOD->IDR&(1<<1))?1:0)
 #define D2       ((GPIOD->IDR&(1<<2))?1:0)
@@ -573,6 +597,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define D13      ((GPIOD->IDR&(1<<13))?1:0)
 #define D14      ((GPIOD->IDR&(1<<14))?1:0)
 #define D15      ((GPIOD->IDR&(1<<15))?1:0)
+#define D(n)     ((GPIOD->IDR&(1<<n))?1:0)
+
 #define E0       ((GPIOE->IDR&(1<<0))?1:0)
 #define E1       ((GPIOE->IDR&(1<<1))?1:0)
 #define E2       ((GPIOE->IDR&(1<<2))?1:0)
@@ -589,6 +615,8 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define E13      ((GPIOE->IDR&(1<<13))?1:0)
 #define E14      ((GPIOE->IDR&(1<<14))?1:0)
 #define E15      ((GPIOE->IDR&(1<<15))?1:0)
+#define E(n)     ((GPIOE->IDR&(1<<n))?1:0)
+
 #define F0       ((GPIOF->IDR&(1<<0))?1:0)
 #define F1       ((GPIOF->IDR&(1<<1))?1:0)
 #define F2       ((GPIOF->IDR&(1<<2))?1:0)
@@ -605,6 +633,7 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define F13      ((GPIOF->IDR&(1<<13))?1:0)
 #define F14      ((GPIOF->IDR&(1<<14))?1:0)
 #define F15      ((GPIOF->IDR&(1<<15))?1:0)
+
 #define G0       ((GPIOG->IDR&(1<<0))?1:0)
 #define G1       ((GPIOG->IDR&(1<<1))?1:0)
 #define G2       ((GPIOG->IDR&(1<<2))?1:0)
@@ -621,58 +650,9 @@ extern void GPIOG_Init(u16 io, u16 mode, u8 du);
 #define G13      ((GPIOG->IDR&(1<<13))?1:0)
 #define G14      ((GPIOG->IDR&(1<<14))?1:0)
 #define G15      ((GPIOG->IDR&(1<<15))?1:0)
-// #define Set_A(n) GPIOA->BSRR=1<<n;
-// #define Set_B(n) GPIOB->BSRR=1<<n;
-// #define Set_C(n) GPIOC->BSRR=1<<n;
-// #define Set_D(n) GPIOD->BSRR=1<<n;
-// #define Set_E(n) GPIOE->BSRR=1<<n;
-// #define Set_F(n) GPIOF->BSRR=1<<n;
-// #define Set_G(n) GPIOG->BSRR=1<<n;
-// #define Clr_A(n) GPIOA->BRR=1<<n;
-// #define Clr_B(n) GPIOB->BRR=1<<n;
-// #define Clr_C(n) GPIOC->BRR=1<<n;
-// #define Clr_D(n) GPIOD->BRR=1<<n;
-// #define Clr_E(n) GPIOE->BRR=1<<n;
-// #define Clr_F(n) GPIOF->BRR=1<<n;
-// #define Clr_G(n) GPIOG->BRR=1<<n;
-// #define A(n)     ((GPIOA->IDR&(1<<n))?1:0)
-// #define B(n)     ((GPIOB->IDR&(1<<n))?1:0)
-// #define C(n)     ((GPIOC->IDR&(1<<n))?1:0)
-// #define D(n)     ((GPIOD->IDR&(1<<n))?1:0)
-// #define E(n)     ((GPIOE->IDR&(1<<n))?1:0)
-// #define F(n)     ((GPIOF->IDR&(1<<n))?1:0)
-// #define G(n)     ((GPIOG->IDR&(1<<n))?1:0)
-inline void Set_A(char n){GPIOA->BSRR=1<<n;}
-inline void Set_B(char n){GPIOB->BSRR=1<<n;}
-inline void Set_C(char n){GPIOC->BSRR=1<<n;}
-inline void Set_D(char n){GPIOD->BSRR=1<<n;}
-inline void Set_E(char n){GPIOE->BSRR=1<<n;}
-inline void Set_F(char n){GPIOF->BSRR=1<<n;}
-inline void Set_G(char n){GPIOG->BSRR=1<<n;}
-inline void Clr_A(char n){GPIOA->BRR=1<<n;}
-inline void Clr_B(char n){GPIOB->BRR=1<<n;}
-inline void Clr_C(char n){GPIOC->BRR=1<<n;}
-inline void Clr_D(char n){GPIOD->BRR=1<<n;}
-inline void Clr_E(char n){GPIOE->BRR=1<<n;}
-inline void Clr_F(char n){GPIOF->BRR=1<<n;}
-inline void Clr_G(char n){GPIOG->BRR=1<<n;}
-inline void PAOUT(char n,char io){if(io){GPIOA->BSRR=1<<n;}else{GPIOA->BRR=1<<n;}}
-inline void PBOUT(char n,char io){if(io){GPIOB->BSRR=1<<n;}else{GPIOB->BRR=1<<n;}}
-inline void PCOUT(char n,char io){if(io){GPIOC->BSRR=1<<n;}else{GPIOC->BRR=1<<n;}}
-inline void PDOUT(char n,char io){if(io){GPIOD->BSRR=1<<n;}else{GPIOD->BRR=1<<n;}}
-inline void PEOUT(char n,char io){if(io){GPIOE->BSRR=1<<n;}else{GPIOE->BRR=1<<n;}}
-inline void PFOUT(char n,char io){if(io){GPIOF->BSRR=1<<n;}else{GPIOF->BRR=1<<n;}}
-inline void PGOUT(char n,char io){if(io){GPIOG->BSRR=1<<n;}else{GPIOG->BRR=1<<n;}}
 
-
-inline char A(char n){return ((GPIOA->IDR&(1<<n))?1:0);}
-inline char B(char n){return ((GPIOB->IDR&(1<<n))?1:0);}
-inline char C(char n){return ((GPIOC->IDR&(1<<n))?1:0);}
-inline char D(char n){return ((GPIOD->IDR&(1<<n))?1:0);}
-inline char E(char n){return ((GPIOE->IDR&(1<<n))?1:0);}
-inline char F(char n){return ((GPIOF->IDR&(1<<n))?1:0);}
-inline char G(char n){return ((GPIOG->IDR&(1<<n))?1:0);}
-
+#define F(n)     ((GPIOF->IDR&(1<<n))?1:0)
+#define G(n)     ((GPIOG->IDR&(1<<n))?1:0)
 #ifdef __cplusplus
         }
 #endif
