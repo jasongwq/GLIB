@@ -56,12 +56,18 @@
 void Ultrasonic_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-    RCC_APB2PeriphClockCmd(RCC_ULTRASONIC_TRIG, ENABLE); //使能Px端口时钟
-
-    GPIO_InitStructure.GPIO_Pin = ULTRASONIC_TRIG_PIN;
+    RCC_APB2PeriphClockCmd(RCC_ULTRASONIC_TRIG1, ENABLE); //使能Px端口时钟
+    GPIO_InitStructure.GPIO_Pin = ULTRASONIC_TRIG1_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_Init(ULTRASONIC_TRIG_GPIO, &GPIO_InitStructure);
+    GPIO_Init(ULTRASONIC_TRIG1_GPIO, &GPIO_InitStructure);
+		
+		RCC_APB2PeriphClockCmd(RCC_ULTRASONIC_TRIG2, ENABLE); //使能Px端口时钟
+    GPIO_InitStructure.GPIO_Pin = ULTRASONIC_TRIG2_PIN;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(ULTRASONIC_TRIG2_GPIO, &GPIO_InitStructure);
+		
 		TIM1_Cap_Init(0XFFFF, 72 - 1);
 }
 
