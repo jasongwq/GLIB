@@ -1,18 +1,23 @@
+#include "stm32f10x.h"
 #ifndef __EXTI_H
-#define __EXIT_H
-#include "sys.h"
-//////////////////////////////////////////////////////////////////////////////////
-//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
-//ALIENTEKæˆ˜èˆ°STM32å¼€å‘æ¿
-//å¤–éƒ¨ä¸­æ–­ é©±åŠ¨ä»£ç 
-//æ­£ç‚¹åŸå­@ALIENTEK
-//æŠ€æœ¯è®ºå›:www.openedv.com
-//ä¿®æ”¹æ—¥æœŸ:2012/9/3
-//ç‰ˆæœ¬ï¼šV1.0
-//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
-//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2009-2019
-//All rights reserved
-//////////////////////////////////////////////////////////////////////////////////
-void EXTIX_Init(void);//å¤–éƒ¨ä¸­æ–­åˆå§‹åŒ–
-#endif
+#define __EXTI_H 
 
+/*			       »ù±¾Ê¹ÓÃ·½·¨
+ *		EXTI_Configuration(GPIOA,GPIO_Pin_1,0);       ±íÊ¾ PA1 ×÷ÎªÍâ²¿ÖĞ¶Ï ÏÂ½µÑØ´¥·¢
+ *		EXTI_Configuration(GPIOB,GPIO_Pin_1,0);       ±íÊ¾ PB1 ×÷ÎªÍâ²¿ÖĞ¶Ï ÏÂ½µÑØ´¥·¢
+ *		EXTI_Configuration(GPIOB,GPIO_Pin_2,0);       ±íÊ¾ PB2 ×÷ÎªÍâ²¿ÖĞ¶Ï ÏÂ½µÑØ´¥·¢
+ *		EXTI_Configuration(GPIOB,GPIO_Pin_2,1);       ±íÊ¾ PB2 ×÷ÎªÍâ²¿ÖĞ¶Ï ÉÏÉıÑØ´¥·¢
+ *		EXTI_Configuration(GPIOB,GPIO_Pin_2,2);       ±íÊ¾ PB2 ×÷ÎªÍâ²¿ÖĞ¶Ï   ±ßÑØ´¥·¢
+ *
+ *		
+ *	    EXTI_NVIC_Configuration(2 , 5, 1, 4);		2 ±íÊ¾ÉèÖÃµÄÊÇEXTI2_IRQnÖĞ¶Ï  5 ±íÊ¾ÖĞ¶Ï·Ö×éÒÑ¾­·ÖºÃÁËÕâÀïÖ´ĞĞ¿ÕÃüÁî
+ *													1 ±íÊ¾Ç¿Õ¼ÓÅÏÈ¼¶µÄÊı		  4 ±íÊ¾´ÓÓÅÏÈ¼¶µÄÊı
+ *		EXTI_GenerateSWInterrupt(EXTI_Line6);  //²úÉúÈí¼şÖĞ¶Ï
+ *
+ *
+ */
+
+void EXTI_Configuration(GPIO_TypeDef* GPIO,uint16_t GPIO_Pin, u8 Trigger);
+void EXTI_NVIC_Configuration(u8 Line ,u8 PriorityGroup,u8 PreemptionPriority,u8 SubPriority);
+
+#endif

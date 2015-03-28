@@ -1,11 +1,11 @@
 #include "gpio.h"
 /*
     GPIO_InitTypeDef GPIO_InitStructure;
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOX, ENABLE); //GPIOAæ—¶é’Ÿä»¥åŠå¤ç”¨åŠŸèƒ½æ—¶é’Ÿ
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOX, ENABLE); //GPIOAÊ±ÖÓÒÔ¼°¸´ÓÃ¹¦ÄÜÊ±ÖÓ
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_x; //PX,x
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //å¤ç”¨æŽ¨æŒ½è¾“å‡º
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //¸´ÓÃÍÆÍìÊä³ö
     GPIO_Init(GPIOX, &GPIO_InitStructure);
         GPIO_SetBits(LCD_LIGHT_GPIO,LCD_LIGHT_Pin);
         GPIO_ResetBits(LCD_LIGHT_GPIO,LCD_LIGHT_Pin);
@@ -15,30 +15,30 @@ GPIOA_Init(0,3,PU);
 
 
 mode:
-0 æ¨¡æ‹Ÿè¾“å…¥æ¨¡å¼(ADCç”¨)
-8 ä¸Šæ‹‰è¾“å…¥
-3 æŽ¨æŒ½è¾“å‡º
-B å¤ç”¨è¾“å‡º
+0 Ä£ÄâÊäÈëÄ£Ê½(ADCÓÃ)
+8 ÉÏÀ­ÊäÈë
+3 ÍÆÍìÊä³ö
+B ¸´ÓÃÊä³ö
 
-AIN 0           //æ¨¡æ‹Ÿè¾“å…¥
-IN_FLOATING 4   //æµ®ç©ºè¾“å…¥
-IPD 8           //ä¸‹æ‹‰è¾“å…¥
-IPU 8           //ä¸Šæ‹‰è¾“å…¥
+AIN 0           //Ä£ÄâÊäÈë
+IN_FLOATING 4   //¸¡¿ÕÊäÈë
+IPD 8           //ÏÂÀ­ÊäÈë
+IPU 8           //ÉÏÀ­ÊäÈë
 
-Out_PP 3        //æŽ¨æŒ½è¾“å‡º
-Out_OD 7        //å¼€æ¼è¾“å‡º
-AF_PP 0xF       //å¤ç”¨å¼€æ¼è¾“å‡º
-AF_OD 0xB       //å¤ç”¨æŽ¨æŒ½è¾“å‡º
+Out_PP 3        //ÍÆÍìÊä³ö
+Out_OD 7        //¿ªÂ©Êä³ö
+AF_PP 0xF       //¸´ÓÃ¿ªÂ©Êä³ö
+AF_OD 0xB       //¸´ÓÃÍÆÍìÊä³ö
 
-PU ä¸Šæ‹‰
-PD ä¸‹æ‹‰
+PU ÉÏÀ­
+PD ÏÂÀ­
 
 */
 
 void GPIOA_Init(u16 io, u16 mode, u8 du)
 {
     u32 apb2;
-    RCC->APB2ENR |= 1 << 2; //ä½¿èƒ½PORTxæ—¶é’Ÿ
+    RCC->APB2ENR |= 1 << 2; //Ê¹ÄÜPORTxÊ±ÖÓ
     if (io > 7)
     {
         io -= 8;
@@ -59,14 +59,14 @@ void GPIOA_Init(u16 io, u16 mode, u8 du)
         GPIOA->CRL |= apb2; //PB.x
     }
     if (du)
-        GPIOA->ODR |= 1 << io; //PB.x è¾“å‡ºä¸Šæ‹‰
+        GPIOA->ODR |= 1 << io; //PB.x Êä³öÉÏÀ­
     else
-        GPIOA->BRR |= 1 << io; //PB.x è¾“å‡ºä¸‹æ‹‰
+        GPIOA->BRR |= 1 << io; //PB.x Êä³öÏÂÀ­
 }
 void GPIOB_Init(u16 io, u16 mode, u8 du)
 {
     u32 apb2;
-    RCC->APB2ENR |= 1 << 3; //ä½¿èƒ½PORTxæ—¶é’Ÿ
+    RCC->APB2ENR |= 1 << 3; //Ê¹ÄÜPORTxÊ±ÖÓ
     if (io > 7)
     {
         io -= 8;
@@ -88,14 +88,14 @@ void GPIOB_Init(u16 io, u16 mode, u8 du)
     }
 
     if (du)
-        GPIOB->ODR |= 1 << io; //PB.x è¾“å‡ºä¸Šæ‹‰
+        GPIOB->ODR |= 1 << io; //PB.x Êä³öÉÏÀ­
     else
-        GPIOB->BRR |= 1 << io; //PB.x è¾“å‡ºä¸‹æ‹‰
+        GPIOB->BRR |= 1 << io; //PB.x Êä³öÏÂÀ­
 }
 void GPIOC_Init(u16 io, u16 mode, u8 du)
 {
     u32 apb2;
-    RCC->APB2ENR |= 1 << 4; //ä½¿èƒ½PORTxæ—¶é’Ÿ
+    RCC->APB2ENR |= 1 << 4; //Ê¹ÄÜPORTxÊ±ÖÓ
     if (io > 7)
     {
         io -= 8;
@@ -117,14 +117,14 @@ void GPIOC_Init(u16 io, u16 mode, u8 du)
     }
 
     if (du)
-        GPIOC->ODR |= 1 << io; //PB.x è¾“å‡ºä¸Šæ‹‰
+        GPIOC->ODR |= 1 << io; //PB.x Êä³öÉÏÀ­
     else
-        GPIOC->BRR |= 1 << io; //PB.x è¾“å‡ºä¸‹æ‹‰
+        GPIOC->BRR |= 1 << io; //PB.x Êä³öÏÂÀ­
 }
 void GPIOD_Init(u16 io, u16 mode, u8 du)
 {
     u32 apb2;
-    RCC->APB2ENR |= 1 << 5; //ä½¿èƒ½PORTxæ—¶é’Ÿ
+    RCC->APB2ENR |= 1 << 5; //Ê¹ÄÜPORTxÊ±ÖÓ
     if (io > 7)
     {
         io -= 8;
@@ -146,14 +146,14 @@ void GPIOD_Init(u16 io, u16 mode, u8 du)
     }
 
     if (du)
-        GPIOD->ODR |= 1 << io; //PB.x è¾“å‡ºä¸Šæ‹‰
+        GPIOD->ODR |= 1 << io; //PB.x Êä³öÉÏÀ­
     else
-        GPIOD->BRR |= 1 << io; //PB.x è¾“å‡ºä¸‹æ‹‰
+        GPIOD->BRR |= 1 << io; //PB.x Êä³öÏÂÀ­
 }
 void GPIOE_Init(u16 io, u16 mode, u8 du)
 {
     u32 apb2;
-    RCC->APB2ENR |= 1 << 6; //ä½¿èƒ½PORTxæ—¶é’Ÿ
+    RCC->APB2ENR |= 1 << 6; //Ê¹ÄÜPORTxÊ±ÖÓ
     if (io > 7)
     {
         io -= 8;
@@ -174,14 +174,14 @@ void GPIOE_Init(u16 io, u16 mode, u8 du)
         GPIOE->CRL |= apb2; //PB.x
     }
     if (du)
-        GPIOE->ODR |= 1 << io; //PB.x è¾“å‡ºä¸Šæ‹‰
+        GPIOE->ODR |= 1 << io; //PB.x Êä³öÉÏÀ­
     else
-        GPIOE->BRR |= 1 << io; //PB.x è¾“å‡ºä¸‹æ‹‰
+        GPIOE->BRR |= 1 << io; //PB.x Êä³öÏÂÀ­
 }
 void GPIOF_Init(u16 io, u16 mode, u8 du)
 {
     u32 apb2;
-    RCC->APB2ENR |= 1 << 7; //ä½¿èƒ½PORTxæ—¶é’Ÿ
+    RCC->APB2ENR |= 1 << 7; //Ê¹ÄÜPORTxÊ±ÖÓ
     if (io > 7)
     {
         io -= 8;
@@ -202,14 +202,14 @@ void GPIOF_Init(u16 io, u16 mode, u8 du)
         GPIOF->CRL |= apb2; //PB.x
     }
     if (du)
-        GPIOF->ODR |= 1 << io; //PB.x è¾“å‡ºä¸Šæ‹‰
+        GPIOF->ODR |= 1 << io; //PB.x Êä³öÉÏÀ­
     else
-        GPIOF->BRR |= 1 << io; //PB.x è¾“å‡ºä¸‹æ‹‰
+        GPIOF->BRR |= 1 << io; //PB.x Êä³öÏÂÀ­
 }
 void GPIOG_Init(u16 io, u16 mode, u8 du)
 {
     u32 apb2;
-    RCC->APB2ENR |= 1 << 8; //ä½¿èƒ½PORTxæ—¶é’Ÿ
+    RCC->APB2ENR |= 1 << 8; //Ê¹ÄÜPORTxÊ±ÖÓ
     if (io > 7)
     {
         io -= 8;
@@ -230,7 +230,7 @@ void GPIOG_Init(u16 io, u16 mode, u8 du)
         GPIOG->CRL |= apb2; //PB.x
     }
     if (du)
-        GPIOG->ODR |= 1 << io; //PB.x è¾“å‡ºä¸Šæ‹‰
+        GPIOG->ODR |= 1 << io; //PB.x Êä³öÉÏÀ­
     else
-        GPIOG->BRR |= 1 << io; //PB.x è¾“å‡ºä¸‹æ‹‰
+        GPIOG->BRR |= 1 << io; //PB.x Êä³öÏÂÀ­
 }

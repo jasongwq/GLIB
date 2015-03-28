@@ -2262,11 +2262,11 @@ FRESULT validate (	/* FR_OK(0): The object is valid, !=0: Invalid */
 
 
 /*-----------------------------------------------------------------------*/
-/* Mount/Unmount a Logical Drive   æŒ‚è½½/å¸è½½ é©±åŠ¨                        */
+/* Mount/Unmount a Logical Drive   ¹ÒÔØ/Ğ¶ÔØ Çı¶¯                        */
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_mount (
-	BYTE vol,		/* é€»è¾‘é©±åŠ¨å™¨ å·Logical drive number to be mounted/unmounted */
+	BYTE vol,		/* Âß¼­Çı¶¯Æ÷ ºÅLogical drive number to be mounted/unmounted */
 	FATFS *fs		/* Pointer to new file system object (NULL for unmount)*/
 )
 {

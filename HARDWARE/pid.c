@@ -5,28 +5,28 @@ s32 PID_in; // PID Feedback (Input)
 
 //void PID_Init(struct PID *pp)
 //{
-//    memset(pp, 0, sizeof(struct PID));//将pp中前sizeof(struct PID)字节用0替换
+//    memset(pp, 0, sizeof(struct PID));//��pp��ǰsizeof(struct PID)�ֽ���0�滻
 
-//    p-pProportion = 0; // Set PID Coefficients//比例常数
-//    spid.Integral = 0;//积分常数
-//    spid.Derivative = 0;//微分常数
-//    spid.SetPoint = 0; // Set PID Setpoint//设定目标
+//    p-pProportion = 0; // Set PID Coefficients//��������
+//    spid.Integral = 0;//���ֳ���
+//    spid.Derivative = 0;//΢�ֳ���
+//    spid.SetPoint = 0; // Set PID Setpoint//�趨Ŀ��
 //}
-/*========================= PID计算部分 =========================================*/
+/*========================= PID���㲿�� =========================================*/
 s32 PID_Calc(struct PID *pp, s16 NextPoint)
 {
     unsigned int dError, Error;
-    Error = pp -> SetPoint - NextPoint; // 偏差
-    pp -> SumError += Error; // 积分
-    dError = pp -> LastError - pp -> PrevError; // 当前微分//上一次-上上次偏差
+    Error = pp -> SetPoint - NextPoint; // ƫ��
+    pp -> SumError += Error; // ����
+    dError = pp -> LastError - pp -> PrevError; // ��ǰ΢��//��һ��-���ϴ�ƫ��
     pp -> PrevError = pp -> LastError;
     pp -> LastError = Error;
 
-    return (pp -> Proportion * Error // 比例项//比例常数*偏差
+    return (pp -> Proportion * Error // ������//��������*ƫ��
             +
-            pp -> Integral * pp -> SumError // 积分项//积分常数*总偏差
+            pp -> Integral * pp -> SumError // ������//���ֳ���*��ƫ��
             +
-            pp -> Derivative * dError); // 微分项//微分常数*
+            pp -> Derivative * dError); // ΢����//΢�ֳ���*
 }
-/*********************************************************** 温度比较处理子程序 ***********************************************************/
+/*********************************************************** �¶ȱȽϴ����ӳ��� ***********************************************************/
 

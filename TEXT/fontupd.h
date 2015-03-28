@@ -2,42 +2,42 @@
 #define __FONTUPD_H__	 
 #include "sys.h"
 //////////////////////////////////////////////////////////////////////////////////	 
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//ALIENTEK战舰STM32开发板
-//字库更新 驱动代码	   
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//修改日期:2012/9/18
-//版本：V1.0
-//版权所有，盗版必究。
-//Copyright(C) 广州市星翼电子科技有限公司 2009-2019
+//������ֻ��ѧϰʹ�ã�δ���������ɣ��������������κ���;
+//ALIENTEKս��STM32������
+//�ֿ���� ��������	   
+//����ԭ��@ALIENTEK
+//������̳:www.openedv.com
+//�޸�����:2012/9/18
+//�汾��V1.0
+//��Ȩ���У�����ؾ���
+//Copyright(C) �������������ӿƼ����޹�˾ 2009-2019
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
 
-//前面6M被fatfs占用了.
-//6M以后紧跟的500K字节,用户可以随便用.
-//6M+500K字节以后的字节,被字库占用了,不能动!
-//字体信息保存地址,占25个字节,第1个字节用于标记字库是否存在.后续每8个字节一组,分别保存起始地址和文件大小														   
+//ǰ��6M��fatfsռ����.
+//6M�Ժ������500K�ֽ�,�û����������.
+//6M+500K�ֽ��Ժ���ֽ�,���ֿ�ռ����,���ܶ�!
+//������Ϣ�����ַ,ռ25���ֽ�,��1���ֽ����ڱ���ֿ��Ƿ����.����ÿ8���ֽ�һ��,�ֱ𱣴���ʼ��ַ���ļ���С														   
 extern u32 FONTINFOADDR;	
-//字库信息结构体定义
-//用来保存字库基本信息，地址，大小等
+//�ֿ���Ϣ�ṹ�嶨��
+//���������ֿ������Ϣ����ַ����С��
 __packed typedef struct 
 {
-	u8 fontok;				//字库存在标志，0XAA，字库正常；其他，字库不存在
-	u32 ugbkaddr; 			//unigbk的地址
-	u32 ugbksize;			//unigbk的大小	 
-	u32 f12addr;			//gbk12地址	
-	u32 gbk12size;			//gbk12的大小	 
-	u32 f16addr;			//gbk16地址
-	u32 gkb16size;			//gbk16的大小	 
+	u8 fontok;				//�ֿ���ڱ�־��0XAA���ֿ��������������ֿⲻ����
+	u32 ugbkaddr; 			//unigbk�ĵ�ַ
+	u32 ugbksize;			//unigbk�Ĵ�С	 
+	u32 f12addr;			//gbk12��ַ	
+	u32 gbk12size;			//gbk12�Ĵ�С	 
+	u32 f16addr;			//gbk16��ַ
+	u32 gkb16size;			//gbk16�Ĵ�С	 
 }_font_info;																   
 
-extern _font_info ftinfo;	//字库信息结构体
+extern _font_info ftinfo;	//�ֿ���Ϣ�ṹ��
 
-u32 fupd_prog(u16 x,u16 y,u8 size,u32 fsize,u32 pos);//显示更新进度
-u8 updata_fontx(u16 x,u16 y,u8 size,u8 *fxpath,u8 fx);//更新指定字库
-u8 update_font(u16 x,u16 y,u8 size,u8 src);//更新全部字库
-u8 font_init(void);//初始化字库
+u32 fupd_prog(u16 x,u16 y,u8 size,u32 fsize,u32 pos);//��ʾ���½���
+u8 updata_fontx(u16 x,u16 y,u8 size,u8 *fxpath,u8 fx);//����ָ���ֿ�
+u8 update_font(u16 x,u16 y,u8 size,u8 src);//����ȫ���ֿ�
+u8 font_init(void);//��ʼ���ֿ�
 #endif
 
 

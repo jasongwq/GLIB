@@ -1,24 +1,24 @@
 #include "nokia_5110.h"
 #include "english_6x8_pixel.h"//ascll
-#include "write_chinese_string_pixel.h"//ä¸­æ–‡
-#include "delay.h"//ä¸­æ–‡
+#include "write_chinese_string_pixel.h"//ÖĞÎÄ
+#include "delay.h"//ÖĞÎÄ
 
 
 static void _GPIO_Init(void)
 {
     GPIO_InitTypeDef  GPIO_InitStructure;
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE); //ä½¿èƒ½Pxç«¯å£æ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE); //Ê¹ÄÜPx¶Ë¿ÚÊ±ÖÓ
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_11;   //PC.7
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;        //è¾“å…¥
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;        //ÊäÈë
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 
 }
 
 /*-----------------------------------------------------------------------
-LCD_write_byte    : ä½¿ç”¨SPIæ¥å£å†™æ•°æ®åˆ°LCD
-è¾“å…¥å‚æ•°ï¼šdata    ï¼šå†™å…¥çš„æ•°æ®ï¼›
-          command ï¼šå†™æ•°æ®/å‘½ä»¤é€‰æ‹©ï¼›
+LCD_write_byte    : Ê¹ÓÃSPI½Ó¿ÚĞ´Êı¾İµ½LCD
+ÊäÈë²ÎÊı£ºdata    £ºĞ´ÈëµÄÊı¾İ£»
+          command £ºĞ´Êı¾İ/ÃüÁîÑ¡Ôñ£»
 -----------------------------------------------------------------------*/
 static void LCD_write_byte(unsigned char dat, unsigned char command)
 {
@@ -44,46 +44,46 @@ static void LCD_write_byte(unsigned char dat, unsigned char command)
 void Set_Nokia_Contrast(u8 Contrast)
 {
 	  if(Contrast>5)Contrast=5;	
-    LCD_write_byte(0x21, 0);    // ä½¿ç”¨æ‰©å±•å‘½ä»¤è®¾ç½®LCDæ¨¡å¼
-	  LCD_write_byte(0xc0 | (1 << Contrast), 0); // è®¾ç½®åç½®ç”µå‹
-	  LCD_write_byte(0x20, 0);    // ä½¿ç”¨åŸºæœ¬å‘½ä»¤
+    LCD_write_byte(0x21, 0);    // Ê¹ÓÃÀ©Õ¹ÃüÁîÉèÖÃLCDÄ£Ê½
+	  LCD_write_byte(0xc0 | (1 << Contrast), 0); // ÉèÖÃÆ«ÖÃµçÑ¹
+	  LCD_write_byte(0x20, 0);    // Ê¹ÓÃ»ù±¾ÃüÁî
 }
 
 /*-----------------------------------------------------------------------
-LCD_init          : 3310LCDåˆå§‹åŒ–
-ç¼–å†™æ—¥æœŸ          ï¼š2004-8-10
-æœ€åä¿®æ”¹æ—¥æœŸ      ï¼š2004-8-10
+LCD_init          : 3310LCD³õÊ¼»¯
+±àĞ´ÈÕÆÚ          £º2004-8-10
+×îºóĞŞ¸ÄÈÕÆÚ      £º2004-8-10
 -----------------------------------------------------------------------*/
 void NOKIA_5110_LCD_Init(void)
 {
     _GPIO_Init();
 
-    // äº§ç”Ÿä¸€ä¸ªè®©LCDå¤ä½çš„ä½ç”µå¹³è„‰å†²
+    // ²úÉúÒ»¸öÈÃLCD¸´Î»µÄµÍµçÆ½Âö³å
     LCD_RST = 0;
     delay_us(1);
     LCD_RST = 1;
-    // å…³é—­LCD
+    // ¹Ø±ÕLCD
     LCD_CE = 0;
     delay_us(1);
-    // ä½¿èƒ½LCD
+    // Ê¹ÄÜLCD
     LCD_CE = 1;
     delay_us(1);
 
-    /*åŠŸèƒ½è®¾ç½®
-    0   æ°´å¹³ åŸºæœ¬æŒ‡ä»¤é›†
-    1        æ‹“å±•...
-    2 å‚ç›´ åŸºæœ¬æŒ‡ä»¤é›†
-    3      æ‹“å±•...
-    4 çœç”µæ¨¡å¼
+    /*¹¦ÄÜÉèÖÃ
+    0   Ë®Æ½ »ù±¾Ö¸Áî¼¯
+    1        ÍØÕ¹...
+    2 ´¹Ö± »ù±¾Ö¸Áî¼¯
+    3      ÍØÕ¹...
+    4 Ê¡µçÄ£Ê½
     5
     6
     7
     */
-    //    LCD_write_byte(0x21, 0);    // ä½¿ç”¨çœç”µæ¨¡å¼
-    LCD_write_byte(0x21, 0);    // ä½¿ç”¨æ‰©å±•å‘½ä»¤è®¾ç½®LCDæ¨¡å¼
-    //LCD_write_byte(0x20, 0);    // ä½¿ç”¨åŸºæœ¬å‘½ä»¤è®¾ç½®LCDæ¨¡å¼
-    //0~5 5å¯¹æ¯”åº¦æœ€é«˜ 0å¯¹æ¯”åº¦æœ€ä½
-    LCD_write_byte(0xc0 | (1 << 4), 0); // è®¾ç½®åç½®ç”µå‹
+    //    LCD_write_byte(0x21, 0);    // Ê¹ÓÃÊ¡µçÄ£Ê½
+    LCD_write_byte(0x21, 0);    // Ê¹ÓÃÀ©Õ¹ÃüÁîÉèÖÃLCDÄ£Ê½
+    //LCD_write_byte(0x20, 0);    // Ê¹ÓÃ»ù±¾ÃüÁîÉèÖÃLCDÄ£Ê½
+    //0~5 5¶Ô±È¶È×î¸ß 0¶Ô±È¶È×îµÍ
+    LCD_write_byte(0xc0 | (1 << 4), 0); // ÉèÖÃÆ«ÖÃµçÑ¹
     /*
     +0x00~0x03
     0
@@ -92,10 +92,10 @@ void NOKIA_5110_LCD_Init(void)
     17
     24
     */
-    LCD_write_byte((0x04 + 0x00), 0);  // æ¸©åº¦æ ¡æ­£
+    LCD_write_byte((0x04 + 0x00), 0);  // ÎÂ¶ÈĞ£Õı
     /*
     0X10~0X17
-    BS2 BS1 BS0 n æ¨èæ··åˆç‡
+    BS2 BS1 BS0 n ÍÆ¼ö»ìºÏÂÊ
     0    0   0  7   1:100
     0    0   1  6   1:80
     0    1   0  5   1:65 / 1:65
@@ -105,17 +105,17 @@ void NOKIA_5110_LCD_Init(void)
     1    1   0  1   1:18 / 1:16
     1    1   1  0   1:10 / 1:9 / 1:8
     */
-    LCD_write_byte(0x10 + 0x00, 0);  // 1:48 è®¾ç½®åç½®ç³»ç»Ÿ
-    LCD_write_byte(0x20, 0);    // ä½¿ç”¨åŸºæœ¬å‘½ä»¤
-    NOKIA_5110_LCD_Clear();     // æ¸…å±
-    LCD_write_byte(0x0c, 0);    // è®¾å®šæ˜¾ç¤ºæ¨¡å¼ï¼Œæ­£å¸¸æ˜¾ç¤º
+    LCD_write_byte(0x10 + 0x00, 0);  // 1:48 ÉèÖÃÆ«ÖÃÏµÍ³
+    LCD_write_byte(0x20, 0);    // Ê¹ÓÃ»ù±¾ÃüÁî
+    NOKIA_5110_LCD_Clear();     // ÇåÆÁ
+    LCD_write_byte(0x0c, 0);    // Éè¶¨ÏÔÊ¾Ä£Ê½£¬Õı³£ÏÔÊ¾
     NOKIA_5110_LCD_Clear();
-    // å…³é—­LCD
+    // ¹Ø±ÕLCD
     LCD_CE = 0;
 }
 
 /*-----------------------------------------------------------------------
-LCD_clear         : LCDæ¸…å±å‡½æ•°
+LCD_clear         : LCDÇåÆÁº¯Êı
 -----------------------------------------------------------------------*/
 void NOKIA_5110_LCD_Clear(void)
 {
@@ -128,9 +128,9 @@ void NOKIA_5110_LCD_Clear(void)
 }
 
 /*-----------------------------------------------------------------------
-LCD_set_XY        : è®¾ç½®LCDåæ ‡å‡½æ•°
-è¾“å…¥å‚æ•°ï¼šX       ï¼š0ï¼83
-          Y       ï¼š0ï¼5
+LCD_set_XY        : ÉèÖÃLCD×ø±êº¯Êı
+ÊäÈë²ÎÊı£ºX       £º0£­83
+          Y       £º0£­5
 -----------------------------------------------------------------------*/
 static void LCD_set_XY(unsigned char X, unsigned char Y)
 {
@@ -139,8 +139,8 @@ static void LCD_set_XY(unsigned char X, unsigned char Y)
 }
 
 /*-----------------------------------------------------------------------
-LCD_write_char    : æ˜¾ç¤ºè‹±æ–‡å­—ç¬¦
-è¾“å…¥å‚æ•°ï¼šc       ï¼šæ˜¾ç¤ºçš„å­—ç¬¦ï¼›
+LCD_write_char    : ÏÔÊ¾Ó¢ÎÄ×Ö·û
+ÊäÈë²ÎÊı£ºc       £ºÏÔÊ¾µÄ×Ö·û£»
 -----------------------------------------------------------------------*/
 void LCD_write_char(unsigned char c)
 {
@@ -151,9 +151,9 @@ void LCD_write_char(unsigned char c)
 }
 
 /*-----------------------------------------------------------------------
-LCD_write_english_String  : è‹±æ–‡å­—ç¬¦ä¸²æ˜¾ç¤ºå‡½æ•°
-è¾“å…¥å‚æ•°ï¼š*s      ï¼šè‹±æ–‡å­—ç¬¦ä¸²æŒ‡é’ˆ;
-          Xã€Y    : æ˜¾ç¤ºå­—ç¬¦ä¸²çš„ä½ç½®,x 0-83 ,y 0-5
+LCD_write_english_String  : Ó¢ÎÄ×Ö·û´®ÏÔÊ¾º¯Êı
+ÊäÈë²ÎÊı£º*s      £ºÓ¢ÎÄ×Ö·û´®Ö¸Õë;
+          X¡¢Y    : ÏÔÊ¾×Ö·û´®µÄÎ»ÖÃ,x 0-83 ,y 0-5
 -----------------------------------------------------------------------*/
 void LCD_write_english_string(unsigned char X, unsigned char Y, char* s)
 {
@@ -165,13 +165,13 @@ void LCD_write_english_string(unsigned char X, unsigned char Y, char* s)
     }
 }
 /*-----------------------------------------------------------------------
-LCD_write_chinese_string: åœ¨LCDä¸Šæ˜¾ç¤ºæ±‰å­—
-è¾“å…¥å‚æ•°ï¼šXã€Y    ï¼šæ˜¾ç¤ºæ±‰å­—çš„èµ·å§‹Xã€Yåæ ‡ï¼›
-          ch_with ï¼šæ±‰å­—ç‚¹é˜µçš„å®½åº¦
-          num     ï¼šæ˜¾ç¤ºæ±‰å­—çš„ä¸ªæ•°ï¼›
-          line    ï¼šæ±‰å­—ç‚¹é˜µæ•°ç»„ä¸­çš„èµ·å§‹è¡Œæ•°
-          row     ï¼šæ±‰å­—æ˜¾ç¤ºçš„è¡Œé—´è·
-æµ‹è¯•ï¼š
+LCD_write_chinese_string: ÔÚLCDÉÏÏÔÊ¾ºº×Ö
+ÊäÈë²ÎÊı£ºX¡¢Y    £ºÏÔÊ¾ºº×ÖµÄÆğÊ¼X¡¢Y×ø±ê£»
+          ch_with £ººº×ÖµãÕóµÄ¿í¶È
+          num     £ºÏÔÊ¾ºº×ÖµÄ¸öÊı£»
+          line    £ººº×ÖµãÕóÊı×éÖĞµÄÆğÊ¼ĞĞÊı
+          row     £ººº×ÖÏÔÊ¾µÄĞĞ¼ä¾à
+²âÊÔ£º
     LCD_write_chi(0,0,12,7,0,0);
     LCD_write_chi(0,2,12,7,0,0);
     LCD_write_chi(0,4,12,7,0,0);
@@ -182,13 +182,13 @@ void LCD_write_chinese_string(unsigned char X, unsigned char Y,
 {
     unsigned char i, n;
 
-    LCD_set_XY(X, Y);                            //è®¾ç½®åˆå§‹ä½ç½®
+    LCD_set_XY(X, Y);                            //ÉèÖÃ³õÊ¼Î»ÖÃ
 
     for (i = 0; i < num;)
     {
-        for (n = 0; n < ch_with * 2; n++)        //å†™ä¸€ä¸ªæ±‰å­—
+        for (n = 0; n < ch_with * 2; n++)        //Ğ´Ò»¸öºº×Ö
         {
-            if (n == ch_with)                    //å†™æ±‰å­—çš„ä¸‹åŠéƒ¨åˆ†
+            if (n == ch_with)                    //Ğ´ºº×ÖµÄÏÂ°ë²¿·Ö
             {
                 if (i == 0) LCD_set_XY(X, Y + 1);
                 else
@@ -204,11 +204,11 @@ void LCD_write_chinese_string(unsigned char X, unsigned char Y,
 
 
 /*-----------------------------------------------------------------------
-LCD_draw_map      : ä½å›¾ç»˜åˆ¶å‡½æ•°
-è¾“å…¥å‚æ•°ï¼šXã€Y    ï¼šä½å›¾ç»˜åˆ¶çš„èµ·å§‹Xã€Yåæ ‡ï¼›
-          *map    ï¼šä½å›¾ç‚¹é˜µæ•°æ®ï¼›
-          Pix_x   ï¼šä½å›¾åƒç´ ï¼ˆé•¿ï¼‰
-          Pix_y   ï¼šä½å›¾åƒç´ ï¼ˆå®½ï¼‰
+LCD_draw_map      : Î»Í¼»æÖÆº¯Êı
+ÊäÈë²ÎÊı£ºX¡¢Y    £ºÎ»Í¼»æÖÆµÄÆğÊ¼X¡¢Y×ø±ê£»
+          *map    £ºÎ»Í¼µãÕóÊı¾İ£»
+          Pix_x   £ºÎ»Í¼ÏñËØ£¨³¤£©
+          Pix_y   £ºÎ»Í¼ÏñËØ£¨¿í£©
 -----------------------------------------------------------------------*/
 void LCD_draw_bmp_pixel(unsigned char X, unsigned char Y, unsigned char* map,
                         unsigned char Pix_x, unsigned char Pix_y)
@@ -216,7 +216,7 @@ void LCD_draw_bmp_pixel(unsigned char X, unsigned char Y, unsigned char* map,
     unsigned int i, n;
     unsigned char row;
 
-    if (Pix_y % 8 == 0) row = Pix_y / 8; //è®¡ç®—ä½å›¾æ‰€å è¡Œæ•°
+    if (Pix_y % 8 == 0) row = Pix_y / 8; //¼ÆËãÎ»Í¼ËùÕ¼ĞĞÊı
     else row = Pix_y / 8 + 1;
 
     for (n = 0; n < row; n++)
@@ -226,7 +226,7 @@ void LCD_draw_bmp_pixel(unsigned char X, unsigned char Y, unsigned char* map,
         {
             LCD_write_byte(map[i + n * Pix_x], 1);
         }
-        Y++;                         //æ¢è¡Œ
+        Y++;                         //»»ĞĞ
     }
 }
 

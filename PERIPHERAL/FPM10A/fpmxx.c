@@ -7,29 +7,29 @@ Stm32 F4
 
 volatile unsigned char FPMXX_RECEICE_BUFFER[64];
 
-//FINGERPRINTé€šä¿¡åè®®å®šä¹‰
-unsigned char FPMXX_Pack_Head[6] = {0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF}; //åè®®åŒ…å¤´
-unsigned char FPMXX_Get_Img[6] =   {0x01, 0x00, 0x03, 0x01, 0x00, 0x05}; //è·å¾—æŒ‡çº¹å›¾åƒ
-unsigned char FPMXX_Get_Templete_Count[6] =   {0x01, 0x00, 0x03, 0x1D, 0x00, 0x21}; //è·å¾—æ¨¡ç‰ˆæ€»æ•°
-unsigned char FP_Search[11] =     {0x01, 0x00, 0x08, 0x04, 0x01, 0x00, 0x00, 0x03, 0xA1, 0x00, 0xB2}; //æœç´¢æŒ‡çº¹æœç´¢èŒƒå›´0 - 929
-unsigned char FP_Img_To_Buffer[7] =  {0x01, 0x00, 0x04, 0x02, 0x01, 0x00, 0x08}; //å°†å›¾åƒæ”¾å…¥åˆ°BUFFER
-unsigned char FP_Reg_Model[6] =       {0x01, 0x00, 0x03, 0x05, 0x00, 0x09}; //å°†BUFFER1è·ŸBUFFER2åˆæˆç‰¹å¾æ¨¡ç‰ˆ
-unsigned char FP_Delet_All_Model[6] = {0x01, 0x00, 0x03, 0x0d, 0x00, 0x11}; //åˆ é™¤æŒ‡çº¹æ¨¡å—é‡Œæ‰€æœ‰çš„æ¨¡ç‰ˆ
-volatile unsigned char FP_Save_Finger[9] =   {0x01, 0x00, 0x06, 0x06, 0x01, 0x00, 0x0B, 0x00, 0x19}; //å°†BUFFER1ä¸­çš„ç‰¹å¾ç å­˜æ”¾åˆ°æŒ‡å®šçš„ä½ç½®
-volatile unsigned char FP_Delete_Model[10] = {0x01, 0x00, 0x07, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00}; //åˆ é™¤æŒ‡å®šçš„æ¨¡ç‰ˆ
+//FINGERPRINTÍ¨ĞÅĞ­Òé¶¨Òå
+unsigned char FPMXX_Pack_Head[6] = {0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF}; //Ğ­Òé°üÍ·
+unsigned char FPMXX_Get_Img[6] =   {0x01, 0x00, 0x03, 0x01, 0x00, 0x05}; //»ñµÃÖ¸ÎÆÍ¼Ïñ
+unsigned char FPMXX_Get_Templete_Count[6] =   {0x01, 0x00, 0x03, 0x1D, 0x00, 0x21}; //»ñµÃÄ£°æ×ÜÊı
+unsigned char FP_Search[11] =     {0x01, 0x00, 0x08, 0x04, 0x01, 0x00, 0x00, 0x03, 0xA1, 0x00, 0xB2}; //ËÑË÷Ö¸ÎÆËÑË÷·¶Î§0 - 929
+unsigned char FP_Img_To_Buffer[7] =  {0x01, 0x00, 0x04, 0x02, 0x01, 0x00, 0x08}; //½«Í¼Ïñ·ÅÈëµ½BUFFER
+unsigned char FP_Reg_Model[6] =       {0x01, 0x00, 0x03, 0x05, 0x00, 0x09}; //½«BUFFER1¸úBUFFER2ºÏ³ÉÌØÕ÷Ä£°æ
+unsigned char FP_Delet_All_Model[6] = {0x01, 0x00, 0x03, 0x0d, 0x00, 0x11}; //É¾³ıÖ¸ÎÆÄ£¿éÀïËùÓĞµÄÄ£°æ
+volatile unsigned char FP_Save_Finger[9] =   {0x01, 0x00, 0x06, 0x06, 0x01, 0x00, 0x0B, 0x00, 0x19}; //½«BUFFER1ÖĞµÄÌØÕ÷Âë´æ·Åµ½Ö¸¶¨µÄÎ»ÖÃ
+volatile unsigned char FP_Delete_Model[10] = {0x01, 0x00, 0x07, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00}; //É¾³ıÖ¸¶¨µÄÄ£°æ
 //volatile unsigned char FINGER_NUM;
 
 #define Driver_UARTx Driver_UART2
 extern ARM_DRIVER_UART Driver_UARTx;
 //#define FPMXX_USART_Send_Byte(x) Send_Hex(FPMXX_USART,x)
 #define FPMXX_USART_Send_Byte(x) Driver_UARTx.WriteData((uint8_t *)&x,1)
-/*------------------ FINGERPRINTå‘½ä»¤å­— --------------------------*/
-void FPMXX_Cmd_Send_Pack_Head(void) //å‘é€åŒ…å¤´
+/*------------------ FINGERPRINTÃüÁî×Ö --------------------------*/
+void FPMXX_Cmd_Send_Pack_Head(void) //·¢ËÍ°üÍ·
 {
     Driver_UARTx.WriteData(FPMXX_Pack_Head, 6);
 }
 
-//FINGERPRINT_è·å¾—æŒ‡çº¹å›¾åƒå‘½ä»¤
+//FINGERPRINT_»ñµÃÖ¸ÎÆÍ¼ÏñÃüÁî
 void FPMXX_Cmd_Get_Img(void)
 {
     Driver_UARTx.WriteData(FPMXX_Pack_Head, 6);
@@ -37,7 +37,7 @@ void FPMXX_Cmd_Get_Img(void)
     Driver_UARTx.WriteData(FPMXX_Get_Img, 6);
 }
 
-//è®²å›¾åƒè½¬æ¢æˆç‰¹å¾ç å­˜æ”¾åœ¨Buffer1ä¸­
+//½²Í¼Ïñ×ª»»³ÉÌØÕ÷Âë´æ·ÅÔÚBuffer1ÖĞ
 void FINGERPRINT_Cmd_Img_To_Buffer(int BufferID)
 {
     Driver_UARTx.WriteData(FPMXX_Pack_Head, 6);
@@ -48,27 +48,27 @@ void FINGERPRINT_Cmd_Img_To_Buffer(int BufferID)
 }
 
 
-//å°†BUFFER1 è·Ÿ BUFFER2 ä¸­çš„ç‰¹å¾ç åˆå¹¶æˆæŒ‡çº¹æ¨¡ç‰ˆ
+//½«BUFFER1 ¸ú BUFFER2 ÖĞµÄÌØÕ÷ÂëºÏ²¢³ÉÖ¸ÎÆÄ£°æ
 void FINGERPRINT_Cmd_Reg_Model(void)
 {
     unsigned char i;
-    for (i = 0; i < 6; i++) //åŒ…å¤´
+    for (i = 0; i < 6; i++) //°üÍ·
         FPMXX_USART_Send_Byte(FPMXX_Pack_Head[i]);
-    for (i = 0; i < 6; i++) //å‘½ä»¤åˆå¹¶æŒ‡çº¹æ¨¡ç‰ˆ
+    for (i = 0; i < 6; i++) //ÃüÁîºÏ²¢Ö¸ÎÆÄ£°æ
         FPMXX_USART_Send_Byte(FP_Reg_Model[i]);
 }
 
-//åˆ é™¤æŒ‡çº¹æ¨¡å—é‡Œçš„æ‰€æœ‰æŒ‡çº¹æ¨¡ç‰ˆ
+//É¾³ıÖ¸ÎÆÄ£¿éÀïµÄËùÓĞÖ¸ÎÆÄ£°æ
 void FINGERPRINT_Cmd_Delete_All_Model(void)
 {
     int i;
-    for (i = 0; i < 6; i++) //åŒ…å¤´
+    for (i = 0; i < 6; i++) //°üÍ·
         FPMXX_USART_Send_Byte(FPMXX_Pack_Head[i]);
-    for (i = 0; i < 6; i++) //å‘½ä»¤åˆå¹¶æŒ‡çº¹æ¨¡ç‰ˆ
+    for (i = 0; i < 6; i++) //ÃüÁîºÏ²¢Ö¸ÎÆÄ£°æ
         FPMXX_USART_Send_Byte(FP_Delet_All_Model[i]);
 }
 
-//åˆ é™¤æŒ‡çº¹æ¨¡å—é‡Œçš„æŒ‡å®šæŒ‡çº¹æ¨¡ç‰ˆ
+//É¾³ıÖ¸ÎÆÄ£¿éÀïµÄÖ¸¶¨Ö¸ÎÆÄ£°æ
 void FINGERPRINT_Cmd_Delete_Model(unsigned int uiID_temp)
 {
     volatile unsigned int uiSum_temp = 0;
@@ -86,17 +86,17 @@ void FINGERPRINT_Cmd_Delete_Model(unsigned int uiID_temp)
     FP_Delete_Model[9] = uiSum_temp & 0x00FF;
 
 
-    for (i = 0; i < 6; i++) //åŒ…å¤´
+    for (i = 0; i < 6; i++) //°üÍ·
         FPMXX_USART_Send_Byte(FPMXX_Pack_Head[i]);
 
-    for (i = 0; i < 10; i++) //å‘½ä»¤åˆå¹¶æŒ‡çº¹æ¨¡ç‰ˆ
+    for (i = 0; i < 10; i++) //ÃüÁîºÏ²¢Ö¸ÎÆÄ£°æ
         FPMXX_USART_Send_Byte(FP_Delete_Model[i]);
 }
 
 
 
 
-//è·å¾—æŒ‡çº¹æ¨¡æ¿æ•°é‡
+//»ñµÃÖ¸ÎÆÄ£°åÊıÁ¿
 void FINGERPRINT_Cmd_Get_Templete_Num(void)
 {
 
@@ -113,7 +113,7 @@ void FINGERPRINT_Cmd_Search_Finger(int BufferID,int StartPage,int PageNum)
 	FP_Search[6]=StartPage;
 	FP_Search[7]=PageNum>>8;
 	FP_Search[8]=PageNum;
-	for (int i = 0; i < 9; i++) //è®¡ç®—æ ¡éªŒå’Œ
+	for (int i = 0; i < 9; i++) //¼ÆËãĞ£ÑéºÍ
         sum = sum + FP_Search[i];
 	FP_Search[9]=sum>>8;
 	FP_Search[10]=sum;
@@ -125,53 +125,53 @@ void FINGERPRINT_Cmd_Save_Finger( unsigned char ucH_Char, unsigned char ucL_Char
     unsigned long temp = 0;
     unsigned char i;
 
-    //           SAVE_FINGER[9]={0x01,0x00,0x06,0x06,0x01,0x00,0x0B,0x00,0x19};//å°†BUFFER1ä¸­çš„ç‰¹å¾ç å­˜æ”¾åˆ°æŒ‡å®šçš„ä½ç½®
+    //           SAVE_FINGER[9]={0x01,0x00,0x06,0x06,0x01,0x00,0x0B,0x00,0x19};//½«BUFFER1ÖĞµÄÌØÕ÷Âë´æ·Åµ½Ö¸¶¨µÄÎ»ÖÃ
 
     FP_Save_Finger[5] = ucH_Char;
     FP_Save_Finger[6] = ucL_Char;
 
-    for (i = 0; i < 7; i++) //è®¡ç®—æ ¡éªŒå’Œ
+    for (i = 0; i < 7; i++) //¼ÆËãĞ£ÑéºÍ
         temp = temp + FP_Save_Finger[i];
 
-    FP_Save_Finger[7] = (temp & 0x00FF00) >> 8; //å­˜æ”¾æ ¡éªŒæ•°æ®
+    FP_Save_Finger[7] = (temp & 0x00FF00) >> 8; //´æ·ÅĞ£ÑéÊı¾İ
     FP_Save_Finger[8] = temp & 0x0000FF;
 
-    FPMXX_Cmd_Send_Pack_Head(); //å‘é€é€šä¿¡åè®®åŒ…å¤´
+    FPMXX_Cmd_Send_Pack_Head(); //·¢ËÍÍ¨ĞÅĞ­Òé°üÍ·
 
     for (i = 0; i < 9; i++)
-        FPMXX_USART_Send_Byte(FP_Save_Finger[i]);      //å‘é€å‘½ä»¤ å°†å›¾åƒè½¬æ¢æˆ ç‰¹å¾ç  å­˜æ”¾åœ¨ CHAR_buffer1
+        FPMXX_USART_Send_Byte(FP_Save_Finger[i]);      //·¢ËÍÃüÁî ½«Í¼Ïñ×ª»»³É ÌØÕ÷Âë ´æ·ÅÔÚ CHAR_buffer1
 }
-//æ¥æ”¶åé¦ˆæ•°æ®ç¼“å†²
+//½ÓÊÕ·´À¡Êı¾İ»º³å
 void FPMXX_Receive_Data(unsigned char ucLength)
 {
     Driver_UARTx.ReadData ((uint8_t *)FPMXX_RECEICE_BUFFER, ucLength);
 }
 /*
-//æŒ‡çº¹æ·»åŠ æ–°ç”¨æˆ·
+//Ö¸ÎÆÌí¼ÓĞÂÓÃ»§
 unsigned char FP_add_new_user(unsigned char ucH_user,unsigned char ucL_user)
 {
 
                do {
-                    FINGERPRINT_Cmd_Get_Img(); //è·å¾—æŒ‡çº¹å›¾åƒ
-                    FINGERPRINT_Recevice_Data(12); //æ¥æ”¶12ä¸ªé•¿åº¦çš„åé¦ˆç 
+                    FINGERPRINT_Cmd_Get_Img(); //»ñµÃÖ¸ÎÆÍ¼Ïñ
+                    FINGERPRINT_Recevice_Data(12); //½ÓÊÕ12¸ö³¤¶ÈµÄ·´À¡Âë
                   }
-               while ( UART1_FINGERPRINT_RECEVICE_BUFFER[9]!=0x0 ); //æ£€æµ‹æ˜¯å¦æˆåŠŸçš„æŒ‰äº†æŒ‡çº¹
+               while ( UART1_FINGERPRINT_RECEVICE_BUFFER[9]!=0x0 ); //¼ì²âÊÇ·ñ³É¹¦µÄ°´ÁËÖ¸ÎÆ
 
 
-                 FINGERPRINT_Cmd_Img_To_Buffer1(); //å°†å›¾åƒè½¬æ¢æˆç‰¹å¾ç å­˜æ”¾åœ¨Buffer1ä¸­
-                 FINGERPRINT_Recevice_Data(12);   //æ¥æ”¶12ä¸ªé•¿åº¦çš„åé¦ˆç 
+                 FINGERPRINT_Cmd_Img_To_Buffer1(); //½«Í¼Ïñ×ª»»³ÉÌØÕ÷Âë´æ·ÅÔÚBuffer1ÖĞ
+                 FINGERPRINT_Recevice_Data(12);   //½ÓÊÕ12¸ö³¤¶ÈµÄ·´À¡Âë
 
                 do{
-                     FINGERPRINT_Cmd_Get_Img(); //è·å¾—æŒ‡çº¹å›¾åƒ
-                     FINGERPRINT_Recevice_Data(12); //æ¥æ”¶12ä¸ªé•¿åº¦çš„åé¦ˆç 
+                     FINGERPRINT_Cmd_Get_Img(); //»ñµÃÖ¸ÎÆÍ¼Ïñ
+                     FINGERPRINT_Recevice_Data(12); //½ÓÊÕ12¸ö³¤¶ÈµÄ·´À¡Âë
                  }
                  while( UART1_FINGERPRINT_RECEVICE_BUFFER[9]!=0x0 );
 
-                 FINGERPRINT_Cmd_Img_To_Buffer2(); //å°†å›¾åƒè½¬æ¢æˆç‰¹å¾ç å­˜æ”¾åœ¨Buffer2ä¸­
-                 FINGERPRINT_Recevice_Data(12);   //æ¥æ”¶12ä¸ªé•¿åº¦çš„åé¦ˆç 
+                 FINGERPRINT_Cmd_Img_To_Buffer2(); //½«Í¼Ïñ×ª»»³ÉÌØÕ÷Âë´æ·ÅÔÚBuffer2ÖĞ
+                 FINGERPRINT_Recevice_Data(12);   //½ÓÊÕ12¸ö³¤¶ÈµÄ·´À¡Âë
 
 
-                 FP_Cmd_Reg_Model();//è½¬æ¢æˆç‰¹å¾ç 
+                 FP_Cmd_Reg_Model();//×ª»»³ÉÌØÕ÷Âë
                  FINGERPRINT_Recevice_Data(12);
 
                  FINGERPRINT_Cmd_Save_Finger(ucH_user,ucL_user);

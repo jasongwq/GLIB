@@ -2,16 +2,16 @@
 #define __24L01_H
 #include "sys.h"
 
-void NRF24L01_Init(void);//åˆå§‹åŒ–
-void NRF24L01_RX_Mode(void);//é…ç½®ä¸ºæ¥æ”¶æ¨¡å¼
-void NRF24L01_TX_Mode(void);//é…ç½®ä¸ºå‘é€æ¨¡å¼
-static u8 NRF24L01_Write_Buf(u8 reg, u8* pBuf, u8 u8s);//å†™æ•°æ®åŒº
-static u8 NRF24L01_Read_Buf(u8 reg, u8* pBuf, u8 u8s);//è¯»æ•°æ®åŒº
-static u8 NRF24L01_Read_Reg(u8 reg);                     //è¯»å¯„å­˜å™¨
-static u8 NRF24L01_Write_Reg(u8 reg, u8 value);//å†™å¯„å­˜å™¨
-static u8 NRF24L01_Check(void);//æ£€æŸ¥24L01æ˜¯å¦å­˜åœ¨
-//u8 NRF24L01_TxPacket(u8 *txbuf);//å‘é€ä¸€ä¸ªåŒ…çš„æ•°æ®
-//u8 NRF24L01_RxPacket(u8 *rxbuf);//æ¥æ”¶ä¸€ä¸ªåŒ…çš„æ•°æ®
+void NRF24L01_Init(void);//³õÊ¼»¯
+void NRF24L01_RX_Mode(void);//ÅäÖÃÎª½ÓÊÕÄ£Ê½
+void NRF24L01_TX_Mode(void);//ÅäÖÃÎª·¢ËÍÄ£Ê½
+static u8 NRF24L01_Write_Buf(u8 reg, u8* pBuf, u8 u8s);//Ğ´Êı¾İÇø
+static u8 NRF24L01_Read_Buf(u8 reg, u8* pBuf, u8 u8s);//¶ÁÊı¾İÇø
+static u8 NRF24L01_Read_Reg(u8 reg);                     //¶Á¼Ä´æÆ÷
+static u8 NRF24L01_Write_Reg(u8 reg, u8 value);//Ğ´¼Ä´æÆ÷
+static u8 NRF24L01_Check(void);//¼ì²é24L01ÊÇ·ñ´æÔÚ
+//u8 NRF24L01_TxPacket(u8 *txbuf);//·¢ËÍÒ»¸ö°üµÄÊı¾İ
+//u8 NRF24L01_RxPacket(u8 *rxbuf);//½ÓÊÕÒ»¸ö°üµÄÊı¾İ
 
 
 void NRF24L01_Test_0(void);

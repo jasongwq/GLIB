@@ -19,9 +19,9 @@
 /  object instead of the sector buffer in the individual file object for file
 /  data transfer. This reduces memory consumption 512 bytes each file object. */
 /*
-1ï¼‰_FS_TINYã€‚è¿™ä¸ªé€‰é¡¹åœ¨R0.07ç‰ˆæœ¬ä¸­å¼€å§‹å‡ºçŽ°ï¼Œä¹‹å‰çš„ç‰ˆæœ¬éƒ½æ˜¯ä»¥ç‹¬ç«‹çš„Cæ–‡ä»¶å‡ºçŽ°
-ï¼ˆFATFSå’ŒTiny  FATFSï¼‰ï¼Œæœ‰äº†è¿™ä¸ªé€‰é¡¹ä¹‹åŽï¼Œä¸¤è€…æ•´åˆåœ¨ä¸€èµ·äº†ï¼Œä½¿ç”¨èµ·æ¥æ›´æ–¹ä¾¿ã€‚æˆ‘ä»¬ä½¿
-ç”¨FATFSï¼Œæ‰€ä»¥æŠŠè¿™ä¸ªé€‰é¡¹å®šä¹‰ä¸º0å³å¯ã€‚
+1£©_FS_TINY¡£Õâ¸öÑ¡ÏîÔÚR0.07°æ±¾ÖÐ¿ªÊ¼³öÏÖ£¬Ö®Ç°µÄ°æ±¾¶¼ÊÇÒÔ¶ÀÁ¢µÄCÎÄ¼þ³öÏÖ
+£¨FATFSºÍTiny  FATFS£©£¬ÓÐÁËÕâ¸öÑ¡ÏîÖ®ºó£¬Á½ÕßÕûºÏÔÚÒ»ÆðÁË£¬Ê¹ÓÃÆðÀ´¸ü·½±ã¡£ÎÒÃÇÊ¹
+ÓÃFATFS£¬ËùÒÔ°ÑÕâ¸öÑ¡Ïî¶¨ÒåÎª0¼´¿É¡£
 */
 
 #define _FS_READONLY	0	/* 0:Read/Write or 1:Read only */
@@ -29,8 +29,8 @@
 /  writing functions, f_write, f_sync, f_unlink, f_mkdir, f_chmod, f_rename,
 /  f_truncate and useless f_getfree. */
 /*
-2)_FS_READONLYã€‚è¿™ä¸ªç”¨æ¥é…ç½®æ˜¯ä¸æ˜¯åªè¯»ï¼Œæœ¬ç« æˆ‘ä»¬éœ€è¦è¯»å†™éƒ½ç”¨ï¼Œæ‰€ä»¥è¿™é‡Œè®¾ç½®
-ä¸º0å³å¯
+2)_FS_READONLY¡£Õâ¸öÓÃÀ´ÅäÖÃÊÇ²»ÊÇÖ»¶Á£¬±¾ÕÂÎÒÃÇÐèÒª¶ÁÐ´¶¼ÓÃ£¬ËùÒÔÕâÀïÉèÖÃ
+Îª0¼´¿É
 */
 
 #define _FS_MINIMIZE	0	/* 0 to 3 */
@@ -46,20 +46,20 @@
 #define	_USE_STRFUNC	1	/* 0:Disable or 1-2:Enable */
 /* To enable string functions, set _USE_STRFUNC to 1 or 2. */
 /*
-3ï¼‰_USE_STRFUNCã€‚è¿™ä¸ªç”¨æ¥è®¾ç½®æ˜¯å¦æ”¯æŒå­—ç¬¦ä¸²ç±»æ“ä½œï¼Œæ¯”å¦‚f_putcï¼Œf_putsç­‰ï¼Œæœ¬ç« 
-æˆ‘ä»¬éœ€è¦ç”¨åˆ°ï¼Œæ•…è®¾ç½®è¿™é‡Œä¸º1ã€‚
+3£©_USE_STRFUNC¡£Õâ¸öÓÃÀ´ÉèÖÃÊÇ·ñÖ§³Ö×Ö·û´®Àà²Ù×÷£¬±ÈÈçf_putc£¬f_putsµÈ£¬±¾ÕÂ
+ÎÒÃÇÐèÒªÓÃµ½£¬¹ÊÉèÖÃÕâÀïÎª1¡£
 */
 
 #define	_USE_MKFS		1	/* 0:Disable or 1:Enable */
 /* To enable f_mkfs function, set _USE_MKFS to 1 and set _FS_READONLY to 0 */
 /*
-4ï¼‰_USE_MKFSã€‚è¿™ä¸ªç”¨æ¥å®šæ—¶æ˜¯å¦ä½¿èƒ½æ ¼å¼åŒ–ï¼Œæœ¬ç« éœ€è¦ç”¨åˆ°ï¼Œæ‰€ä»¥è®¾ç½®è¿™é‡Œä¸º1ã€‚
+4£©_USE_MKFS¡£Õâ¸öÓÃÀ´¶¨Ê±ÊÇ·ñÊ¹ÄÜ¸ñÊ½»¯£¬±¾ÕÂÐèÒªÓÃµ½£¬ËùÒÔÉèÖÃÕâÀïÎª1¡£
 */
 
 #define	_USE_FASTSEEK	1	/* 0:Disable or 1:Enable */
 /* To enable fast seek feature, set _USE_FASTSEEK to 1. */
 /*
-5ï¼‰_USE_FASTSEEKã€‚è¿™ä¸ªç”¨æ¥ä½¿èƒ½å¿«é€Ÿå®šä½ï¼Œæˆ‘ä»¬è®¾ç½®ä¸º1ï¼Œä½¿èƒ½å¿«é€Ÿå®šä½ã€‚*/
+5£©_USE_FASTSEEK¡£Õâ¸öÓÃÀ´Ê¹ÄÜ¿ìËÙ¶¨Î»£¬ÎÒÃÇÉèÖÃÎª1£¬Ê¹ÄÜ¿ìËÙ¶¨Î»¡£*/
 
 #define _USE_LABEL		0	/* 0:Disable or 1:Enable */
 /* To enable volume label functions, set _USE_LAVEL to 1 */
@@ -105,16 +105,16 @@
 /		1    - ASCII only (Valid for non LFN cfg.)
 */
 /*
-6ï¼‰_CODE_PAGEã€‚è¿™ä¸ªç”¨äºŽè®¾ç½®è¯­è¨€ç±»åž‹ï¼ŒåŒ…æ‹¬å¾ˆå¤šé€‰é¡¹ï¼ˆè§FATFS å®˜ç½‘è¯´æ˜Žï¼‰ï¼Œæˆ‘ä»¬
-è¿™é‡Œè®¾ç½®ä¸º936ï¼Œå³ç®€ä½“ä¸­æ–‡ï¼ˆGBKç ï¼Œéœ€è¦c936.cæ–‡ä»¶æ”¯æŒï¼Œè¯¥æ–‡ä»¶åœ¨optionæ–‡ä»¶å¤¹ï¼‰ã€‚ 
+6£©_CODE_PAGE¡£Õâ¸öÓÃÓÚÉèÖÃÓïÑÔÀàÐÍ£¬°üÀ¨ºÜ¶àÑ¡Ïî£¨¼ûFATFS ¹ÙÍøËµÃ÷£©£¬ÎÒÃÇ
+ÕâÀïÉèÖÃÎª936£¬¼´¼òÌåÖÐÎÄ£¨GBKÂë£¬ÐèÒªc936.cÎÄ¼þÖ§³Ö£¬¸ÃÎÄ¼þÔÚoptionÎÄ¼þ¼Ð£©¡£ 
 */
 
 
 #define	_USE_LFN	0		/* 0 to 3 */
 /*
-7ï¼‰_USE_LFNã€‚è¯¥é€‰é¡¹ç”¨äºŽè®¾ç½®æ˜¯å¦æ”¯æŒé•¿æ–‡ä»¶åï¼ˆè¿˜éœ€è¦_CODE_PAGEæ”¯æŒï¼‰ï¼Œå–å€¼èŒƒ
-å›´ä¸º0~3ã€‚0ï¼Œè¡¨ç¤ºä¸æ”¯æŒé•¿æ–‡ä»¶åï¼Œ1~3æ˜¯æ”¯æŒé•¿æ–‡ä»¶åï¼Œä½†æ˜¯å­˜å‚¨åœ°æ–¹ä¸ä¸€æ ·ï¼Œæˆ‘ä»¬é€‰æ‹©ä½¿
-ç”¨3ï¼Œé€šè¿‡ff_memallocå‡½æ•°æ¥åŠ¨æ€åˆ†é…é•¿æ–‡ä»¶åçš„å­˜å‚¨åŒºåŸŸã€‚ 
+7£©_USE_LFN¡£¸ÃÑ¡ÏîÓÃÓÚÉèÖÃÊÇ·ñÖ§³Ö³¤ÎÄ¼þÃû£¨»¹ÐèÒª_CODE_PAGEÖ§³Ö£©£¬È¡Öµ·¶
+Î§Îª0~3¡£0£¬±íÊ¾²»Ö§³Ö³¤ÎÄ¼þÃû£¬1~3ÊÇÖ§³Ö³¤ÎÄ¼þÃû£¬µ«ÊÇ´æ´¢µØ·½²»Ò»Ñù£¬ÎÒÃÇÑ¡ÔñÊ¹
+ÓÃ3£¬Í¨¹ýff_memallocº¯ÊýÀ´¶¯Ì¬·ÖÅä³¤ÎÄ¼þÃûµÄ´æ´¢ÇøÓò¡£ 
 */
 #define	_MAX_LFN	255		/* Maximum LFN length to handle (12 to 255) */
 /* The _USE_LFN option switches the LFN support.
@@ -152,7 +152,7 @@
 #define _VOLUMES	1
 /* Number of volumes (logical drives) to be used. */
 /*
-8ï¼‰_VOLUMESã€‚ç”¨äºŽè®¾ç½®FATFSæ”¯æŒçš„é€»è¾‘è®¾å¤‡æ•°ç›®ï¼Œæˆ‘ä»¬è®¾ç½®ä¸º2ï¼Œå³æ”¯æŒ2ä¸ªè®¾å¤‡ã€‚
+8£©_VOLUMES¡£ÓÃÓÚÉèÖÃFATFSÖ§³ÖµÄÂß¼­Éè±¸ÊýÄ¿£¬ÎÒÃÇÉèÖÃÎª2£¬¼´Ö§³Ö2¸öÉè±¸¡£
 */
 
 #define	_MAX_SS		512		/* 512, 1024, 2048 or 4096 */
@@ -162,7 +162,7 @@
 /  When _MAX_SS is larger than 512, it configures FatFs to variable sector size
 /  and GET_SECTOR_SIZE command must be implememted to the disk_ioctl function. */
 /*
-9ï¼‰_MAX_SSã€‚æ‰‡åŒºç¼“å†²çš„æœ€å¤§å€¼ï¼Œä¸€èˆ¬è®¾ç½®ä¸º512ã€‚ 
+9£©_MAX_SS¡£ÉÈÇø»º³åµÄ×î´óÖµ£¬Ò»°ãÉèÖÃÎª512¡£ 
 */
 
 #define	_MULTI_PARTITION	0	/* 0:Single partition, 1:Enable multiple partition */

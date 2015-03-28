@@ -2,34 +2,34 @@
 #define __DS18B20_H
 #include "sys.h"
 //////////////////////////////////////////////////////////////////////////////////
-//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºŽå…¶å®ƒä»»ä½•ç”¨é€”
-//ALIENTEKæˆ˜èˆ°STM32å¼€å‘æ¿
-//DS18B20é©±åŠ¨ä»£ç 
-//æ­£ç‚¹åŽŸå­@ALIENTEK
-//æŠ€æœ¯è®ºå›:www.openedv.com
-//ä¿®æ”¹æ—¥æœŸ:2012/9/12
-//ç‰ˆæœ¬ï¼šV1.0
-//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
-//Copyright(C) å¹¿å·žå¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2009-2019
+//±¾³ÌÐòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßÐí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
+//ALIENTEKÕ½½¢STM32¿ª·¢°å
+//DS18B20Çý¶¯´úÂë
+//ÕýµãÔ­×Ó@ALIENTEK
+//¼¼ÊõÂÛÌ³:www.openedv.com
+//ÐÞ¸ÄÈÕÆÚ:2012/9/12
+//°æ±¾£ºV1.0
+//°æÈ¨ËùÓÐ£¬µÁ°æ±Ø¾¿¡£
+//Copyright(C) ¹ãÖÝÊÐÐÇÒíµç×Ó¿Æ¼¼ÓÐÏÞ¹«Ë¾ 2009-2019
 //All rights reserved
 //////////////////////////////////////////////////////////////////////////////////
 
-////IOæ–¹å‘è®¾ç½®
+////IO·½ÏòÉèÖÃ
 //#define DS18B20_IO_IN()  {GPIOA->CRH&=0XFFFF0FFF;GPIOA->CRH|=8<<12;}
 //#define DS18B20_IO_OUT() {GPIOA->CRH&=0XFFFF0FFF;GPIOA->CRH|=3<<12;}
-//////IOæ“ä½œå‡½æ•°
-//#define DS18B20_DQ_OUT PAout(11) //æ•°æ®ç«¯å£ PA0 
-//#define DS18B20_DQ_IN  PAin(11)  //æ•°æ®ç«¯å£ PA0 
+//////IO²Ù×÷º¯Êý
+//#define DS18B20_DQ_OUT PAout(11) //Êý¾Ý¶Ë¿Ú PA0 
+//#define DS18B20_DQ_IN  PAin(11)  //Êý¾Ý¶Ë¿Ú PA0 
 
 
-u8 DS18B20_Init(void);//åˆå§‹åŒ–DS18B20
-short DS18B20_Get_Temp(void);//èŽ·å–æ¸©åº¦
-void DS18B20_Start(void);//å¼€å§‹æ¸©åº¦è½¬æ¢
-void DS18B20_Write_Byte(u8 dat);//å†™å…¥ä¸€ä¸ªå­—èŠ‚
-u8 DS18B20_Read_Byte(void);//è¯»å‡ºä¸€ä¸ªå­—èŠ‚
-u8 DS18B20_Read_Bit(void);//è¯»å‡ºä¸€ä¸ªä½
-u8 DS18B20_Check(void);//æ£€æµ‹æ˜¯å¦å­˜åœ¨DS18B20
-void DS18B20_Rst(void);//å¤ä½DS18B20
+u8 DS18B20_Init(void);//³õÊ¼»¯DS18B20
+short DS18B20_Get_Temp(void);//»ñÈ¡ÎÂ¶È
+void DS18B20_Start(void);//¿ªÊ¼ÎÂ¶È×ª»»
+void DS18B20_Write_Byte(u8 dat);//Ð´ÈëÒ»¸ö×Ö½Ú
+u8 DS18B20_Read_Byte(void);//¶Á³öÒ»¸ö×Ö½Ú
+u8 DS18B20_Read_Bit(void);//¶Á³öÒ»¸öÎ»
+u8 DS18B20_Check(void);//¼ì²âÊÇ·ñ´æÔÚDS18B20
+void DS18B20_Rst(void);//¸´Î»DS18B20
 #endif
 
 

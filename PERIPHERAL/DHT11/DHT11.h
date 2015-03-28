@@ -27,21 +27,21 @@
 */
 
 
-//IOæ–¹å‘è®¾ç½®
+//IO·½ÏòÉèÖÃ
 #define DHT11_IO_IN  GPIOD_Init(13,IPD,PU);
 #define DHT11_IO_OUT GPIOD_Init(13,Out_PP,PU);
-////IOæ“ä½œå‡½æ•°											   
+////IO²Ù×÷º¯Êı											   
 #define	DHT11_DQ_OUT_Set   Set_D13 
 #define	DHT11_DQ_OUT_Clr   Clr_D13
 #define	DHT11_DQ_IN            D13  
 
 
-u8 DHT11_Init(void);//åˆå§‹åŒ–DHT11
-u8 DHT11_Read_Data(u8 *temp,u8 *humi);//è¯»å–æ¸©æ¹¿åº¦
-u8 DHT11_Read_Byte(void);//è¯»å‡ºä¸€ä¸ªå­—èŠ‚
-u8 DHT11_Read_Bit(void);//è¯»å‡ºä¸€ä¸ªä½
-u8 DHT11_Check(void);//æ£€æµ‹æ˜¯å¦å­˜åœ¨DHT11
-void DHT11_Rst(void);//å¤ä½DHT11
+u8 DHT11_Init(void);//³õÊ¼»¯DHT11
+u8 DHT11_Read_Data(u8 *temp,u8 *humi);//¶ÁÈ¡ÎÂÊª¶È
+u8 DHT11_Read_Byte(void);//¶Á³öÒ»¸ö×Ö½Ú
+u8 DHT11_Read_Bit(void);//¶Á³öÒ»¸öÎ»
+u8 DHT11_Check(void);//¼ì²âÊÇ·ñ´æÔÚDHT11
+void DHT11_Rst(void);//¸´Î»DHT11
 
 
 

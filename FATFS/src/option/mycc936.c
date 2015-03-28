@@ -1,15 +1,15 @@
 #include "ff.h"
 #include "sys.h"
 
-//这里需要大约512字节左右的内存.
-//当内存不足的时候,可以使用指针方式,以节省部分内存
-//或者在函数内部申明,不过如果在内部申明,请保证堆栈大小大于512字节.
-//在.s文件里面设置.
-//必须注意的是:UNI2GBK的数组和GBK2UNI的数组大小一定要一致!!!.	
+//������Ҫ��Լ512�ֽ����ҵ��ڴ�.
+//���ڴ治���ʱ��,����ʹ��ָ�뷽ʽ,�Խ�ʡ�����ڴ�
+//�����ں����ڲ�����,����������ڲ�����,�뱣֤��ջ��С����512�ֽ�.
+//��.s�ļ���������.
+//����ע�����:UNI2GBK�������GBK2UNI�������Сһ��Ҫһ��!!!.	
 
 FIL UK_FILE;	  
-u8 UK_FLAG=0;   									//标记是否打开了UNIGBK.BIN	 
-const u8 *UNIGBK_PATH="0:/SYSTEM/FONT/UNIGBK.BIN"; 	//UNIGBK  存放路径
+u8 UK_FLAG=0;   									//����Ƿ����UNIGBK.BIN	 
+const u8 *UNIGBK_PATH="0:/SYSTEM/FONT/UNIGBK.BIN"; 	//UNIGBK  ���·��
 
 
 WCHAR ff_convert (	/* Converted code, 0 means conversion error */
@@ -24,10 +24,10 @@ WCHAR ff_convert (	/* Converted code, 0 means conversion error */
 	unsigned int cout;		   
 	u32 gbk2uni_offset=0;		  
 						  
-	if (src < 0x80)c = src;//ASCII,直接不用转换.
+	if (src < 0x80)c = src;//ASCII,ֱ�Ӳ���ת��.
 	else 
 	{
-		if(!UK_FLAG)//如果没打开UNIGBK.BIN.
+		if(!UK_FLAG)//���û��UNIGBK.BIN.
 		{
 			if(f_open(&UK_FILE,(const TCHAR*)UNIGBK_PATH,FA_READ)!=FR_OK)UK_FLAG=0;
 			else UK_FLAG=1;
@@ -39,10 +39,10 @@ WCHAR ff_convert (	/* Converted code, 0 means conversion error */
 		{   
 			gbk2uni_offset=0;
 		}
-		if(UK_FLAG)//存在 		    
+		if(UK_FLAG)//���� 		    
 		{
 			/* Unicode to OEMCP */
-			hi=UK_FILE.fsize/2;//对半开.
+			hi=UK_FILE.fsize/2;//�԰뿪.
 			hi =hi / 4 - 1;
 			li = 0;
 			for (n = 16; n; n--)

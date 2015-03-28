@@ -10,8 +10,8 @@ typedef struct{
 				int16_t y;
 				int16_t z;}S_INT16_XYZ;
 				
-extern S_INT16_XYZ		MPU6050_ACC_LAST,MPU6050_GYRO_LAST;	 //ÊúÄÊñ∞‰∏ÄÊ¨°ËØªÂèñÂÄº
-extern S_INT16_XYZ		GYRO_OFFSET,ACC_OFFSET;			         //Èõ∂ÊºÇ
+extern S_INT16_XYZ		MPU6050_ACC_LAST,MPU6050_GYRO_LAST;	 //◊Ó–¬“ª¥Œ∂¡»°÷µ
+extern S_INT16_XYZ		GYRO_OFFSET,ACC_OFFSET;			         //¡„∆Ø
 extern u8							GYRO_OFFSET_OK;
 extern u8							ACC_OFFSET_OK;
 

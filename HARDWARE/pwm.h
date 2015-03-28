@@ -55,9 +55,9 @@ void TIM8_PWM_Init(u16 arr, u16 psc);
 #define TIM_GetCompare(TIMx,Comparex) TIMx->CCR##Comparex
 
 /*
-999 è®¡æ•°
-0   åˆ†é¢‘
-TIM2_PWM_Init(999,0);//899 ä¸åˆ†é¢‘ ä¸åˆ†é¢‘,PWMé¢‘çŽ‡=72000/900=80Khz
+999 ¼ÆÊý
+0   ·ÖÆµ
+TIM2_PWM_Init(999,0);//899 ²»·ÖÆµ ²»·ÖÆµ,PWMÆµÂÊ=72000/900=80Khz
 void TIM_SetCompare2(TIM_TypeDef* TIMx, uint16_t Compare2);
 
         TIM2_PWM_Init(900,1);//80kHz

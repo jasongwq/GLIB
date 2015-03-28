@@ -32,7 +32,7 @@
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-//绔偣1鐢ㄤ簬鏁版嵁鍙戦�佺粰鐢佃剳
+//端点1用于数据发送给电脑
 void EP1_IN_Callback(void)
 {
   Mass_Storage_In();
@@ -45,7 +45,7 @@ void EP1_IN_Callback(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
-//绔偣2,鐢ㄤ簬鎺ユ敹浠庣數鑴戝彂閫佽繃鏉ョ殑鏁版嵁
+//端点2,用于接收从电脑发送过来的数据
 void EP2_OUT_Callback(void)
 {
   Mass_Storage_Out();

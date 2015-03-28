@@ -7,9 +7,9 @@
 //#define KEY_DOWN  2
 //#define KEY_RIGHT 1
 
-#define KEY1  GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_5)//è¯»å–æŒ‰é”®1
-#define KEY2  GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_2)//è¯»å–æŒ‰é”®2 
-#define KEY3  GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_3)//è¯»å–æŒ‰é”®3(WK_UP) 
+#define KEY1  GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_5)//¶ÁÈ¡°´¼ü1
+#define KEY2  GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_2)//¶ÁÈ¡°´¼ü2 
+#define KEY3  GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_3)//¶ÁÈ¡°´¼ü3(WK_UP) 
 
 
 
@@ -19,8 +19,8 @@
 #define KEY_SURE    4
 #define KEY_RETURN  5
 
-void KEY_Init(void);//IOåˆå§‹åŒ–
-u8 KEY_Scan(u8);    //æŒ‰é”®æ‰«æå‡½æ•°
+void KEY_Init(void);//IO³õÊ¼»¯
+u8 KEY_Scan(u8);    //°´¼üÉ¨Ãèº¯Êı
 void GPS_KEY_Init(void);
 u8 GPS_KEY_Scan(u8 mode);
 

@@ -23,11 +23,11 @@
 #include "led.h"
 
 
-//ÈÖçÁΩÆUSBÊó∂Èíü,USBclk=48Mhz
+//≈‰÷√USB ±÷”,USBclk=48Mhz
 void Set_USBClock(void)
 {
     RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);   //USBclk=PLLclk/1.5=48Mhz
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);//USBÊó∂Èíü‰ΩøËÉΩ
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);//USB ±÷” πƒ‹
 }
 
 /*******************************************************************************
@@ -63,19 +63,19 @@ void Leave_LowPowerMode(void)
     }
 
 }
-//USB‰∏≠Êñ≠ÈÖçÁΩÆ
+//USB÷–∂œ≈‰÷√
 void USB_Interrupts_Config(void)
 {
 
     NVIC_InitTypeDef NVIC_InitStructure;
     /* Enable the USB interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;  //ÁªÑ2Ôºå‰ºòÂÖàÁ∫ßÊ¨°‰πã
+    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;  //◊È2£¨”≈œ»º∂¥Œ÷Æ
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
     /* Enable the USB Wake-up interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = USB_HP_CAN1_TX_IRQn;   //ÁªÑ2Ôºå‰ºòÂÖàÁ∫ßÊúÄÈ´ò
+    NVIC_InitStructure.NVIC_IRQChannel = USB_HP_CAN1_TX_IRQn;   //◊È2£¨”≈œ»º∂◊Ó∏ﬂ
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_Init(&NVIC_InitStructure);

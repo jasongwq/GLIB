@@ -7,64 +7,64 @@
 #include "ff.h"
 
 //////////////////////////////////////////////////////////////////////////////////
-//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
-//ALIENTEKæˆ˜èˆ°STM32å¼€å‘æ¿
-//æ±‰å­—æ˜¾ç¤º é©±åŠ¨ä»£ç 
-//æ­£ç‚¹åŸå­@ALIENTEK
-//æŠ€æœ¯è®ºå›:www.openedv.com
-//ä¿®æ”¹æ—¥æœŸ:2012/9/18
-//ç‰ˆæœ¬ï¼šV1.0
-//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
-//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2009-2019
+//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
+//ALIENTEKÕ½½¢STM32¿ª·¢°å
+//ºº×ÖÏÔÊ¾ Çı¶¯´úÂë
+//ÕıµãÔ­×Ó@ALIENTEK
+//¼¼ÊõÂÛÌ³:www.openedv.com
+//ĞŞ¸ÄÈÕÆÚ:2012/9/18
+//°æ±¾£ºV1.0
+//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
+//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2009-2019
 //All rights reserved
 //////////////////////////////////////////////////////////////////////////////////
 
-//code å­—ç¬¦æŒ‡é’ˆå¼€å§‹
-//ä»å­—åº“ä¸­æŸ¥æ‰¾å‡ºå­—æ¨¡
-//code å­—ç¬¦ä¸²çš„å¼€å§‹åœ°å€,GBKç 
-//mat  æ•°æ®å­˜æ”¾åœ°å€ size*2 byteså¤§å°
-void Get_HzMat(unsigned char* code, unsigned char* mat, u8 size)
-{
-    FIL fsrc;
-    FRESULT res;
-    UINT br;
-    unsigned char qh, ql;
-    unsigned char i;
-    unsigned long foffset;
-    qh = *code;
-    ql = *(++code);
-    if (qh < 0x81 || ql < 0x40 || ql == 0xff || qh == 0xff) //? ????
-    {
-        for (i = 0; i < (size * 2); i++)*mat++ = 0x00; //????
-        return; //????
-    }
-    if (ql < 0x7f)ql -= 0x40; //??!
-    else ql -= 0x41;
-    qh -= 0x81;
-    foffset = ((unsigned long)190 * qh + ql) * (size * 2); //???????????
-    if (size == 16)
-    {
-        res = f_open(&fsrc, "0:/SYSTEM/FONT/GBK16.FON", FA_OPEN_EXISTING | FA_READ);   //??????
-        if (res != FR_OK)
-        {
+//code ×Ö·ûÖ¸Õë¿ªÊ¼
+//´Ó×Ö¿âÖĞ²éÕÒ³ö×ÖÄ£
+//code ×Ö·û´®µÄ¿ªÊ¼µØÖ·,GBKÂë
+//mat  Êı¾İ´æ·ÅµØÖ· size*2 bytes´óĞ¡
+ void Get_HzMat(unsigned char* code, unsigned char* mat, u8 size)
+ {
+     FIL fsrc;
+     FRESULT res;
+     UINT br;
+     unsigned char qh, ql;
+     unsigned char i;
+     unsigned long foffset;
+     qh = *code;
+     ql = *(++code);
+     if (qh < 0x81 || ql < 0x40 || ql == 0xff || qh == 0xff) //? ????
+     {
+         for (i = 0; i < (size * 2); i++)*mat++ = 0x00; //????
+         return; //????
+     }
+     if (ql < 0x7f)ql -= 0x40; //??!
+     else ql -= 0x41;
+     qh -= 0x81;
+     foffset = ((unsigned long)190 * qh + ql) * (size * 2); //???????????
+     if (size == 16)
+     {
+         res = f_open(&fsrc, "0:/SYSTEM/FONT/GBK16.FON", FA_OPEN_EXISTING | FA_READ);   //??????
+         if (res != FR_OK)
+         {
 
-        }
-        res = f_lseek(&fsrc, foffset); //?????
-        res = f_read(&fsrc, mat, 32, &br);
-        res = f_close(&fsrc); //????
-    }
-    else
-    {
-        res = f_open(&fsrc, "0:/SYSTEM/FONT/GBK12.FON", FA_OPEN_EXISTING | FA_READ);   //??????
-        if (res != FR_OK)
-        {
+         }
+         res = f_lseek(&fsrc, foffset); //?????
+         res = f_read(&fsrc, mat, 32, &br);
+         res = f_close(&fsrc); //????
+     }
+     else
+     {
+         res = f_open(&fsrc, "0:/SYSTEM/FONT/GBK12.FON", FA_OPEN_EXISTING | FA_READ);   //??????
+         if (res != FR_OK)
+         {
 
-        }
-        res = f_lseek(&fsrc, foffset); //?????
-        res = f_read(&fsrc, mat, 24, &br);
-        res = f_close(&fsrc); //????
-    }
-}
+         }
+         res = f_lseek(&fsrc, foffset); //?????
+         res = f_read(&fsrc, mat, 24, &br);
+         res = f_close(&fsrc); //????
+     }
+ }
 //void Get_HzMat(unsigned char *code,unsigned char *mat,u8 size)
 //{
 //  unsigned char qh,ql;
@@ -72,37 +72,38 @@ void Get_HzMat(unsigned char* code, unsigned char* mat, u8 size)
 //  unsigned long foffset;
 //  qh=*code;
 //  ql=*(++code);
-//  if(qh<0x81||ql<0x40||ql==0xff||qh==0xff)//é å¸¸ç”¨æ±‰å­—
+//  if(qh<0x81||ql<0x40||ql==0xff||qh==0xff)//·Ç ³£ÓÃºº×Ö
 //  {
-//      for(i=0;i<(size*2);i++)*mat++=0x00;//å¡«å……æ»¡æ ¼
-//      return; //ç»“æŸè®¿é—®
+//      for(i=0;i<(size*2);i++)*mat++=0x00;//Ìî³äÂú¸ñ
+//      return; //½áÊø·ÃÎÊ
 //  }
-//  if(ql<0x7f)ql-=0x40;//æ³¨æ„!
+//  if(ql<0x7f)ql-=0x40;//×¢Òâ!
 //  else ql-=0x41;
 //  qh-=0x81;
-//  foffset=((unsigned long)190*qh+ql)*(size*2);//å¾—åˆ°å­—åº“ä¸­çš„å­—èŠ‚åç§»é‡
+//  foffset=((unsigned long)190*qh+ql)*(size*2);//µÃµ½×Ö¿âÖĞµÄ×Ö½ÚÆ«ÒÆÁ¿
 
 //  if(size==16)SPI_Flash_Read(mat,foffset+ftinfo.f16addr,32);
 //  else SPI_Flash_Read(mat,foffset+ftinfo.f12addr,24);
 //}
-//æ˜¾ç¤ºä¸€ä¸ªæŒ‡å®šå¤§å°çš„æ±‰å­—
-//x,y :æ±‰å­—çš„åæ ‡
-//font:æ±‰å­—GBKç 
-//size:å­—ä½“å¤§å°
-//mode:0,æ­£å¸¸æ˜¾ç¤º,1,å åŠ æ˜¾ç¤º
+
+//ÏÔÊ¾Ò»¸öÖ¸¶¨´óĞ¡µÄºº×Ö
+//x,y :ºº×ÖµÄ×ø±ê
+//font:ºº×ÖGBKÂë
+//size:×ÖÌå´óĞ¡
+//mode:0,Õı³£ÏÔÊ¾,1,µş¼ÓÏÔÊ¾
 void Show_Font(u16 x, u16 y, u8* font, u8 size, u8 mode)
 {
     u8 temp, t, t1;
     u16 y0 = y;
     u8 dzk[32];
     u16 tempcolor;
-    if (size != 12 && size != 16)return; //ä¸æ”¯æŒçš„size
-    Get_HzMat(font, dzk, size); //å¾—åˆ°ç›¸åº”å¤§å°çš„ç‚¹é˜µæ•°æ®
-    if (mode == 0) //æ­£å¸¸æ˜¾ç¤º
+    if (size != 12 && size != 16)return; //²»Ö§³ÖµÄsize
+    Get_HzMat(font, dzk, size); //µÃµ½ÏàÓ¦´óĞ¡µÄµãÕóÊı¾İ
+    if (mode == 0) //Õı³£ÏÔÊ¾
     {
         for (t = 0; t < size * 2; t++)
         {
-            temp = dzk[t]; //å¾—åˆ°12æ•°æ®
+            temp = dzk[t]; //µÃµ½12Êı¾İ
             for (t1 = 0; t1 < 8; t1++)
             {
                 if (temp & 0x80)LCD_DrawPoint(x, y);
@@ -111,24 +112,31 @@ void Show_Font(u16 x, u16 y, u8* font, u8 size, u8 mode)
                     tempcolor = POINT_COLOR;
                     POINT_COLOR = BACK_COLOR;
                     LCD_DrawPoint(x, y);
-                    POINT_COLOR = tempcolor; //è¿˜åŸ
+                    POINT_COLOR = tempcolor; //»¹Ô­
                 }
                 temp <<= 1;
+//							  x++;
+//                if ((x - x0) == size)
+//                {
+//                    x = x0;
+//                    y++;
+//                    break;
+//                }
                 y++;
                 if ((y - y0) == size)
                 {
                     y = y0;
                     x++;
                     break;
-                }
+                }			
             }
         }
     }
-    else //å åŠ æ˜¾ç¤º
+    else //µş¼ÓÏÔÊ¾
     {
         for (t = 0; t < size * 2; t++)
         {
-            temp = dzk[t]; //å¾—åˆ°12æ•°æ®
+            temp = dzk[t]; //µÃµ½12Êı¾İ
             for (t1 = 0; t1 < 8; t1++)
             {
                 if (temp & 0x80)LCD_DrawPoint(x, y);
@@ -144,70 +152,70 @@ void Show_Font(u16 x, u16 y, u8* font, u8 size, u8 mode)
         }
     }
 }
-//åœ¨æŒ‡å®šä½ç½®å¼€å§‹æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦ä¸²
-//æ”¯æŒè‡ªåŠ¨æ¢è¡Œ
-//(x,y):èµ·å§‹åæ ‡
-//width,height:åŒºåŸŸ
-//str  :å­—ç¬¦ä¸²
-//size :å­—ä½“å¤§å°
-//mode:0,éå åŠ æ–¹å¼;1,å åŠ æ–¹å¼
-void Show_Str(u16 x, u16 y, u16 width, u16 height, u8* str, u8 size, u8 mode)
+//ÔÚÖ¸¶¨Î»ÖÃ¿ªÊ¼ÏÔÊ¾Ò»¸ö×Ö·û´®
+//Ö§³Ö×Ô¶¯»»ĞĞ
+//(x,y):ÆğÊ¼×ø±ê
+//width,height:ÇøÓò
+//str  :×Ö·û´®
+//size :×ÖÌå´óĞ¡
+//mode:0,·Çµş¼Ó·½Ê½;1,µş¼Ó·½Ê½
+void Show_Str(u16 x, u16 y, u16 width, u16 height, u8 * str, u8 size, u8 mode)
 {
     u16 x0 = x;
     u16 y0 = y;
-    u8 bHz = 0;   //å­—ç¬¦æˆ–è€…ä¸­æ–‡
-    while (*str != 0) //æ•°æ®æœªç»“æŸ
+    u8 bHz = 0;   //×Ö·û»òÕßÖĞÎÄ
+    while (*str != 0) //Êı¾İÎ´½áÊø
     {
         if (!bHz)
         {
-            if (*str > 0x80)bHz = 1; //ä¸­æ–‡
-            else              //å­—ç¬¦
+            if (*str > 0x80)bHz = 1; //ÖĞÎÄ
+            else              //×Ö·û
             {
-                if (x > (x0 + width - size / 2)) //æ¢è¡Œ
+                if (x > (x0 + width - size / 2)) //»»ĞĞ
                 {
                     y += size;
                     x = x0;
                 }
-                if (y > (y0 + height - size))break; //è¶Šç•Œè¿”å›
-                if (*str == 13) //æ¢è¡Œç¬¦å·
+                if (y > (y0 + height - size))break; //Ô½½ç·µ»Ø
+                if (*str == 13) //»»ĞĞ·ûºÅ
                 {
                     y += size;
                     x = x0;
                     str++;
                 }
-                else LCD_ShowChar(x, y, *str, size, mode); //æœ‰æ•ˆéƒ¨åˆ†å†™å…¥
+                else LCD_ShowChar(x, y, *str, size, mode); //ÓĞĞ§²¿·ÖĞ´Èë
                 str++;
-                x += size / 2; //å­—ç¬¦,ä¸ºå…¨å­—çš„ä¸€åŠ
+                x += size / 2; //×Ö·û,ÎªÈ«×ÖµÄÒ»°ë
             }
         }
-        else //ä¸­æ–‡
+        else //ÖĞÎÄ
         {
-            bHz = 0; //æœ‰æ±‰å­—åº“
-            if (x > (x0 + width - size)) //æ¢è¡Œ
+            bHz = 0; //ÓĞºº×Ö¿â
+            if (x > (x0 + width - size)) //»»ĞĞ
             {
                 y += size;
                 x = x0;
             }
-            if (y > (y0 + height - size))break; //è¶Šç•Œè¿”å›
-            Show_Font(x, y, str, size, mode); //æ˜¾ç¤ºè¿™ä¸ªæ±‰å­—,ç©ºå¿ƒæ˜¾ç¤º
+            if (y > (y0 + height - size))break; //Ô½½ç·µ»Ø
+            Show_Font(x, y, (u8*)str, size, mode); //ÏÔÊ¾Õâ¸öºº×Ö,¿ÕĞÄÏÔÊ¾
             str += 2;
-            x += size; //ä¸‹ä¸€ä¸ªæ±‰å­—åç§»
+            x += size; //ÏÂÒ»¸öºº×ÖÆ«ÒÆ
         }
     }
 }
-//åœ¨æŒ‡å®šå®½åº¦çš„ä¸­é—´æ˜¾ç¤ºå­—ç¬¦ä¸²
-//å¦‚æœå­—ç¬¦é•¿åº¦è¶…è¿‡äº†len,åˆ™ç”¨Show_Stræ˜¾ç¤º
-//len:æŒ‡å®šè¦æ˜¾ç¤ºçš„å®½åº¦
+//ÔÚÖ¸¶¨¿í¶ÈµÄÖĞ¼äÏÔÊ¾×Ö·û´®
+//Èç¹û×Ö·û³¤¶È³¬¹ıÁËlen,ÔòÓÃShow_StrÏÔÊ¾
+//len:Ö¸¶¨ÒªÏÔÊ¾µÄ¿í¶È
 void Show_Str_Mid(u16 x, u16 y, u8* str, u8 size, u8 len)
 {
     u16 strlenth = 0;
     strlenth = strlen((const char*)str);
     strlenth *= size / 2;
-    if (strlenth > len)Show_Str(x, y, 240, 320, str, size, 1);
+    if (strlenth > len)Show_Str(x, y, 240, 320, (u8*)str, size, 1);
     else
     {
         strlenth = (len - strlenth) / 2;
-        Show_Str(strlenth + x, y, 240, 320, str, size, 1);
+        Show_Str(strlenth + x, y, 240, 320, (u8*)str, size, 1);
     }
 }
 
