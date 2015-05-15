@@ -47,18 +47,34 @@ TIM1_CH1N    |PB13(!36)|   PA7   |   PE8 (100 144)   |
 TIM1_CH2N    |PB14(!36)|   PB0   |   PE10(100 144)   |
 TIM1_CH3N    |PB15(!36)|   PB1   |   PE12(100 144)   |
 *****************************************************/
-
+#if TIM1_EN==1
+void TIM1_Int_Init(u16 arr, u16 psc);
+#endif
+#if TIM2_EN==1
 void TIM2_Int_Init(u16 arr, u16 psc);
-void TIM3_Int_Init(u16 arr, u16 psc);
-void TIM4_Int_Init(u16 arr, u16 psc);
-void TIM5_Int_Init(u16 arr, u16 psc);
-void TIM6_Int_Init(u16 arr, u16 psc);
-void TIM7_Int_Init(u16 arr, u16 psc);
-
 void TIM2_ADC_Init(u16 arr, u16 psc);
-
 void TIM2_Irgo_Init(u16 arr, u16 psc);
+#endif
+#if TIM3_EN==1
+void TIM3_Int_Init(u16 arr, u16 psc);
 void TIM3_Irgo_Init(u16 arr, u16 psc);
+#endif
+#if TIM4_EN==1
+void TIM4_Int_Init(u16 arr, u16 psc);
+#endif
+#if TIM5_EN==1
+void TIM5_Int_Init(u16 arr, u16 psc);
+#endif
+#if TIM6_EN==1
+void TIM6_Int_Init(u16 arr, u16 psc);
+#endif
+#if TIM7_EN==1
+void TIM7_Int_Init(u16 arr, u16 psc);
+#endif
+#if TIM8_EN==1
+void TIM8_Int_Init(u16 arr, u16 psc);
+#endif
+
 #ifdef __cplusplus
         }
 #endif

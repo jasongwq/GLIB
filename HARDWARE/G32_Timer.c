@@ -49,7 +49,7 @@ TIM1_CH1N    |PB13(!36)|   PA7   |   PE8 (100 144)   |
 TIM1_CH2N    |PB14(!36)|   PB0   |   PE10(100 144)   |
 TIM1_CH3N    |PB15(!36)|   PB1   |   PE12(100 144)   |
 *****************************************************/
-
+#if TIM2_EN==1
 //通用定时器2中断初始化
 //这里时钟选择为APB1的2倍，而APB1为36M
 //arr：自动重装值。
@@ -106,9 +106,28 @@ void TIM2_ADC_Init(u16 arr, u16 psc)
     TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
     TIM_Cmd(TIM2, ENABLE);  //使能TIM2
     TIM_CtrlPWMOutputs(TIM2, ENABLE);
-
 }
 
+void TIM2_Irgo_Init(u16 arr, u16 psc)
+{
+    TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE); //时钟使能
+
+    TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
+    //定时器TIM2初始化
+    TIM_TimeBaseStructure.TIM_Period = arr;      //设置在下一个更新事件装入活动的自动重装载寄存器周期的值
+    TIM_TimeBaseStructure.TIM_Prescaler = psc; //设置用来作为TIMx时钟频率除数的预分频值
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //设置时钟分割:TDTS = Tck_tim
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM向上计数模式
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure); //根据指定的参数初始化TIMx的时间基数单位
+
+    TIM_PrescalerConfig(TIM2, psc, TIM_PSCReloadMode_Update);
+    ///纠结 好久
+    TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update); //选择TRGO触发源为计时器更新时间
+    TIM_Cmd(TIM2, ENABLE);
+}
+#endif
+#if TIM3_EN==1
 //通用定时器3中断初始化
 //这里时钟选择为APB1的2倍，而APB1为36M
 //arr：自动重装值。
@@ -138,6 +157,26 @@ void TIM3_Int_Init(u16 arr, u16 psc)
 
     TIM_Cmd(TIM3, ENABLE);  //使能TIMx
 }
+void TIM3_Irgo_Init(u16 arr, u16 psc)
+{
+    TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE); //时钟使能
+
+    TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
+    //定时器TIM2初始化
+    TIM_TimeBaseStructure.TIM_Period = arr;      //设置在下一个更新事件装入活动的自动重装载寄存器周期的值
+    TIM_TimeBaseStructure.TIM_Prescaler = psc; //设置用来作为TIMx时钟频率除数的预分频值
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //设置时钟分割:TDTS = Tck_tim
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM向上计数模式
+    TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure); //根据指定的参数初始化TIMx的时间基数单位
+    TIM_PrescalerConfig(TIM3, psc, TIM_PSCReloadMode_Update);
+    ///纠结 好久
+    TIM_SelectOutputTrigger(TIM3, TIM_TRGOSource_Update); //选择TRGO触发源为计时器更新时间
+    TIM_Cmd(TIM3, ENABLE);
+}
+
+#endif
+#if TIM4_EN==1
 //通用定时器4中断初始化
 //这里时钟选择为APB1的2倍，而APB1为36M
 //arr：自动重装值。
@@ -167,12 +206,14 @@ void TIM4_Int_Init(u16 arr, u16 psc)
 
     TIM_Cmd(TIM4, ENABLE);  //使能TIMx
 }
-
+#endif
+#if TIM5_EN==1
 //通用定时器5中断初始化
 //这里时钟选择为APB1的2倍，而APB1为36M
 //arr：自动重装值。
 //psc：时钟预分频数
 //这里使用的是定时器5!
+
 void TIM5_Int_Init(u16 arr, u16 psc)
 {
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
@@ -197,7 +238,8 @@ void TIM5_Int_Init(u16 arr, u16 psc)
 
     TIM_Cmd(TIM5, ENABLE);  //使能TIMx
 }
-
+#endif
+#if TIM6_EN==1
 //基本定时器6中断初始化
 //这里时钟选择为APB1的2倍，而APB1为36M
 //arr：自动重装值。
@@ -226,6 +268,8 @@ void TIM6_Int_Init(u16 arr, u16 psc)
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
     NVIC_Init(&NVIC_InitStructure);  //根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
 }
+#endif
+#if TIM7_EN==1
 //基本定时器7中断初始化
 //这里时钟选择为APB1的2倍，而APB1为36M
 //arr：自动重装值。
@@ -254,52 +298,4 @@ void TIM7_Int_Init(u16 arr, u16 psc)
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
     NVIC_Init(&NVIC_InitStructure);  //根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
 }
-
-
-void TIM2_Irgo_Init(u16 arr, u16 psc)
-{
-    TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE); //时钟使能
-
-    TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
-    //定时器TIM2初始化
-    TIM_TimeBaseStructure.TIM_Period = arr;      //设置在下一个更新事件装入活动的自动重装载寄存器周期的值
-    TIM_TimeBaseStructure.TIM_Prescaler = psc; //设置用来作为TIMx时钟频率除数的预分频值
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //设置时钟分割:TDTS = Tck_tim
-    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM向上计数模式
-    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure); //根据指定的参数初始化TIMx的时间基数单位
-
-    TIM_PrescalerConfig(TIM2, psc, TIM_PSCReloadMode_Update);
-    ///纠结 好久
-    TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update); //选择TRGO触发源为计时器更新时间
-    TIM_Cmd(TIM2, ENABLE);
-}
-void TIM3_Irgo_Init(u16 arr, u16 psc)
-{
-    TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE); //时钟使能
-
-    TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
-    //定时器TIM2初始化
-    TIM_TimeBaseStructure.TIM_Period = arr;      //设置在下一个更新事件装入活动的自动重装载寄存器周期的值
-    TIM_TimeBaseStructure.TIM_Prescaler = psc; //设置用来作为TIMx时钟频率除数的预分频值
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //设置时钟分割:TDTS = Tck_tim
-    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM向上计数模式
-    TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure); //根据指定的参数初始化TIMx的时间基数单位
-    TIM_PrescalerConfig(TIM3, psc, TIM_PSCReloadMode_Update);
-    ///纠结 好久
-    TIM_SelectOutputTrigger(TIM3, TIM_TRGOSource_Update); //选择TRGO触发源为计时器更新时间
-    TIM_Cmd(TIM3, ENABLE);
-}
-
-
-
-
-
-
-
-
-
-
-
-
+#endif
