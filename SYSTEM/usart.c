@@ -1,7 +1,6 @@
 #include "sys.h"
 #include <stdio.h>
-//#include "stm32_config.h"
-//#include "usart.h"
+#include "Usart_Config.h"
 #include "sys_usart.h"
 
 void USART_DMA_Config(USART_TypeDef *USARTx, u32 SendBuff);
@@ -88,7 +87,7 @@ void uart_init(u32 bound)
     //GPIO端口设置
     GPIO_InitTypeDef GPIO_InitStructure;
     USART_InitTypeDef USART_InitStructure;
-#if EN_USART_RX
+#if EN_USART_RX||EN_USART1_IQR_T
     NVIC_InitTypeDef NVIC_InitStructure;
 #endif
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE); //使能USART1
@@ -132,13 +131,15 @@ void uart_init(u32 bound)
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//无硬件数据流控制
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx; //收发模式
     USART_Init(USART1, &USART_InitStructure); //初始化串口
-    //Usart1 NVIC 配置
-#if EN_USART_RX                                                 //如果使能了接收
+#if EN_USART_RX||EN_USART1_IQR_T
+		//Usart1 NVIC 配置                   
     NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3 ;  //抢占优先级3
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;          //子优先级3
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;             //IRQ通道使能
     NVIC_Init(&NVIC_InitStructure);                             //根据指定的参数初始化VIC寄存器
+#endif
+#if EN_USART_RX     //如果使能了接收
     USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);//开启中断
 #endif
     USART_Cmd(USART1, ENABLE);                    //使能串口
@@ -185,7 +186,7 @@ void uart2_init(u32 bound)
     //GPIO端口设置
     GPIO_InitTypeDef GPIO_InitStructure;
     USART_InitTypeDef USART_InitStructure;
-#if EN_USART2_RX
+#if EN_USART2_RX||EN_USART2_IQR_T
     NVIC_InitTypeDef NVIC_InitStructure;
 #endif
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE); //使能USART2
@@ -231,12 +232,14 @@ void uart2_init(u32 bound)
 
     USART_Init(USART2, &USART_InitStructure); //初始化串口
     //Usart2 NVIC 配置
-#if EN_USART2_RX         //如果使能了接收
+#if EN_USART2_RX||EN_USART2_IQR_T
     NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3 ; //抢占优先级3
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;      //子优先级3
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;         //IRQ通道使能
     NVIC_Init(&NVIC_InitStructure); //根据指定的参数初始化VIC寄存器
+#endif
+#if EN_USART2_RX         //如果使能了接收
     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);//开启中断
 #endif
     USART_Cmd(USART2, ENABLE);                    //使能串口
@@ -283,7 +286,7 @@ void uart3_init(u32 bound)
     //GPIO端口设置
     GPIO_InitTypeDef GPIO_InitStructure;
     USART_InitTypeDef USART_InitStructure;
-#if EN_USART3_RX
+#if EN_USART3_RX||EN_USART3_IQR_T
     NVIC_InitTypeDef NVIC_InitStructure;
 #endif
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE); //使能USART3
@@ -339,12 +342,14 @@ void uart3_init(u32 bound)
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx; //收发模式
     USART_Init(USART3, &USART_InitStructure); //初始化串口
     //USART3 NVIC 配置
-#if EN_USART3_RX         //如果使能了接收
+#if EN_USART3_RX||EN_USART3_IQR_T
     NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3 ; //抢占优先级3
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;      //子优先级3
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;         //IRQ通道使能
     NVIC_Init(&NVIC_InitStructure); //根据指定的参数初始化VIC寄存器
+#endif
+#if EN_USART3_RX         //如果使能了接收
     USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);//开启中断
 #endif
     USART_Cmd(USART3, ENABLE);                    //使能串口
@@ -447,9 +452,27 @@ void USART_DMA_Enable(USART_TypeDef *USARTx, u16 size)
         DMAy_Channelx = DMA1_Channel7;
     else if (USARTx == USART3)
         DMAy_Channelx = DMA1_Channel2;
-    while (DMAy_Channelx->CNDTR != 0); //等待通道7传输完成
+    while (DMAy_Channelx->CNDTR != 0); 
     DMA_Cmd(DMAy_Channelx, DISABLE );  //关闭USART1 TX DMA1 所指示的通道
     DMA_SetCurrDataCounter(DMAy_Channelx, size);//SENDBUFF_SIZE); //DMA通道的DMA缓存的大小
     DMA_Cmd(DMAy_Channelx, ENABLE);    //使能USART1 TX DMA1 所指示的通道
 }
 /******************* (C) COPYRIGHT 2012 WildFire Team *****END OF FILE************/
+#if ((EN_USART1_DMA_T+EN_USART1_IQR_T)!=1)
+#error
+#endif
+#if ((EN_USART2_DMA_T+EN_USART2_IQR_T)!=1)
+#error
+#endif
+#if ((EN_USART3_DMA_T+EN_USART3_IQR_T)!=1)
+#error
+#endif
+#if ((EN_USART1_DMA_R+EN_USART1_IQR_R)!=1)
+#error
+#endif
+#if ((EN_USART2_DMA_R+EN_USART2_IQR_R)!=1)
+#error
+#endif
+#if ((EN_USART3_DMA_R+EN_USART3_IQR_R)!=1)
+#error
+#endif

@@ -53,8 +53,6 @@ extern u16 USART_RX_STA;                //接收状态标记
 
 #if EN_USART2_RX
 #define USART2_REC_LEN          200     //定义最大接收字节数 200   
-//#define USART2_MAX_RECV_LEN     800
-//#define USART2_MAX_SEND_LEN     200
 
 extern u8  USART2_RX_BUF[USART2_REC_LEN]; //接收缓冲,最大USART_REC_LEN个字节.末字节为换行符
 extern u16 USART2_RX_STA;               //接收状态标记

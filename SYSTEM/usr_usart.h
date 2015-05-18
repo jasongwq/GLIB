@@ -11,8 +11,11 @@ extern "C" {
 #define Printf_USART USART1
 #endif
 #if VERSIONS ==2
-#define Printf_USART USART3
+#define Printf_USART USART1
 #endif
+
+extern void (*ReceiveProtocol)(u8 com_data);
+
 				 
 #ifdef __cplusplus
         }
