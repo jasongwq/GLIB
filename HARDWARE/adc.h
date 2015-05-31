@@ -1,5 +1,8 @@
 #ifndef __ADC_H
 #define __ADC_H
+#ifdef __cplusplus
+       extern "C" {
+#endif
 #include "sys.h"
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK战舰STM32开发板
@@ -13,9 +16,11 @@
 //All rights reserved
 //////////////////////////////////////////////////////////////////////////////////
 //#define Adc_Init ADC1_Init
-void ADC1_Init(void);
+extern void ADC1_Init(void);
 void Adc_Init(void);
 u16 Get_Adc(u8 ch);
 extern __IO uint16_t ADC_ConvertedValue[];
-
+#ifdef __cplusplus
+        }
+#endif
 #endif

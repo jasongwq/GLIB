@@ -1,7 +1,7 @@
 #include "adc.h"
 #include "delay.h"
 #include "G32_timer.h"
-#include "stm32_config.h"
+#include "adc_config.h"
 /***ADC***/
 /***************************************************|
 | Channel   |    ADC1     |  ADC2      |  ADC3      |
