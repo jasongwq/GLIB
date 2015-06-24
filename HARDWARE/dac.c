@@ -32,7 +32,7 @@ void Dac1_Init(void)
     DAC_InitType.DAC_Trigger = DAC_Trigger_None;            //不使用触发功能 TEN1=0
     DAC_InitType.DAC_WaveGeneration = DAC_WaveGeneration_None; //不使用波形发生
     DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0; //屏蔽、幅值设置
-    DAC_InitType.DAC_OutputBuffer = DAC_OutputBuffer_Disable ;        //DAC1输出缓存关闭 BOFF1=1
+    DAC_InitType.DAC_OutputBuffer = DAC_OutputBuffer_Enable ;        //DAC1输出缓存关闭 BOFF1=1
     DAC_Init(DAC_Channel_1, &DAC_InitType);                             //初始化DAC通道1
 
     DAC_Cmd(DAC_Channel_1, ENABLE);          //使能DAC1
@@ -53,10 +53,10 @@ void Dac2_Init(void)
     GPIO_Init(GPIOA, &GPIO_InitStructure);
     GPIO_SetBits(GPIOA, GPIO_Pin_5)  ;                       //PX.x 输出高
 
-    DAC_InitType.DAC_Trigger = DAC_Trigger_Software;                        //不使用触发功能 TEN1=0
+    DAC_InitType.DAC_Trigger = DAC_Trigger_None;                        //不使用触发功能 TEN1=0
     DAC_InitType.DAC_WaveGeneration = DAC_WaveGeneration_None;        //不使用波形发生
     DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0; //屏蔽、幅值设置
-    DAC_InitType.DAC_OutputBuffer = DAC_OutputBuffer_Disable ;            //DAC1输出缓存关闭 BOFF1=1
+    DAC_InitType.DAC_OutputBuffer = DAC_OutputBuffer_Enable ;            //DAC1输出缓存关闭 BOFF1=1
     DAC_Init(DAC_Channel_2, &DAC_InitType);                                         //初始化DAC通道1
 
     DAC_Cmd(DAC_Channel_2, ENABLE);          //使能DAC1
