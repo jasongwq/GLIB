@@ -14,11 +14,16 @@ extern "C" {
 #define Printf_USART USART1
 #endif
 
-extern void (*ReceiveProtocol)(u8 com_data);
 
-				 
+extern void (*ReceiveProtocol1)(u8 com_data);
+extern void (*ReceiveProtocol2)(u8 com_data);
+extern void (*ReceiveProtocol3)(u8 com_data);
+
+extern u8 UsrtWifiENTMFlag;
+extern u8 UsrtWifiAtRxBuffer[50];
+	
 #ifdef __cplusplus
-        }
+}
 #endif
 #endif
 

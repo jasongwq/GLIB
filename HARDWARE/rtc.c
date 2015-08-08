@@ -81,7 +81,7 @@ u8 RTC_Init(void)
         RTC_Set(2009, 12, 2, 10, 0, 55); //设置时间
         RTC_ExitConfigMode(); //退出配置模式
         BKP_WriteBackupRegister(BKP_DR1, 0X5050);   //向指定的后备寄存器中写入用户程序数据
-        RTC_Set(2014, 4, 15, 21, 12, 10);
+        RTC_Set(2000, 0, 0, 0, 0, 0);
     }
     else//系统继续计时
     {

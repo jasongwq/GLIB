@@ -1,7 +1,9 @@
 #include "stm32f10x.h"
 #ifndef __EXTI_H
 #define __EXTI_H 
-
+#ifdef __cplusplus
+ extern "C" {
+#endif 
 /*			       基本使用方法
  *		EXTI_Configuration(GPIOA,GPIO_Pin_1,0);       表示 PA1 作为外部中断 下降沿触发
  *		EXTI_Configuration(GPIOB,GPIO_Pin_1,0);       表示 PB1 作为外部中断 下降沿触发
@@ -17,7 +19,10 @@
  *
  */
 
-void EXTI_Configuration(GPIO_TypeDef* GPIO,uint16_t GPIO_Pin, u8 Trigger);
-void EXTI_NVIC_Configuration(u8 Line ,u8 PriorityGroup,u8 PreemptionPriority,u8 SubPriority);
+extern void EXTI_Configuration(GPIO_TypeDef* GPIO,uint16_t GPIO_Pin, u8 Trigger);
+extern void EXTI_NVIC_Configuration(u8 Line ,u8 PriorityGroup,u8 PreemptionPriority,u8 SubPriority);
 
+	 #ifdef __cplusplus
+        }
+#endif
 #endif
