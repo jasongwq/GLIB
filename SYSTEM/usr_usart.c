@@ -134,6 +134,7 @@ void ReceiveProtocolReleaseTimeRelayUsrtDisplay(u8 com_data)//串口屏接收函数
     static u8 RxBuffer[50];
     static u8 RxState = 0;
     static u8 _data_len = 0, _data_cnt = 0;
+	Sys_Printf(USART2, "\r\n %d", com_data);
     if (RxState == 0 && com_data == FRAMEHEADER1)
     {
         RxState = 1; RxBuffer[0] = com_data;
