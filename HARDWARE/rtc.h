@@ -33,6 +33,8 @@ u8 RTC_Get(void);         //更新时间
 u8 RTC_Get_Week(u16 year, u8 month, u8 day);
 u8 RTC_Set(u16 syear, u8 smon, u8 sday, u8 hour, u8 min, u8 sec); //设置时间
 extern void get_time(u8 *time);
+extern void RTCSec2Cale(_calendar_obj* cale, u32 timecount , u8 u8Compulsoryrefresh); //秒转化日历
+extern u32 RTCCale2Sec(_calendar_obj cale); //时间转化成秒
 
 #ifdef __cplusplus
 }

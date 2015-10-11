@@ -30,7 +30,7 @@ u8 TEXT_Buffer[]={"STM32 FLASH sEST"};
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //用户根据自己的需要设置
-#define STM32_FLASH_SIZE 256      //所选STM32的FLASH容量大小(单位为K)
+#define STM32_FLASH_SIZE 128      //所选STM32的FLASH容量大小(单位为K)
 #define STM32_FLASH_WREN 1        //使能FLASH写入(0，不是能;1，使能)
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -41,7 +41,7 @@ u8 TEXT_Buffer[]={"STM32 FLASH sEST"};
 u16 STMFLASH_ReadHalfWord(u32 faddr);         //读出半字
 void STMFLASH_Write(u32 WriteAddr, u16 *pBuffer, u16 NumToWrite);   //从指定地址开始写入指定长度的数据
 void STMFLASH_Read(u32 ReadAddr, u16 *pBuffer, u16 NumToRead);      //从指定地址开始读出指定长度的数据
-
+void STMFLASH_Erase(u32 ReadAddr, u16 *pBuffer, u16 NumToRead);      //擦除
 
 #endif
 

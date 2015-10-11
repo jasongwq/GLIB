@@ -223,6 +223,77 @@ u8 RTC_Get(void)
     calendar.week = RTC_Get_Week(calendar.w_year, calendar.w_month, calendar.w_date); //获取星期
     return 0;
 }
+u32 RTCCale2Sec(_calendar_obj cale) //时间转化成秒
+{
+    u16 t;
+    u32 seccount = 0;
+    if (cale.w_year < 1970 || cale.w_year > 2099)return 1;
+    for (t = 1970; t < cale.w_year; t++) //把所有年份的秒钟相加
+    {
+        if (Is_Leap_Year(t))seccount += 31622400; //闰年的秒钟数
+        else seccount += 31536000;            //平年的秒钟数
+    }
+    cale.w_month -= 1;
+    for (t = 0; t < cale.w_month; t++) //把前面月份的秒钟数相加
+    {
+        seccount += (u32)mon_table[t] * 86400; //月份秒钟数相加
+        if (Is_Leap_Year(cale.w_year) && t == 1)seccount += 86400; //闰年2月份增加一天的秒钟数
+    }
+    seccount += (u32)(cale.w_date - 1) * 86400; //把前面日期的秒钟数相加
+    seccount += (u32)cale.hour * 3600; //小时秒钟数
+    seccount += (u32)cale.min * 60; //分钟秒钟数
+    seccount += cale.sec; //最后的秒钟加上去
+
+    return seccount;
+}
+void RTCSec2Cale(_calendar_obj* cale, u32 timecount , u8 u8Compulsoryrefresh) //秒转化日历
+{
+    u32 temp = 0;
+    u16 temp1 = 0;
+    temp = timecount / 86400; //得到天数(秒钟数对应的)
+    if (u8Compulsoryrefresh) //超过一天了
+    {
+        temp1 = 1970; //从1970年开始
+        while (temp >= 365)
+        {
+            if (Is_Leap_Year(temp1)) //是闰年
+            {
+                if (temp >= 366)temp -= 366; //闰年的秒钟数
+                else
+                {
+                    temp1++;
+                    break;
+                }
+            }
+            else temp -= 365; //平年
+            temp1++;
+        }
+        cale->w_year = temp1; //得到年份
+        temp1 = 0;
+        while (temp >= 28) //超过了一个月
+        {
+            if (Is_Leap_Year(cale->w_year) && temp1 == 1) //当年是不是闰年/2月份
+            {
+                if (temp >= 29)temp -= 29; //闰年的秒钟数
+                else break;
+            }
+            else
+            {
+                if (temp >= mon_table[temp1])temp -= mon_table[temp1]; //平年
+                else break;
+            }
+            temp1++;
+        }
+        cale->w_month = temp1 + 1; //得到月份
+        cale->w_date = temp + 1; //得到日期
+    }
+    temp = timecount % 86400;       //得到秒钟数
+    cale->hour = temp / 3600;    //小时
+    cale->min = (temp % 3600) / 60; //分钟
+    cale->sec = (temp % 3600) % 60; //秒钟
+    cale->week = RTC_Get_Week(cale->w_year, cale->w_month, cale->w_date); //获取星期
+    return ;
+}
 //获得现在是星期几
 //功能描述:输入公历日期得到星期(只允许1901-2099年)
 //输入参数：公历年月日
