@@ -34,10 +34,10 @@ void STMFLASH_Write_NoCheck(u32 WriteAddr, u16 *pBuffer, u16 NumToWrite)
 //WriteAddr:起始地址(此地址必须为2的倍数!!)
 //pBuffer:数据指针
 //NumToWrite:半字(16位)数(就是要写入的16位数据的个数.)
-#if STM32_FLASH_SIZE<256
-#define STM_SECTOR_SIZE 1024 //字节
+#if defined (STM32F10X_HD)
+#define STM_SECTOR_SIZE 2048 //字节
 #else
-#define STM_SECTOR_SIZE 2048
+#define STM_SECTOR_SIZE 1024
 #endif
 u16 STMFLASH_BUF[STM_SECTOR_SIZE / 2]; //最多是2K字节
 void STMFLASH_Write(u32 WriteAddr, u16 *pBuffer, u16 NumToWrite)
@@ -47,7 +47,7 @@ void STMFLASH_Write(u32 WriteAddr, u16 *pBuffer, u16 NumToWrite)
     u16 secremain; //扇区内剩余地址(16位字计算)
     u16 i;
     u32 offaddr;   //去掉0X08000000后的地址
-    if (WriteAddr < STM32_FLASH_BASE || (WriteAddr >= (STM32_FLASH_BASE + 1024 * STM32_FLASH_SIZE)))return; //非法地址
+    //if (WriteAddr < STM32_FLASH_BASE || (WriteAddr >= (STM32_FLASH_BASE + 1024 * STM32_FLASH_SIZE)))return; //非法地址
     FLASH_Unlock();                           //解锁
     offaddr = WriteAddr - STM32_FLASH_BASE; //实际偏移地址.
     secpos = offaddr / STM_SECTOR_SIZE;     //扇区地址  0~127 for STM32F103RBT6
@@ -92,7 +92,7 @@ void STMFLASH_Erase(u32 WriteAddr, u16 *pBuffer, u16 NumToWrite)
     u16 secremain; //扇区内剩余地址(16位字计算)
     u16 i;
     u32 offaddr;   //去掉0X08000000后的地址
-    if (WriteAddr < STM32_FLASH_BASE || (WriteAddr >= (STM32_FLASH_BASE + 1024 * STM32_FLASH_SIZE)))return; //非法地址
+    //if (WriteAddr < STM32_FLASH_BASE || (WriteAddr >= (STM32_FLASH_BASE + 1024 * STM32_FLASH_SIZE)))return; //非法地址
     FLASH_Unlock();                           //解锁
     offaddr = WriteAddr - STM32_FLASH_BASE; //实际偏移地址.
     secpos = offaddr / STM_SECTOR_SIZE;     //扇区地址  0~127 for STM32F103RBT6
