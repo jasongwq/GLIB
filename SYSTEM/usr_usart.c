@@ -85,9 +85,9 @@ void ReceiveProtocolUsrtWifiAtENTM(u8 com_data)
     static u8 RxBuffer[50];
     static u8 RxState = 0;
     static u8 _data_len = 0, _data_cnt = 0;
-    if (RxState == 0 && com_data == 0x10)//双帧头
+    if (RxState == 0 && com_data == 0x01)//双帧头
     {
-        RxState = 1; RxBuffer[0] = com_data;
+        RxState = 1; RxBuffer[0] = com_data;//com_data;
     }
     else if (RxState == 1 && com_data == 0x01)//次帧头
     {
@@ -99,8 +99,10 @@ void ReceiveProtocolUsrtWifiAtENTM(u8 com_data)
     }
     else if (RxState == 3)// && com_data < 50)//帧长度
     {
-				com_data=34;
-        RxState = 4; RxBuffer[3] = com_data; _data_len = com_data; _data_cnt = 0;
+				//com_data=34;
+        //RxState = 4; RxBuffer[3] = com_data; _data_len = com_data; _data_cnt = 0;
+			//com_data=34;
+        RxState = 4; RxBuffer[3] = com_data; _data_len = 34; _data_cnt = 0;
     }
     else if (RxState == 4 && _data_len > 0)//数据
     {
