@@ -2,6 +2,8 @@
 #include "usr_usart.h"
 #include <stdarg.h>
 #include "stdio.h"
+#include "gpio.h"
+
 int Sys_Printf(USART_TypeDef *USARTx, const char *Data, ...)
 {
     char sprintf_buf[0xff];

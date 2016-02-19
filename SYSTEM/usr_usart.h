@@ -21,7 +21,7 @@ extern void (*ReceiveProtocol3)(u8 com_data);
 
 extern u8 UsrtWifiENTMFlag;
 extern u8 UsrtWifiAtRxBuffer[50];
-	
+extern u8 KeepAliveFlag;
 #ifdef __cplusplus
 }
 #endif

@@ -102,6 +102,7 @@ void ReceiveProtocolUsrtWifiAtENTM(u8 com_data)
 				//com_data=34;
         //RxState = 4; RxBuffer[3] = com_data; _data_len = com_data; _data_cnt = 0;
 			//com_data=34;
+				KeepAliveFlag=1;
         RxState = 4; RxBuffer[3] = com_data; _data_len = 34; _data_cnt = 0;
     }
     else if (RxState == 4 && _data_len > 0)//数据
@@ -139,7 +140,7 @@ void ReceiveProtocolReleaseTimeRelayUsrtDisplay(u8 com_data)//串口屏接收函数
     static u8 RxBuffer[50];
     static u8 RxState = 0;
     static u8 _data_len = 0, _data_cnt = 0;
-	//Sys_Printf(USART2, "\r\n %d", com_data);
+		//Sys_Printf(USART2, "\r\n %d", com_data);
     if (RxState == 0 && com_data == FRAMEHEADER1)
     {
         RxState = 1; RxBuffer[0] = com_data;
@@ -165,7 +166,11 @@ void ReceiveProtocolReleaseTimeRelayUsrtDisplay(u8 com_data)//串口屏接收函数
         RxState = 0;
     return;
 }
-
+void ReceiveProtocolPlc485(u8 com_data)//串口屏接收函数
+{
+		USART2->DR=com_data;
+    return;
+}
 void (*ReceiveProtocol1)(u8 com_data) = ReceiveProtocolReleaseTimeRelayUsrtDisplay;
-void (*ReceiveProtocol2)(u8 com_data) = ReceiveProtocolReleaseTimeRelayUsrtDisplay;
+void (*ReceiveProtocol2)(u8 com_data) = ReceiveProtocolPlc485;
 void (*ReceiveProtocol3)(u8 com_data) = ReceiveProtocolReleaseTimeRelayTcp;

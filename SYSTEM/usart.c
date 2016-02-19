@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "Usart_Config.h"
 #include "sys_usart.h"
+#include "gpio.h"
 
 void USART_DMA_Config(USART_TypeDef *USARTx, u32 SendBuff);
 /*
@@ -183,6 +184,8 @@ void ATK_Usart2_IQR(void)
 #if EN_USART2_
 void uart2_init(u32 bound)
 {
+		//485需要设置方向
+		USART2_485_Init
     //GPIO端口设置
     GPIO_InitTypeDef GPIO_InitStructure;
     USART_InitTypeDef USART_InitStructure;
