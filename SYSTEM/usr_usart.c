@@ -87,6 +87,7 @@ void ReceiveProtocolUsrtWifiAtENTM(u8 com_data)
     static u8 _data_len = 0, _data_cnt = 0;
     if (RxState == 0 && com_data == 0x01)//双帧头
     {
+			KeepAliveFlag=1;
         RxState = 1; RxBuffer[0] = com_data;//com_data;
     }
     else if (RxState == 1 && com_data == 0x01)//次帧头
@@ -102,7 +103,7 @@ void ReceiveProtocolUsrtWifiAtENTM(u8 com_data)
 				//com_data=34;
         //RxState = 4; RxBuffer[3] = com_data; _data_len = com_data; _data_cnt = 0;
 			//com_data=34;
-				KeepAliveFlag=1;
+				
         RxState = 4; RxBuffer[3] = com_data; _data_len = 34; _data_cnt = 0;
     }
     else if (RxState == 4 && _data_len > 0)//数据
@@ -166,7 +167,7 @@ void ReceiveProtocolReleaseTimeRelayUsrtDisplay(u8 com_data)//串口屏接收函数
         RxState = 0;
     return;
 }
-void ReceiveProtocolPlc485(u8 com_data)//串口屏接收函数
+void ReceiveProtocolPlc485(u8 com_data)//485接收函数
 {
 		USART2->DR=com_data;
     return;
